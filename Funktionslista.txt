@@ -1,0 +1,9 @@
+Skriv in varje funktion ni skapar här använd mal från topp  av den här filen
+
+------
+Funktion:[namn]
+Argument:[namn,typ]
+Return:[namn,typ]
+Fil:[Kod/Styrmodul/exempel.txt]
+Funktion:[Beskrivning av vad den gör]
+------
