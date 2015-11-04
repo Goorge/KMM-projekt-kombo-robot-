@@ -7,7 +7,7 @@ typedef short bool;
 #define false 0
 
 typedef unsigned char byte;
-#include "i2c master.c"
+#include "i2c_master.c"
 
 //avbrotsrutiner
 ISR(INT0_vect)

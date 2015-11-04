@@ -4,12 +4,15 @@
 #include <avr/interrupt.h>
 #include <compat/twi.h>
 
-typedef short bool;
+//typedef int bool;
 #define true 1
 #define false 0
 
 typedef unsigned char byte;
-#include "i2c master.c"
+#include "i2c_slave.c"
+
+void run();
+void initialize();
 
 int main (void)
 {
