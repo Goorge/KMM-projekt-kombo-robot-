@@ -12,8 +12,9 @@ void i2c_setup(bool master) {
 		
 		EIMSK = 1<<INT0;					// Enable INT0
 		MCUCR = 1<<ISC01 | 1<<ISC00;	// Trigger INT0 on rising edge
-		//TWBR = 0x01;
-		//TWSR = (0<<TWPS1)|(0<<TWPS0);
+		TWBR = 0x01;
+		TWSR = (0<<TWPS1)|(0<<TWPS0);
+		TWAR = 0x04; // namnge
 	}
 	
 };

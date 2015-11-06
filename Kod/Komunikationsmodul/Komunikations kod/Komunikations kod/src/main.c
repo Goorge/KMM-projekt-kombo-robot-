@@ -14,6 +14,14 @@ typedef unsigned char byte;
 void run();
 void initialize();
 
+byte a;
+
+ISR(TWI){
+	a=incomingData();
+	DDRD = 1<<PD6;
+	PORTD= 1<<PD6;
+}
+
 int main (void)
 {
 	/* Insert system clock initialization code here (sysclk_init()). */
@@ -25,11 +33,16 @@ int main (void)
 }
 
 void initialize(){
-	
+	i2c_setup(0x02);
+	sei();
 }
 
 void run(){
+	
 	while(true)	{
-		
+		if(a == 0xf0){
+			DDRD = 1<<PD7;
+			PORTD= 1<<PD7;
+		}
 	}
 }
