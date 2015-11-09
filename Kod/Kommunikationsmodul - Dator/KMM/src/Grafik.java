@@ -55,18 +55,20 @@ public class Grafik {
 	private JButton turn_left_btn; 
 	
 	// THE LISTs
-	private JList graficList;
-	private DefaultListModel[] lists;
-
+	private static JList graficList;
+	private static DefaultListModel[] lists;
+	private static DefaultListModel comPorts;
 	// Labels
 	private JLabel line_labels[]; // Used to show a grafical version of the different line sensors 
 	private JLabel image_label;	  // Used for the background image
 	private JLabel rgb_label;	  // Use to show if the RGB is getting any data  
 	
-	// Bluetooth device
-	private Bluetooth bt = new Bluetooth();
+	//SPPPEEEEDDD of the bluetooth
+	private static int baudRate = 115200;
 	
-	// Launch the application.
+	//Bluetooth thingy
+	private static COMunication com;
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -78,6 +80,38 @@ public class Grafik {
 				}
 			}
 		});
+			
+		while(true){
+			if(com.isSetup()){
+				if(com.isDataAvailable()){
+					handleData(com.deliverData());
+				}
+			}
+		}
+	}
+	
+	// Tar hand om data som kommer ifrån bt, Behöver göras mer. 
+	private static void handleData(byte[] data){
+		if((data[0] >>> 4) == 0){
+			switch (data[0]){
+			case (byte)0x03: // RGB BLÅ 
+				addToList(listEnum.rgb, System.currentTimeMillis() + "RÖD");
+				break;
+			case (byte)0x04: // RGB GRÖN 
+				addToList(listEnum.rgb, System.currentTimeMillis() + "GRÖN");
+				break;
+			case (byte)0x05: // RGB BLÅ 
+				addToList(listEnum.rgb, System.currentTimeMillis() + "BLÅ");
+				break;
+			case (byte)0x06: // gyro klart 
+				addToList(listEnum.gyro, System.currentTimeMillis() + "GyroKlart");
+				break;
+			case (byte)0x07: // gyro aktiverat 
+				addToList(listEnum.gyro, System.currentTimeMillis() + "GyroStart");
+				break;
+			
+			}
+		}
 	}
 	
 	// label buttons
@@ -109,6 +143,30 @@ public class Grafik {
 		}
 	}
 
+	//Skicka data via bt, Behöver uppdateras med mer data. 
+	private void sendDirection(directions dirr){
+		byte toSend[] = new byte[1];
+		switch (dirr){
+		case goForwards: 
+			toSend[0] = (byte)0x09; //00001001
+			break;
+		case goBackwards:
+			toSend[0] = (byte)0x0D; //00001101
+			break;
+		case goLeft://?
+			toSend[0] = (byte)0x09; //00001001
+			break;
+		case goRight://?
+			toSend[0] = (byte)0x0A; //00001010
+			break;
+		case turnLeft:
+			toSend[0] = (byte)0x0B; //00001011
+			break;
+		}
+		if(com.isSetup())
+			com.sendData(toSend);
+	}
+	
 	// Select what data to write to the list
 	private void setJListVisible(listEnum list){
 		graficList.setModel(lists[list.ordinal()]);
@@ -126,7 +184,7 @@ public class Grafik {
 	}
 	
 	// Add element to list as a String
-	public void addToList(listEnum list, String value){
+	public static void addToList(listEnum list, String value){
 		lists[list.ordinal()].addElement(value);
 	}
 
@@ -141,8 +199,10 @@ public class Grafik {
 		lists = new DefaultListModel[8];
 		for(int i = 0; i < 8; i++){
 			lists[i] = new DefaultListModel();
-			lists[i].addElement("asd"+i);
+			lists[i].addElement("");
 		}
+		
+		com = new COMunication();
 	}
 	
 	// Initialize the contents of the frame.
@@ -201,7 +261,7 @@ public class Grafik {
 		turn_left_btn.setBounds(35, 522, 64, 55);
 		turn_left_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				bt.sendDirection(directions.turnLeft);
+				sendDirection(directions.turnLeft);
 			}
 		});
 		frame.getContentPane().add(turn_left_btn);
@@ -210,7 +270,7 @@ public class Grafik {
 		go_back_btn.setBounds(104, 522, 64, 55);
 		go_back_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				bt.sendDirection(directions.goBackwards);
+				sendDirection(directions.goBackwards);
 			}
 		});
 		frame.getContentPane().add(go_back_btn);
@@ -219,7 +279,7 @@ public class Grafik {
 		turn_right_btn.setBounds(173, 522, 64, 55);
 		turn_right_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				bt.sendDirection(directions.turnRight);
+				sendDirection(directions.turnRight);
 			}
 		});
 		frame.getContentPane().add(turn_right_btn);
@@ -228,7 +288,7 @@ public class Grafik {
 		go_forward_btn.setBounds(104, 462, 64, 55);
 		go_forward_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				bt.sendDirection(directions.goForwards);
+				sendDirection(directions.goForwards);
 			}
 		});
 		frame.getContentPane().add(go_forward_btn);
@@ -237,7 +297,7 @@ public class Grafik {
 		go_left_btn.setBounds(35, 462, 64, 55);
 		go_left_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				bt.sendDirection(directions.goLeft);
+				sendDirection(directions.goLeft);
 			}
 		});
 		frame.getContentPane().add(go_left_btn);
@@ -247,7 +307,7 @@ public class Grafik {
 		go_right_btn.setBounds(173, 462, 64, 55);
 		go_right_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				bt.sendDirection(directions.goRight);
+				sendDirection(directions.goRight);
 			}
 		});
 		frame.getContentPane().add(go_right_btn);
@@ -298,10 +358,36 @@ public class Grafik {
 		rgb_label.setOpaque(true);
 		frame.getContentPane().add(rgb_label);
 		
+		Button com_btn = new Button("Set COMport");
+		com_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String port = (String)graficList.getSelectedValue();
+				if((graficList.getModel() == comPorts) && port != null ){
+					System.out.println(port);
+					com.setup(port, baudRate);
+				}
+			}
+		});
+		com_btn.setBounds(484, 600, 80, 22);
+		frame.getContentPane().add(com_btn);
+		
+		Button refresh_com_btn = new Button("refresh list of COMport");
+		refresh_com_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				comPorts = new DefaultListModel();
+				String[] ports = com.availablePorts();
+				for(int i = 0; i < ports.length; i++){
+					comPorts.addElement(ports[i]);
+				}
+				
+				graficList.setModel(comPorts);
+			}
+		});
+		refresh_com_btn.setBounds(430, 575, 200, 22);
+		frame.getContentPane().add(refresh_com_btn);
+		
 		image_label = new JLabel("");
-		image_label.setIcon(new ImageIcon("C:\\Users\\Pontus\\workspace\\KMM\\img\\robot.png"));
-		//Image img = new ImageIcon(this.getClass().getResource("robot.png")).getImage();
-		//image_label.setIcon(new ImageIcon(img));
+		image_label.setIcon(new ImageIcon("img/robot.png"));
 		image_label.setBounds(300, 10, 456, 567);
 		frame.getContentPane().add(image_label);
 	}
