@@ -9,7 +9,7 @@ public class COMunication {
 	private static byte[] data;
 	private static boolean newData;
 	private static boolean isSetup = false;
-	
+
 	//initialize the comstuff.
 	public void setup(String port, int baudRate_){
 		serialPort = new SerialPort(port);
@@ -21,7 +21,6 @@ public class COMunication {
 	            int mask = SerialPort.MASK_RXCHAR;//Prepare mask, allows evenlistener on incoming data
 	            serialPort.setEventsMask(mask);//Set mask
 	            serialPort.addEventListener(new SerialPortReader());//Add SerialPortEventListener
-	            serialPort.closePort();
 	        }
 	        catch (SerialPortException ex) {
 	            System.out.println(ex);
@@ -29,13 +28,13 @@ public class COMunication {
 	}
 	
 	// returns true is the comunication is up and running
-	public static boolean isSetup(){return isSetup;}
+	public boolean isSetup(){return isSetup;}
 	
 	//returns the byte new data, if data is available send it to the gui
-	public static boolean isDataAvailable(){ return newData; }
+	public boolean isDataAvailable(){ return newData; }
 	
 	//Delivers the data to the gui and sets new data to false
-	public static byte[] deliverData(){
+	public byte[] deliverData(){
 		newData = false;
 		return data;
 	}

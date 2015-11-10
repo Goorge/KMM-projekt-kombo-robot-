@@ -12,10 +12,9 @@ void initialize();
 
 byte a;
 
-ISR(TWI){
+ISR(TWI_vect){
 	a=incomingData();
-	DDRD = 1<<PD6;
-	PORTD= 1<<PD6;
+	
 }
 
 int main (void)
@@ -38,12 +37,18 @@ void initialize(){
 }
 
 void run(){
+<<<<<<< HEAD
 	while(true)	{bluetooth_send(0x02);
 		if(newData){
 			
 			PORTB = 0xff;
 		}
 		if(a == 0xf0){
+=======
+	
+	while(true)	{
+		if(a == 0xff){
+>>>>>>> 185953bdb6adb98e3fc4f4be5fb7c5a4b0bdddb9
 			DDRD = 1<<PD7;
 			PORTD= 1<<PD7;
 		}

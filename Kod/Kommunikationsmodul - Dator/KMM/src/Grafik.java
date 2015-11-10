@@ -61,6 +61,7 @@ public class Grafik {
 	
 	// THE LISTs
 	private static JList graficList;
+
 	private static JPanel panel = new JPanel();
 	private static JScrollPane listScroll = new JScrollPane();
 	private static DefaultListModel[] lists;
@@ -121,8 +122,8 @@ public class Grafik {
 				break;
 			case (byte)0x07: // gyro aktiverat 
 				addToList(listEnum.gyro, getCurrentTime() + "GyroStart");
-				break;
-			
+				addToList(listEnum.rgb, System.currentTimeMillis() + "RÖD");
+				break;			
 			}
 		}
 	}
