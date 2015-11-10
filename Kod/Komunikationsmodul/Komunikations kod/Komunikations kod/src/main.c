@@ -16,10 +16,9 @@ void initialize();
 
 byte a;
 
-ISR(TWI){
+ISR(TWI_vect){
 	a=incomingData();
-	DDRD = 1<<PD6;
-	PORTD= 1<<PD6;
+	
 }
 
 int main (void)
@@ -40,7 +39,7 @@ void initialize(){
 void run(){
 	
 	while(true)	{
-		if(a == 0xf0){
+		if(a == 0xff){
 			DDRD = 1<<PD7;
 			PORTD= 1<<PD7;
 		}
