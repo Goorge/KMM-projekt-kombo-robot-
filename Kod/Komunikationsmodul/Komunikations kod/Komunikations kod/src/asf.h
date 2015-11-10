@@ -66,6 +66,16 @@
 #include <status_codes.h>
 
 // From module: Part identification macros
+
 #include <parts.h>
+
+//typedef int bool;
+#define true 1
+#define false 0
+
+typedef unsigned char byte;
+
+extern byte dataFromBT;
+extern bool newData;
 
 #endif // ASF_H

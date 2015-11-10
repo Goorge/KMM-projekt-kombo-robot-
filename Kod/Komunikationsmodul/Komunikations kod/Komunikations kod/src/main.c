@@ -1,15 +1,11 @@
 
-#include <asf.h> //?????
+#include <asf.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <compat/twi.h>
 
-//typedef int bool;
-#define true 1
-#define false 0
-
-typedef unsigned char byte;
 #include "i2c_slave.c"
+#include "bluetooth.c"
 
 void run();
 void initialize();
@@ -33,13 +29,20 @@ int main (void)
 }
 
 void initialize(){
+	EIMSK = 1<<INT1;					// Enable INT0
+	//MCUCR = 1<<ISC01 | 1<<ISC00;	// Trigger INT0 on rising edge
 	i2c_setup(0x02);
+	bluetooth_setup(115200);
+	DDRB = 0xff;
 	sei();
 }
 
 void run(){
-	
-	while(true)	{
+	while(true)	{bluetooth_send(0x02);
+		if(newData){
+			
+			PORTB = 0xff;
+		}
 		if(a == 0xf0){
 			DDRD = 1<<PD7;
 			PORTD= 1<<PD7;
