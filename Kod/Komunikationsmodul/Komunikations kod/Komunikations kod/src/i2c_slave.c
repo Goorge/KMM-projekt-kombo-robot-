@@ -12,6 +12,7 @@ int bytesSent = 0;
 void i2c_setup(byte adress_) {
 	adress = adress_;
 	TWAR = adress;
+	TWCR = (1 << TWIE) | (1 << TWEN)| (1<<TWEA) | (1<<TWINT);
 };
 
 void requestToSend(byte adress, byte* data){
@@ -24,12 +25,16 @@ byte incomingData(){
 	int counter=0;
 	TWAR = adress & 0xfe;
 	TWCR = (1<<TWEA)|(1<<TWEN)&(0<<TWSTA)&(0<<TWSTO);//START
-	while(!(TWCR & (1<<TWINT))); //Wait for TWINT, START is now sent
-	
+	while(!(TWCR & (1<<TWINT))); //Wait for TWINT, START is now sent	
 	if(TWSR==0x60)
 		i2c_send(reciverAdress,dataToSend[bytesSent++]);
 	else if(TWSR==0xA8)
-		return i2c_recive();
+		{
+			DDRD = 1<<PD6;
+			PORTD= 1<<PD6;
+			return i2c_recive();
+			}
+
 	return NULL;
 }
 
