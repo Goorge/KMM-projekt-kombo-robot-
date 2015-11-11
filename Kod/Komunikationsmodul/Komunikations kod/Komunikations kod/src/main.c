@@ -28,8 +28,6 @@ int main (void)
 }
 
 void initialize(){
-	EIMSK = 1<<INT1;					// Enable INT0
-	//MCUCR = 1<<ISC01 | 1<<ISC00;	// Trigger INT0 on rising edge
 	i2c_setup(0x02);
 	bluetooth_setup(115200);
 	DDRB = 0xff;
@@ -37,18 +35,12 @@ void initialize(){
 }
 
 void run(){
-<<<<<<< HEAD
-	while(true)	{bluetooth_send(0x02);
+	while(true)	{
 		if(newData){
-			
+			bluetooth_send(0x02);
 			PORTB = 0xff;
 		}
 		if(a == 0xf0){
-=======
-	
-	while(true)	{
-		if(a == 0xff){
->>>>>>> 185953bdb6adb98e3fc4f4be5fb7c5a4b0bdddb9
 			DDRD = 1<<PD7;
 			PORTD= 1<<PD7;
 		}
