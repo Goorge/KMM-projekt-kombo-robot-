@@ -34,7 +34,7 @@ void USART_Transmit( byte data )
 	UDR0 = data;
 }
 
-void RequestToSend(byte* data){
+void RequestToSend(byte data){
 	RequestingToSend = true;
 	dataToSend = data;
 }

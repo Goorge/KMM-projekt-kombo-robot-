@@ -37,7 +37,7 @@ void initialize(){
 void run(){
 	while(true)	{
 		if(newData){
-			bluetooth_send(0x02);
+			requestToSend(0x02);
 			PORTB = 0xff;
 		}
 		if(a == 0xf0){
