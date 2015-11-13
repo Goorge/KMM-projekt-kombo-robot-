@@ -22,7 +22,6 @@ void requestToSend(byte adress, byte* data){
 }
 
 byte incomingData(){
-	int counter=0;
 	TWAR = adress & 0xfe;
 	TWCR = (1<<TWEA)|(1<<TWEN)&(0<<TWSTA)&(0<<TWSTO);//START
 	while(!(TWCR & (1<<TWINT))); //Wait for TWINT, START is now sent	

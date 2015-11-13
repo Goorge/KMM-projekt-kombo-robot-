@@ -25,7 +25,7 @@
     <preserveEEPROM>true</preserveEEPROM>
     <OverrideVtorValue>exception_table</OverrideVtorValue>
     <BootSegment>2</BootSegment>
-    <eraseonlaunchrule>2</eraseonlaunchrule>
+    <eraseonlaunchrule>0</eraseonlaunchrule>
     <ExternalProgrammingToolCommand />
     <AsfFrameworkConfig>
       <framework-data>
@@ -68,11 +68,7 @@
     <com_atmel_avrdbg_tool_atmelice>
       <ToolOptions>
         <InterfaceProperties>
-<<<<<<< HEAD
           <JtagDbgClock>200000</JtagDbgClock>
-=======
-          <JtagDbgClock>1923193</JtagDbgClock>
->>>>>>> 185953bdb6adb98e3fc4f4be5fb7c5a4b0bdddb9
           <JtagEnableExtResetOnStartSession>false</JtagEnableExtResetOnStartSession>
           <JtagInChain>true</JtagInChain>
           <JtagDevicesBefore>0</JtagDevicesBefore>
@@ -102,11 +98,7 @@
       </ToolNumber>
       <ToolName>Simulator</ToolName>
     </com_atmel_avrdbg_tool_simulator>
-<<<<<<< HEAD
     <avrtoolinterfaceclock>200000</avrtoolinterfaceclock>
-=======
-    <avrtoolinterfaceclock>1923193</avrtoolinterfaceclock>
->>>>>>> 185953bdb6adb98e3fc4f4be5fb7c5a4b0bdddb9
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>

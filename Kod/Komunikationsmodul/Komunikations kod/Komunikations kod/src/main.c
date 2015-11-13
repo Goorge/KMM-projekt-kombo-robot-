@@ -5,6 +5,7 @@
 #include <compat/twi.h>
 
 #include "i2c_slave.c"
+#include "usart.c"
 #include "bluetooth.c"
 
 void run();
@@ -19,12 +20,9 @@ ISR(TWI_vect){
 
 int main (void)
 {
-	/* Insert system clock initialization code here (sysclk_init()). */
-
-	//board_init();
+	board_init();
 	initialize();
 	run();
-	/* Insert application code here, after the board has been initialized. */
 }
 
 void initialize(){
@@ -35,11 +33,9 @@ void initialize(){
 }
 
 void run(){
-	while(true)	{
-		if(newData){
-			requestToSend(0x02);
-			PORTB = 0xff;
-		}
+	while(true == true)	{
+		RequestToSend(0x02);
+		
 		if(a == 0xf0){
 			DDRD = 1<<PD7;
 			PORTD= 1<<PD7;
