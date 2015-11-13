@@ -14,10 +14,35 @@ typedef unsigned char byte;
 void run();
 void initialize();
 
-byte a;
-
+byte firstdata;
+byte* extradata;
+int datatoget=0;
+bool data_recived=false; //flagga för om all data motagen
 ISR(TWI_vect){
-	a=incomingData();
+
+	firstdata=incomingData();
+	/*
+	if(datatoget==0)
+	{
+		firstdata=incomingData();
+		datatoget=(firstdata>>4)&0x0f;
+		if(firstdata==0x00)
+			data_recived=data_recived;
+		else if(datatoget=0)
+			data_recived=true;
+		else
+			data_recived=false;
+	}
+	else
+	{
+		extradata[(firstdata>>4)&0x0f-datatoget]=incomingData();
+		datatoget--;
+		if (datatoget==0)
+			data_recived=true;
+		else
+			data_recived=false;
+	}
+	*/
 	
 }
 
@@ -39,7 +64,7 @@ void initialize(){
 void run(){
 	
 	while(true)	{
-		if(a == 0xff){
+		if(firstdata == 0x0f){
 			DDRD = 1<<PD7;
 			PORTD= 1<<PD7;
 		}

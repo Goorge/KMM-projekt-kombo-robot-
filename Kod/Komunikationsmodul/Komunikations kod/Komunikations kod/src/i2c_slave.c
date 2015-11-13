@@ -23,19 +23,17 @@ void requestToSend(byte adress, byte* data){
 
 byte incomingData(){
 	int counter=0;
-	TWAR = adress & 0xfe;
-	TWCR = (1<<TWEA)|(1<<TWEN)&(0<<TWSTA)&(0<<TWSTO);//START
-	while(!(TWCR & (1<<TWINT))); //Wait for TWINT, START is now sent	
-	if(TWSR==0x60)
+	TWAR = adress;
+	if((TWSR & 0xF8)==0x60)
+	{
 		i2c_send(reciverAdress,dataToSend[bytesSent++]);
-	else if(TWSR==0xA8)
+	}
+	else if((TWSR & 0xF8)==0xA8)// blir 0xF8
 		{
-			DDRD = 1<<PD6;
-			PORTD= 1<<PD6;
 			return i2c_recive();
-			}
+		}
 
-	return NULL;
+	return 0x00;
 }
 
 void i2c_send(byte prossesor,byte data){

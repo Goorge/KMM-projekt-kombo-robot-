@@ -23,16 +23,21 @@ bool i2c_send(byte prossesor,byte* data){
 	int number_bytes =( data[0]>>4 ) & 0x0f;
 	int counter = 0;
 	int start = TW_START;
+	
 	do{
 	TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN); //send START
 	while(!(TWCR & (1<<TWINT))); //Wait for TWINT, START is now sent
+	
 	if((TWSR & 0xF8) != start) // om status en start
 		return false;
+	led_test();	
 	TWDR = prossesor|0x01;//sista bit R/W
 	TWCR = (1<<TWINT) | (1<<TWEN);// start transmito of addres
 	while(!(TWCR & (1<<TWINT))); // wait for SLA+W transmited and ACK/NACK recived
+	
 	if((TWSR & 0xF8) != TW_MT_SLA_ACK) 
 		return false;
+	
 	TWDR = data[counter];
 	TWCR = (1<<TWINT) | (1<<TWEN);	// start send data
 	while(!(TWCR & (1<<TWINT))); //wait for data transmitted and ACK/NACK

@@ -6,7 +6,7 @@ byte RGB_data;
 char* Reflex_data;
 
 void led_test(){
-	DDRD =0xff;
+	DDRD =1<<PD1;
 	PORTD=1<<PD1;	
 };
 

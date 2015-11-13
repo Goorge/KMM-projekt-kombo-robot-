@@ -8,8 +8,9 @@ typedef short bool;
 
 typedef unsigned char byte;
 
-#include "i2c_master.c"
 #include "linje.c"
+#include "i2c_master.c"
+
 
 //avbrotsrutiner
 ISR(INT0_vect)
@@ -32,8 +33,8 @@ int main(){
 	
 	while(1){
 		//FUNKTIONSLOP
-		i2c_send(0x02, 0xf0);
-		led_test();
+		i2c_send(0x02, 0x0f);
+		
 	};
 	return 0;
 
