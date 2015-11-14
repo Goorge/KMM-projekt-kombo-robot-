@@ -6,7 +6,6 @@
 #include <util/delay.h>
 
 #include "i2c_slave.c"
-#include "usart.c"
 #include "bluetooth.c"
 #include "LCD.c"
 
@@ -15,9 +14,9 @@ void initialize();
 
 byte a;
 
-//ISR(TWI_vect){
-//	a=incomingData();
-//}
+ISR(TWI_vect){
+	a=incomingData();
+}
 
 int main (void)
 {
@@ -35,15 +34,16 @@ void initialize(){
 }
 
 void run(){
-	char test[] = {"test"};
-	//lcd_write_string(test);
-	lcd_write_char('A');
-	while(true == true)	{
-		//RequestToSend(0x02);
+	char test[2][16] = {"test", "Mer Test"};
+	lcd_write_string(test);
+	//lcd_write_char('A');
+	while(true == true)	{		
+		if(PD3 == 0) // Vi har tillåtelse att skicka data
+			bluetooth_send_char('A');
 		
-		if(a == 0xf0){
-			DDRD = 1<<PD7;
-			PORTD= 1<<PD7;
-		}
+		//if(a == 0xf0){
+		//	DDRD = 1<<PD7;
+		//	PORTD= 1<<PD7;
+		//}
 	}
 }
