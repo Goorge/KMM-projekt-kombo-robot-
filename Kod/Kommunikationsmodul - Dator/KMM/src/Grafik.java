@@ -76,7 +76,7 @@ public class Grafik {
 	private static int baudRate = 115200;
 	
 	//Bluetooth thingy
-	private static COMunication com;
+	private static COMunication com = new COMunication();
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {

@@ -1,9 +1,9 @@
 #include <asf.h>
 
-#ifndef usart
-#define usart
-void usart_setup(unsigned int baudrate);
-void USART_Transmit(byte data);
+//#ifndef usart
+//#define usart
+//void usart_setup(unsigned int baudrate);
+//void USART_Transmit(byte data);
 
 
 void usart_setup(unsigned int baudrate){
@@ -26,4 +26,4 @@ void USART_Transmit(byte data){
 	UDR0 = data; // Put the data in to the buffer and send it
 }
 
-#endif
+//#endif

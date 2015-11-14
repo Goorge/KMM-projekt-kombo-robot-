@@ -15,10 +15,9 @@ void initialize();
 
 byte a;
 
-ISR(TWI_vect){
-	a=incomingData();
-	
-}
+//ISR(TWI_vect){
+//	a=incomingData();
+//}
 
 int main (void)
 {
@@ -30,13 +29,17 @@ int main (void)
 void initialize(){
 	i2c_setup(0x02);
 	bluetooth_setup(115200);
+	lcd_setup();
 	DDRB = 0xff;
-	sei();
+	//sei();
 }
 
 void run(){
+	char test[] = {"test"};
+	//lcd_write_string(test);
+	lcd_write_char('A');
 	while(true == true)	{
-		RequestToSend(0x02);
+		//RequestToSend(0x02);
 		
 		if(a == 0xf0){
 			DDRD = 1<<PD7;
