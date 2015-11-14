@@ -3,10 +3,12 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <compat/twi.h>
+#include <util/delay.h>
 
 #include "i2c_slave.c"
 #include "usart.c"
 #include "bluetooth.c"
+#include "LCD.c"
 
 void run();
 void initialize();

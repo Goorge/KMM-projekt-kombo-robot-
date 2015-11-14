@@ -60,7 +60,7 @@ ISR ( USART0_TX ){ //send complete
 	SendingData = false;
 }	 
 
-ISR ( USART0_RXC_vect ){ //send complete'
+ISR ( USART0_RX ){ //send complete
 	dataFromBT = UDR0;
 	newData = true;
 }	

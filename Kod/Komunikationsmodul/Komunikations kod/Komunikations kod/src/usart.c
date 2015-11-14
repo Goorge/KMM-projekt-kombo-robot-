@@ -1,4 +1,10 @@
-#include <util/delay.h>
+#include <asf.h>
+
+#ifndef usart
+#define usart
+void usart_setup(unsigned int baudrate);
+void USART_Transmit(byte data);
+
 
 void usart_setup(unsigned int baudrate){
 	/* Enable receiver and transmitter */
@@ -15,9 +21,9 @@ void usart_setup(unsigned int baudrate){
 	_delay_ms(200);
 }
 
-void USART_Transmit( byte data )
-{	
+void USART_Transmit(byte data){	
 	while ( !( UCSR0A & (1<<UDRE0)) );/* Wait for empty transmit buffer */
-
 	UDR0 = data; // Put the data in to the buffer and send it
 }
+
+#endif
