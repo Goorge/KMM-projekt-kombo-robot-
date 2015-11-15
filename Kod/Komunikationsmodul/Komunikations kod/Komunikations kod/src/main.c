@@ -3,14 +3,14 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <compat/twi.h>
-#include <util/delay.h>
 
 #include "i2c_slave.c"
-#include "bluetooth.c"
-#include "LCD.c"
+#include "bluetooth.h"
+#include "LCD.h"
 
-void run();
-void initialize();
+
+void run(void);
+void initialize(void);
 
 byte a;
 
@@ -25,25 +25,28 @@ int main (void)
 	run();
 }
 
-void initialize(){
-	i2c_setup(0x02);
-	bluetooth_setup(115200);
-	lcd_setup();
+void initialize(void){
+	//i2c_setup(0x02);
 	DDRB = 0xff;
+	bluetooth_setup((long)115200);
+	
+	lcd_setup();
+	
 	//sei();
+	_delay_ms(100);
 }
 
-void run(){
+void run(void){
 	char test[2][16] = {"test", "Mer Test"};
-	lcd_write_string(test);
-	//lcd_write_char('A');
-	while(true == true)	{		
-		if(PD3 == 0) // Vi har tillåtelse att skicka data
-			bluetooth_send_char('A');
-		
-		//if(a == 0xf0){
-		//	DDRD = 1<<PD7;
-		//	PORTD= 1<<PD7;
-		//}
+	//lcd_write_string(test);
+	lcd_write_instruction(lcd_Clear);
+	_delay_us(80);
+	lcd_write_char('A');
+	
+	
+	while(true)	{		
+		if(PORTD & (1<<CTS) == 0){ // Vi har tillåtelse att skicka data
+			bluetooth_send_char(0x04);
+		}
 	}
 }

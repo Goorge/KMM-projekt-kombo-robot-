@@ -4,5 +4,9 @@
 
 src\ASF\common\boards\user_board\init.c
 
+src\bluetooth.c
+
+src\LCD.c
+
 src\main.c
 

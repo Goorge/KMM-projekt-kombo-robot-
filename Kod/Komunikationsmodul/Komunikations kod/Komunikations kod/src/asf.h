@@ -66,7 +66,6 @@
 #include <status_codes.h>
 
 // From module: Part identification macros
-
 #include <parts.h>
 
 //typedef int bool;
@@ -85,11 +84,20 @@ typedef unsigned char byte;
 #define lcd_EntryMode       0b00000110          // shift cursor from left to right on read/write
 #define lcd_DisplayOff      0b00001000          // turn display off
 #define lcd_DisplayOn       0b00001100          // display on, cursor off, don't blink character
-#define lcd_FunctionReset   0b00111000          // reset the LCD
+#define lcd_FunctionReset   0b00110000			// reset the LCD
+#define lcd_FunctionSet		0b00111000          
 #define lcd_SetCursor       0b10000000          // set cursor position
+// BLUETOOTh pinnar
+#define RXD PD0
+#define TXD PD1
+#define CTS PD2
+#define RTS PD3
 
 // global bt data
 extern byte dataFromBT;
 extern bool newData;
+
+#define F_CPU 14745600UL
+#include <util/delay.h>
 
 #endif // ASF_H

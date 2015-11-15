@@ -1,8 +1,8 @@
 void i2c_setup(byte adress_);
 void requestToSend(byte adress, byte* data);
-byte incomingData();
+byte incomingData(void);
 void i2c_send(byte prossesor,byte data);
-byte i2c_recive();
+byte i2c_recive(void);
 
 byte adress;
 byte* dataToSend;
@@ -21,7 +21,7 @@ void requestToSend(byte adress, byte* data){
 	bytesSent = 0;
 }
 
-byte incomingData(){
+byte incomingData(void){
 	TWAR = adress & 0xfe;
 	TWCR = (1<<TWEA)|(1<<TWEN)&(0<<TWSTA)&(0<<TWSTO);//START
 	while(!(TWCR & (1<<TWINT))); //Wait for TWINT, START is now sent	
@@ -34,7 +34,7 @@ byte incomingData(){
 			return i2c_recive();
 			}
 
-	return NULL;
+	return (byte)NULL;
 }
 
 void i2c_send(byte prossesor,byte data){
@@ -42,7 +42,7 @@ void i2c_send(byte prossesor,byte data){
 	while(!(TWCR & (1<<TWINT))); // wait for SLA+W transmited and ACK/NACK recived
 };
 
-byte i2c_recive(){
+byte i2c_recive(void){
 	while(!(TWCR & (1<<TWINT))); // wait for SLA+W transmited and ACK/NACK recived
 	if((TWSR & 0xF8) != TW_MT_SLA_ACK)
 		return false;
