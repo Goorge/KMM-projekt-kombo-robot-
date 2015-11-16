@@ -1,3 +1,4 @@
+#include "definitions.h"
 #include "LCD.h"
 
 #define RS PD6

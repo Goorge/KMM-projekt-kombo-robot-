@@ -293,6 +293,9 @@
     <Compile Include="src\bluetooth.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\definitions.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\LCD.c">
       <SubType>compile</SubType>
     </Compile>
