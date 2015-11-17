@@ -2,18 +2,14 @@
 #include "bluetooth.h"
 
 bool newData = false;
-bool RequestingToSend = false;
-bool SendingData = false;
 
-byte dataFromBT = 0x04;
+byte dataFromBT = 0x00;
 byte dataToSendBT = 0x00;
 
 //PortD0 RXD (IN)
 //PortD1 TXD (OUT)
 //PortD2 CTS (IN)
 //PortD3 RTS (OUT)
-
-bool bluetooth_get_new_data(void){ return newData; }
 
 void usart_setup(unsigned int baudrate){
 	UCSR0B = (1<<RXCIE0)|(1<<TXCIE0)|(1<<RXEN0)|(1<<TXEN0);/* Enable receiver and transmitter */
@@ -44,9 +40,7 @@ void bluetooth_send_byte(byte data){
 }
 
 // Säg till blåtandsenheten att du är redo att ta emot mer data. 
-void bluetooth_clear_to_send(void){
-	PORTD &= (0 << RTS); // Clear To Send;
-}
+void bluetooth_clear_to_send(void){	PORTD &= ~(1 << RTS); }// Clear To Send;
 
 //Hämta ut datan från BT
 byte bluetooth_fetch_new_data(void){
@@ -54,8 +48,16 @@ byte bluetooth_fetch_new_data(void){
 	return dataFromBT;
 }
 
+// Kolla om vi har fått in någon ny data
+bool bluetooth_get_new_data(void){ return newData; }
+
+
 //Hämtar datan
 ISR ( USART0_RX_vect ){ //recieve complete // USART0_RX_vect
-	newData = true;
 	dataFromBT = UDR0;		
+	PORTD |= (1 << RTS);//Säg att du inte vill ha mer data atm
+	newData = true;
+	//cli(); Slå av avbrott!
 }	
+
+ISR ( USART0_TX_vect ){}

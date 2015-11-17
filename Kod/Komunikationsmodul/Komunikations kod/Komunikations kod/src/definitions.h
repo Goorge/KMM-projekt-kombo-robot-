@@ -35,8 +35,8 @@ typedef unsigned char byte;
 #define RTS PD3
 
 // global bt data
-//extern byte dataFromBT;
-//extern bool newData;
+// extern byte dataFromBT;
+// extern bool newData;
 
 #define F_CPU 14745600UL
 #include <util/delay.h>

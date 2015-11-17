@@ -38,19 +38,17 @@ void run(void){
 	//lcd_write_instruction(lcd_Clear);
 	//_delay_us(80);
 	//lcd_write_char('A');
-	
-	
+
 	while(true)	{		
 		if(bluetooth_get_new_data() == true){	
 			if((PIND & (1<<CTS)) == 0){ // Vi har tillåtelse att skicka data
-				if(bluetooth_fetch_new_data() == 0x04);
-					PORTB = 0xff;
+				byte data = bluetooth_fetch_new_data();
+				bluetooth_clear_to_send(); // Säg att du vill ha mer BT data
+				//sei(); //slå på avbrott igen
+				PORTB = data;
 				bluetooth_send_byte(0x04);//0b00000100
 			}
-		}
-		
-		//if udre0
-		//while(!(UCSR0A & (1 << RXC0)));
-		//PORTB = UDR0;
+		} 
+		//PORTB = 0x00;
 	}
 }
