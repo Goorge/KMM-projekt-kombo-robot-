@@ -17,7 +17,7 @@ bool bluetooth_get_new_data(void){ return newData; }
 
 void usart_setup(unsigned int baudrate){
 	UCSR0B = (1<<RXCIE0)|(1<<TXCIE0)|(1<<RXEN0)|(1<<TXEN0);/* Enable receiver and transmitter */
-	UCSR0C = (1<<USBS0)|(3<<UCSZ00);/* Set frame format: 8data, 1stop bit */
+	UCSR0C = (3<<UCSZ00);/* Set frame format: 8data, 1stop bit */
 	
 	/* Set baud rate */
 	unsigned long baudPreScale = ((((14.7456 * 1000000) / (baudrate * 16UL))) - 1); // == 7
@@ -55,8 +55,7 @@ byte bluetooth_fetch_new_data(void){
 }
 
 //Hämtar datan
-ISR ( USART0_RX_vect){ //recieve complete // USART0_RX_vect
-	PORTB = 0xff;
+ISR ( USART0_RX_vect ){ //recieve complete // USART0_RX_vect
 	newData = true;
 	dataFromBT = UDR0;		
 }	

@@ -1,3 +1,4 @@
+/*
 void i2c_setup(byte adress_);
 void requestToSend(byte adress, byte* data);
 byte incomingData(void);
@@ -48,3 +49,4 @@ byte i2c_recive(void){
 		return false;
 	return TWDR;
 };
+*/

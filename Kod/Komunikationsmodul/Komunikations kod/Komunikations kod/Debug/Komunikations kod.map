@@ -36,10 +36,7 @@ c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/..
 Allocating common symbols
 Common symbol       size              file
 
-dataToSend          0x2               src/main.o
-adress              0x1               src/main.o
 a                   0x1               src/main.o
-reciverAdress       0x1               src/main.o
 
 Discarded input sections
 
@@ -103,14 +100,8 @@ Discarded input sections
  .text          0x00000000        0x0 src/bluetooth.o
  .data          0x00000000        0x0 src/bluetooth.o
  .bss           0x00000000        0x0 src/bluetooth.o
- .text.getNewData
+ .text.bluetooth_clear_to_send
                 0x00000000        0x6 src/bluetooth.o
- .text.bluetooth_send_char
-                0x00000000       0x10 src/bluetooth.o
- .text.ClearToSend
-                0x00000000        0x6 src/bluetooth.o
- .text.fetchNewData
-                0x00000000        0xa src/bluetooth.o
  .bss.dataToSendBT
                 0x00000000        0x1 src/bluetooth.o
  .bss.SendingData
@@ -169,6 +160,10 @@ Discarded input sections
  .text          0x00000000        0x0 src/LCD.o
  .data          0x00000000        0x0 src/LCD.o
  .bss           0x00000000        0x0 src/LCD.o
+ .text.lcd_write_char
+                0x00000000       0x1a src/LCD.o
+ .text.lcd_write_string
+                0x00000000       0xa4 src/LCD.o
  .data.directionLeft
                 0x00000000        0x1 src/LCD.o
  .debug_macro   0x00000000      0xa66 src/LCD.o
@@ -230,18 +225,6 @@ Discarded input sections
  .text          0x00000000        0x0 src/main.o
  .data          0x00000000        0x0 src/main.o
  .bss           0x00000000        0x0 src/main.o
- .text.i2c_setup
-                0x00000000       0x10 src/main.o
- .text.requestToSend
-                0x00000000       0x16 src/main.o
- .text.i2c_send
-                0x00000000       0x10 src/main.o
- .text.i2c_recive
-                0x00000000       0x1e src/main.o
- .text.incomingData
-                0x00000000       0x6c src/main.o
- .bss.bytesSent
-                0x00000000        0x2 src/main.o
  .debug_macro   0x00000000      0xa66 src/main.o
  .debug_macro   0x00000000       0x10 src/main.o
  .debug_macro   0x00000000      0x1ad src/main.o
@@ -269,7 +252,7 @@ Discarded input sections
  .debug_macro   0x00000000      0x273 src/main.o
  .debug_macro   0x00000000       0x70 src/main.o
  .debug_macro   0x00000000       0x10 src/main.o
- COMMON         0x00000000        0x5 src/main.o
+ COMMON         0x00000000        0x1 src/main.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(addsf3.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(addsf3.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(addsf3.o)
@@ -478,7 +461,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x61c
+.text           0x00000000      0x56e
  *(.vectors)
  .vectors       0x00000000       0x8c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega1284p/avr51/crtatmega1284p.o
                 0x00000000                __vector_default
@@ -574,83 +557,86 @@ END GROUP
  .text.board_init
                 0x000000c8        0x2 src/ASF/common/boards/user_board/init.o
                 0x000000c8                board_init
+ .text.bluetooth_get_new_data
+                0x000000ca        0x6 src/bluetooth.o
+                0x000000ca                bluetooth_get_new_data
  .text.usart_setup
-                0x000000ca       0x80 src/bluetooth.o
-                0x000000ca                usart_setup
+                0x000000d0       0x80 src/bluetooth.o
+                0x000000d0                usart_setup
  .text.bluetooth_setup
-                0x0000014a        0xa src/bluetooth.o
-                0x0000014a                bluetooth_setup
+                0x00000150        0xa src/bluetooth.o
+                0x00000150                bluetooth_setup
+ .text.bluetooth_send_byte
+                0x0000015a       0x10 src/bluetooth.o
+                0x0000015a                bluetooth_send_byte
+ .text.bluetooth_fetch_new_data
+                0x0000016a        0xa src/bluetooth.o
+                0x0000016a                bluetooth_fetch_new_data
  .text.__vector_20
-                0x00000154       0x2a src/bluetooth.o
-                0x00000154                __vector_20
- .text.lcd_write_char
-                0x0000017e       0x1a src/LCD.o
-                0x0000017e                lcd_write_char
+                0x00000174       0x26 src/bluetooth.o
+                0x00000174                __vector_20
  .text.lcd_write_instruction
-                0x00000198        0x8 src/LCD.o
-                0x00000198                lcd_write_instruction
+                0x0000019a        0x8 src/LCD.o
+                0x0000019a                lcd_write_instruction
  .text.lcd_setup
-                0x000001a0       0x78 src/LCD.o
-                0x000001a0                lcd_setup
- .text.lcd_write_string
-                0x00000218       0x98 src/LCD.o
-                0x00000218                lcd_write_string
+                0x000001a2       0x78 src/LCD.o
+                0x000001a2                lcd_setup
  .text.initialize
-                0x000002b0       0x26 src/main.o
-                0x000002b0                initialize
- .text.run      0x000002d6       0x2e src/main.o
-                0x000002d6                run
- .text.main     0x00000304        0x6 src/main.o
-                0x00000304                main
+                0x0000021a       0x26 src/main.o
+                0x0000021a                initialize
+ .text.run      0x00000240       0x16 src/main.o
+                0x00000240                run
+ .text.main     0x00000256        0x6 src/main.o
+                0x00000256                main
  .text.avr-libc.fplib
-                0x0000030a        0xa c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(addsf3.o)
-                0x0000030a                __subsf3
-                0x0000030c                __addsf3
+                0x0000025c        0xa c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(addsf3.o)
+                0x0000025c                __subsf3
+                0x0000025e                __addsf3
  .text.avr-libc.fplib
-                0x00000314       0xc0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(addsf3x.o)
-                0x0000032e                __addsf3x
+                0x00000266       0xc0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(addsf3x.o)
+                0x00000280                __addsf3x
  .text.avr-libc.fplib
-                0x000003d4        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(divsf3.o)
-                0x000003d4                __divsf3
+                0x00000326        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(divsf3.o)
+                0x00000326                __divsf3
  .text.avr-libc.fplib
-                0x000003d8       0xcc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(divsf3x.o)
-                0x000003ee                __divsf3x
-                0x000003f2                __divsf3_pse
+                0x0000032a       0xcc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(divsf3x.o)
+                0x00000340                __divsf3x
+                0x00000344                __divsf3_pse
  .text.avr-libc.fplib
-                0x000004a4       0x58 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fixunssfsi.o)
-                0x000004a4                __fixunssfsi
+                0x000003f6       0x58 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fixunssfsi.o)
+                0x000003f6                __fixunssfsi
  .text.avr-libc.fplib
-                0x000004fc       0x7a c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(floatsisf.o)
-                0x000004fc                __floatunsisf
-                0x00000500                __floatsisf
+                0x0000044e       0x7a c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(floatsisf.o)
+                0x0000044e                __floatunsisf
+                0x00000452                __floatsisf
  .text.avr-libc.fplib
-                0x00000576        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fp_inf.o)
-                0x00000576                __fp_inf
+                0x000004c8        0xc c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fp_inf.o)
+                0x000004c8                __fp_inf
  .text.avr-libc.fplib
-                0x00000582        0x6 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fp_nan.o)
-                0x00000582                __fp_nan
+                0x000004d4        0x6 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fp_nan.o)
+                0x000004d4                __fp_nan
  .text.avr-libc.fplib
-                0x00000588        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fp_pscA.o)
-                0x00000588                __fp_pscA
+                0x000004da        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fp_pscA.o)
+                0x000004da                __fp_pscA
  .text.avr-libc.fplib
-                0x00000596        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fp_pscB.o)
-                0x00000596                __fp_pscB
+                0x000004e8        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fp_pscB.o)
+                0x000004e8                __fp_pscB
  .text.avr-libc.fplib
-                0x000005a4       0x22 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fp_round.o)
-                0x000005a4                __fp_round
+                0x000004f6       0x22 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fp_round.o)
+                0x000004f6                __fp_round
  .text.avr-libc.fplib
-                0x000005c6       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fp_split3.o)
-                0x000005c6                __fp_split3
-                0x000005d6                __fp_splitA
+                0x00000518       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fp_split3.o)
+                0x00000518                __fp_split3
+                0x00000528                __fp_splitA
  .text.avr-libc.fplib
-                0x0000060a        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fp_zero.o)
-                0x0000060a                __fp_zero
-                0x0000060c                __fp_szero
-                0x00000618                . = ALIGN (0x2)
+                0x0000055c        0xe c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/../../../../avr/lib/avr51\libm.a(fp_zero.o)
+                0x0000055c                __fp_zero
+                0x0000055e                __fp_szero
+                0x0000056a                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000618        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
-                0x00000618                _exit
-                0x00000618                exit
+ .fini9         0x0000056a        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
+                0x0000056a                _exit
+                0x0000056a                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -669,11 +655,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000618        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
+ .fini0         0x0000056a        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000061c                _etext = .
+                0x0000056e                _etext = .
 
-.data           0x00800100       0x22 load address 0x0000061c
+.data           0x00800100        0x2 load address 0x0000056e
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -681,31 +667,30 @@ END GROUP
                 0x00800100        0x1 src/bluetooth.o
                 0x00800100                dataFromBT
  *(.rodata)
- .rodata        0x00800101       0x20 src/main.o
  *(.rodata*)
  *(.gnu.linkonce.d*)
-                0x00800122                . = ALIGN (0x2)
- *fill*         0x00800121        0x1 
-                0x00800122                _edata = .
-                0x00800122                PROVIDE (__data_end, .)
+                0x00800102                . = ALIGN (0x2)
+ *fill*         0x00800101        0x1 
+                0x00800102                _edata = .
+                0x00800102                PROVIDE (__data_end, .)
 
-.bss            0x00800122        0x1
-                0x00800122                PROVIDE (__bss_start, .)
+.bss            0x00800102        0x1
+                0x00800102                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
- .bss.newData   0x00800122        0x1 src/bluetooth.o
-                0x00800122                newData
+ .bss.newData   0x00800102        0x1 src/bluetooth.o
+                0x00800102                newData
  *(COMMON)
-                0x00800123                PROVIDE (__bss_end, .)
-                0x0000061c                __data_load_start = LOADADDR (.data)
-                0x0000063e                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00800103                PROVIDE (__bss_end, .)
+                0x0000056e                __data_load_start = LOADADDR (.data)
+                0x00000570                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800123        0x0
-                0x00800123                PROVIDE (__noinit_start, .)
+.noinit         0x00800103        0x0
+                0x00800103                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800123                PROVIDE (__noinit_end, .)
-                0x00800123                _end = .
-                0x00800123                PROVIDE (__heap_start, .)
+                0x00800103                PROVIDE (__noinit_end, .)
+                0x00800103                _end = .
+                0x00800103                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -772,7 +757,7 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x100
+.debug_aranges  0x00000000       0xd8
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x20 src/ASF/common/boards/user_board/init.o
@@ -781,55 +766,54 @@ END GROUP
  .debug_aranges
                 0x00000070       0x38 src/LCD.o
  .debug_aranges
-                0x000000a8       0x58 src/main.o
+                0x000000a8       0x30 src/main.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xbf9
+.debug_info     0x00000000      0xaa5
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000       0x7c src/ASF/common/boards/user_board/init.o
- .debug_info    0x0000007c      0x263 src/bluetooth.o
- .debug_info    0x000002df      0x5a0 src/LCD.o
- .debug_info    0x0000087f      0x37a src/main.o
+ .debug_info    0x0000007c      0x25c src/bluetooth.o
+ .debug_info    0x000002d8      0x5a0 src/LCD.o
+ .debug_info    0x00000878      0x22d src/main.o
 
-.debug_abbrev   0x00000000      0x56a
+.debug_abbrev   0x00000000      0x50a
  *(.debug_abbrev)
  .debug_abbrev  0x00000000       0x47 src/ASF/common/boards/user_board/init.o
  .debug_abbrev  0x00000047      0x172 src/bluetooth.o
  .debug_abbrev  0x000001b9      0x1c5 src/LCD.o
- .debug_abbrev  0x0000037e      0x1ec src/main.o
+ .debug_abbrev  0x0000037e      0x18c src/main.o
 
-.debug_line     0x00000000     0x14a8
+.debug_line     0x00000000     0x1389
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x392 src/ASF/common/boards/user_board/init.o
- .debug_line    0x00000392      0x51e src/bluetooth.o
- .debug_line    0x000008b0      0x5bf src/LCD.o
- .debug_line    0x00000e6f      0x639 src/main.o
+ .debug_line    0x00000392      0x516 src/bluetooth.o
+ .debug_line    0x000008a8      0x5bf src/LCD.o
+ .debug_line    0x00000e67      0x522 src/main.o
 
-.debug_frame    0x00000000      0x1dc
+.debug_frame    0x00000000      0x17c
  *(.debug_frame)
  .debug_frame   0x00000000       0x24 src/ASF/common/boards/user_board/init.o
  .debug_frame   0x00000024       0xa0 src/bluetooth.o
  .debug_frame   0x000000c4       0x74 src/LCD.o
- .debug_frame   0x00000138       0xa4 src/main.o
+ .debug_frame   0x00000138       0x44 src/main.o
 
-.debug_str      0x00000000    0x11d40
+.debug_str      0x00000000    0x11ce0
  *(.debug_str)
  .debug_str     0x00000000    0x11305 src/ASF/common/boards/user_board/init.o
                               0x114c2 (size before relaxing)
- .debug_str     0x00011305      0x5fa src/bluetooth.o
-                              0x11a91 (size before relaxing)
- .debug_str     0x000118ff       0xc8 src/LCD.o
+ .debug_str     0x00011305      0x614 src/bluetooth.o
+                              0x11ab0 (size before relaxing)
+ .debug_str     0x00011919       0xc8 src/LCD.o
                               0x11a9c (size before relaxing)
- .debug_str     0x000119c7      0x379 src/main.o
-                              0x11d82 (size before relaxing)
+ .debug_str     0x000119e1      0x2ff src/main.o
+                              0x11d2e (size before relaxing)
 
-.debug_loc      0x00000000      0x2cd
+.debug_loc      0x00000000      0x238
  *(.debug_loc)
  .debug_loc     0x00000000       0xcd src/bluetooth.o
  .debug_loc     0x000000cd      0x16b src/LCD.o
- .debug_loc     0x00000238       0x95 src/main.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -849,14 +833,14 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x108
+.debug_ranges   0x00000000       0xe0
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x10 src/ASF/common/boards/user_board/init.o
  .debug_ranges  0x00000010       0x40 src/bluetooth.o
  .debug_ranges  0x00000050       0x70 src/LCD.o
- .debug_ranges  0x000000c0       0x48 src/main.o
+ .debug_ranges  0x000000c0       0x20 src/main.o
 
-.debug_macro    0x00000000     0x4688
+.debug_macro    0x00000000     0x4684
  *(.debug_macro)
  .debug_macro   0x00000000      0x152 src/ASF/common/boards/user_board/init.o
  .debug_macro   0x00000152      0xa66 src/ASF/common/boards/user_board/init.o
@@ -891,8 +875,8 @@ END GROUP
  .debug_macro   0x00004007       0xaa src/bluetooth.o
  .debug_macro   0x000040b1       0x60 src/bluetooth.o
  .debug_macro   0x00004111      0x194 src/LCD.o
- .debug_macro   0x000042a5      0x1a6 src/main.o
- .debug_macro   0x0000444b       0xdd src/main.o
- .debug_macro   0x00004528      0x160 src/main.o
+ .debug_macro   0x000042a5      0x1a2 src/main.o
+ .debug_macro   0x00004447       0xdd src/main.o
+ .debug_macro   0x00004524      0x160 src/main.o
 OUTPUT(Komunikations kod.elf elf32-avr)
 LOAD linker stubs

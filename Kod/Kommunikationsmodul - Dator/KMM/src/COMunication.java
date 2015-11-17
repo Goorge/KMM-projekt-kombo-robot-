@@ -42,13 +42,13 @@ public class COMunication {
 	// sends data over comport
 	public void sendData(byte[] dataToSend){
         try {
-            serialPort.openPort();//Open serial port
+            //serialPort.openPort();//Open serial port
             serialPort.setParams(baudRate, 
         			SerialPort.DATABITS_8,
         			SerialPort.STOPBITS_1,
         			SerialPort.PARITY_NONE);//Set parameters. 
             serialPort.writeBytes(dataToSend);//Write data to port
-            serialPort.closePort();//Close serial port
+            //serialPort.closePort();//Close serial port
         }
         catch (SerialPortException ex) {
             System.out.println(ex);
@@ -62,7 +62,7 @@ public class COMunication {
 		data2 = new byte[0];
 		dataOut = new byte[0];
 		try {
-            serialPort.openPort();//Open serial port
+            //serialPort.openPort();//Open serial port
             serialPort.setParams(baudRate, 
                     			SerialPort.DATABITS_8,
                     			SerialPort.STOPBITS_1,
@@ -72,7 +72,7 @@ public class COMunication {
             if((data1[0] >>> 4) != 0)// shift to get the number of incoming bytes. If we need to recive more bytes we get to know it here. 
             	data2 = serialPort.readBytes(data1[0] >>> 4); //Read the rest of the bytes.
             
-            serialPort.closePort();//Close serial port
+            //serialPort.closePort();//Close serial port
         }
         catch (SerialPortException ex) {
             System.out.println(ex);

@@ -4,7 +4,7 @@
 #include <compat/twi.h>
 
 #include "definitions.h"
-#include "i2c_slave.c"
+//#include "i2c_slave.c"
 #include "bluetooth.h"
 #include "LCD.h"
 
@@ -33,23 +33,21 @@ void initialize(void){
 }
 
 void run(void){
-	char test[2][16] = {"test", "Mer Test"};
-	lcd_write_string(test);
+	//char test[2][16] = {"test", "Mer Test"};
+	//lcd_write_string(test);
 	//lcd_write_instruction(lcd_Clear);
 	//_delay_us(80);
 	//lcd_write_char('A');
 	
 	
 	while(true)	{		
-		//if(getNewData() == true){
-		//	PORTB = 0xff;
-		//	if(!(PIND & (1<<CTS))){ // Vi har tillåtelse att skicka data
-		//		bluetooth_send_char(fetchNewData());//0b00000100
-		//	}
-		//}
-		
-		//_delay_ms(500);
-		//bluetooth_send_byte(0x04);
+		if(bluetooth_get_new_data() == true){	
+			if((PIND & (1<<CTS)) == 0){ // Vi har tillåtelse att skicka data
+				if(bluetooth_fetch_new_data() == 0x04);
+					PORTB = 0xff;
+				bluetooth_send_byte(0x04);//0b00000100
+			}
+		}
 		
 		//if udre0
 		//while(!(UCSR0A & (1 << RXC0)));
