@@ -54,12 +54,9 @@ bool bluetooth_get_new_data(void){ return newData; }
 
 //Hämtar datan
 ISR ( USART0_RX_vect ){ //recieve complete // USART0_RX_vect
-	//while(!(UCSR0A & (1<<RXC0)));
-	//_delay_ms(1);
-	dataFromBT = UDR0;		
 	PORTD |= (1 << RTS);//Säg att du inte vill ha mer data atm
-	newData = true;
-	//cli(); Slå av avbrott!
+	dataFromBT = UDR0;		// Hämta ut datan
+	newData = true; // Tala om för main att vi har fått data
 }	
 
 ISR ( USART0_TX_vect ){}
