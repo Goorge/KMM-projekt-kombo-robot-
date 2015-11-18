@@ -33,22 +33,28 @@ void initialize(void){
 }
 
 void run(void){
-	//char test[2][16] = {"test", "Mer Test"};
-	//lcd_write_string(test);
+	char test[2][16] = {"test", "Mer Test"};
+	lcd_write_string(test);
 	//lcd_write_instruction(lcd_Clear);
-	//_delay_us(80);
+	_delay_us(80);
 	//lcd_write_char('A');
 
+	short number_of_bytes = 0;
+	bool new_data = false;
+
 	while(true)	{		
-		if(bluetooth_get_new_data() == true){	
-			if((PIND & (1<<CTS)) == 0){ // Vi har tillåtelse att skicka data
-				byte data = bluetooth_fetch_new_data();
-				bluetooth_clear_to_send(); // Säg att du vill ha mer BT data
-				//sei(); //slå på avbrott igen
-				PORTB = data;
-				bluetooth_send_byte(0x04);//0b00000100
-			}
+
+		
+
+		// Ta emot data från BT
+		if(bluetooth_get_new_data() == true){ // Om vi har fått data sätts newData till true i BT och vi kollar på den här
+			byte data = bluetooth_fetch_new_data(); // Hämta ut data å sätt newData false
+			bluetooth_clear_to_send(); // Säg att du vill ha mer BT data
 		} 
-		//PORTB = 0x00;
+		
+		// Skicka data via BT
+		if((PIND & (1<<CTS)) == 0){ // Vi har tillåtelse att skicka data
+				bluetooth_send_byte(0x04);//0b00000100
+		}
 	}
 }

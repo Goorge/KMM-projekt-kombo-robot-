@@ -16,7 +16,7 @@ void usart_setup(unsigned int baudrate){
 	UCSR0C = (3<<UCSZ00);/* Set frame format: 8data, 1stop bit */
 	
 	/* Set baud rate */
-	unsigned long baudPreScale = ((((14.7456 * 1000000) / (baudrate * 16UL))) - 1); // == 7
+	unsigned long baudPreScale = 7; //((((14.7456 * 1000000) / (baudrate * 16UL))) - 1); // == 7
 	
 	UBRR0H = (unsigned char)(baudPreScale>>8);
 	UBRR0L = (unsigned char)baudPreScale;
@@ -54,6 +54,8 @@ bool bluetooth_get_new_data(void){ return newData; }
 
 //Hämtar datan
 ISR ( USART0_RX_vect ){ //recieve complete // USART0_RX_vect
+	//while(!(UCSR0A & (1<<RXC0)));
+	//_delay_ms(1);
 	dataFromBT = UDR0;		
 	PORTD |= (1 << RTS);//Säg att du inte vill ha mer data atm
 	newData = true;
