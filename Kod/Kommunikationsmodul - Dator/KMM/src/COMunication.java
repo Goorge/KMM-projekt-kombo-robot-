@@ -1,5 +1,3 @@
-import java.io.*;
-import java.util.*;
 import jssc.*;
 
 public class COMunication {
@@ -7,28 +5,32 @@ public class COMunication {
 	private static SerialPort serialPort;
 	private static int baudRate;
 	private static byte[] data;
-	private static boolean newData;
-	private static boolean isSetup = false;
-
+	private boolean newData = false;
+	private boolean isSetup = false;
+	
 	//initialize the comstuff.
 	public void setup(String port, int baudRate_){
-		serialPort = new SerialPort(port);
-		baudRate = baudRate_;
-		isSetup = true;
-		 try {
-	            serialPort.openPort();//Open port
-	            serialPort.setParams(9600, 8, 1, 0);//Set params
-	            int mask = SerialPort.MASK_RXCHAR;//Prepare mask, allows evenlistener on incoming data
-	            serialPort.setEventsMask(mask);//Set mask
-	            serialPort.addEventListener(new SerialPortReader());//Add SerialPortEventListener
-	        }
-	        catch (SerialPortException ex) {
-	            System.out.println(ex);
-	        }
+		try {
+			if(isSetup)
+				serialPort.closePort();
+			serialPort = new SerialPort(port);
+			baudRate = baudRate_;
+			isSetup = true;
+			serialPort.openPort();//Open port
+	        serialPort.setParams(baudRate, 8, 1, 0);//Set params
+	        int mask = SerialPort.MASK_RXCHAR;//Prepare mask, allows evenlistener on incoming data
+	        serialPort.setEventsMask(mask);//Set mask
+	        serialPort.addEventListener(new SerialPortReader());//Add SerialPortEventListener
+		}
+	    catch (SerialPortException ex) {
+	    	System.out.println(ex);
+	    }
 	}
 	
+	public void clearDataAvailable(){ newData = false; }
+	
 	// returns true is the comunication is up and running
-	public boolean isSetup(){return isSetup;}
+	public boolean GetIsSetup(){ return isSetup; }
 	
 	//returns the byte new data, if data is available send it to the gui
 	public boolean isDataAvailable(){ return newData; }
@@ -42,13 +44,11 @@ public class COMunication {
 	// sends data over comport
 	public void sendData(byte[] dataToSend){
         try {
-            //serialPort.openPort();//Open serial port
             serialPort.setParams(baudRate, 
         			SerialPort.DATABITS_8,
         			SerialPort.STOPBITS_1,
         			SerialPort.PARITY_NONE);//Set parameters. 
             serialPort.writeBytes(dataToSend);//Write data to port
-            //serialPort.closePort();//Close serial port
         }
         catch (SerialPortException ex) {
             System.out.println(ex);
@@ -56,13 +56,12 @@ public class COMunication {
 	}
 	
 	//Recieve data over comport.
-	private static byte[] receiveData(){
+	private byte[] receiveData(){
 		byte[] data1, data2, dataOut;
 		data1 = new byte[0];
 		data2 = new byte[0];
 		dataOut = new byte[0];
 		try {
-            //serialPort.openPort();//Open serial port
             serialPort.setParams(baudRate, 
                     			SerialPort.DATABITS_8,
                     			SerialPort.STOPBITS_1,
@@ -71,8 +70,6 @@ public class COMunication {
             
             if((data1[0] >>> 4) != 0)// shift to get the number of incoming bytes. If we need to recive more bytes we get to know it here. 
             	data2 = serialPort.readBytes(data1[0] >>> 4); //Read the rest of the bytes.
-            
-            //serialPort.closePort();//Close serial port
         }
         catch (SerialPortException ex) {
             System.out.println(ex);
@@ -89,13 +86,14 @@ public class COMunication {
 	//Lists all the active ports, Will be used in GUI to select the port we want. 
 	public String[] availablePorts() {return SerialPortList.getPortNames();}
 	
-	static class SerialPortReader implements SerialPortEventListener {
+	class SerialPortReader implements SerialPortEventListener {
 
 	//EventListener that waits for incoming data.
-    public void serialEvent(SerialPortEvent event) {
-        if(event.isRXCHAR()){//If data is available
-            data = receiveData();
-            newData = true; //set variable that new data is available for GUI
-        }
-    }
-}}
+		public void serialEvent(SerialPortEvent event) {
+        	if(event.isRXCHAR()){//If data is available
+            	data = receiveData();
+            	newData = true;//set variable that new data is available for GUI
+        	}
+    	}
+	}
+}

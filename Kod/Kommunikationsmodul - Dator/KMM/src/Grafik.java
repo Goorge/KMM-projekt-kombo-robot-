@@ -26,7 +26,7 @@ import javax.swing.JLabel;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
 
-enum listEnum{leftDistance, rightDistance, frontDistance, gyro, leftWheel, rightWheel, line, rgb};
+enum listEnum{leftDistance, rightDistance, frontDistance, gyro, leftWheel, rightWheel, line, rgb, garbage};
 enum directions{goForwards, goBackwards, goLeft, goRight, turnLeft, turnRight}; 
 
 public class Grafik {
@@ -61,7 +61,6 @@ public class Grafik {
 	
 	// THE LISTs
 	private static JList graficList;
-
 	private static JPanel panel = new JPanel();
 	private static JScrollPane listScroll = new JScrollPane();
 	private static DefaultListModel[] lists;
@@ -89,10 +88,14 @@ public class Grafik {
 				}
 			}
 		});
-			
+		boolean test;
 		while(true){
-			if(com.isSetup()){
+			test = com.GetIsSetup();
+			System.out.print("");
+			if(test){
+				//System.out.println("Klar med setup");
 				if(com.isDataAvailable()){
+					System.out.println("Mottagen data");
 					handleData(com.deliverData());
 				}
 			}
@@ -103,29 +106,40 @@ public class Grafik {
 	
 	// Tar hand om data som kommer ifrån bt, Behöver göras mer. 
 	private static void handleData(byte[] data){
-		if((data[0] >>> 4) == 0){
-			switch (data[0]){
-			case (byte)0x03: // RGB BLÅ 
-				addToList(listEnum.rgb, getCurrentTime() + "RÖD");
-				changeRGBColor(Color.RED);
-				break;
-			case (byte)0x04: // RGB GRÖN 
-				addToList(listEnum.rgb, getCurrentTime() + "GRÖN");
-				changeRGBColor(Color.GREEN);
-				break;
-			case (byte)0x05: // RGB BLÅ 
-				addToList(listEnum.rgb, getCurrentTime() + "BLÅ");
-				changeRGBColor(Color.BLUE);
-				break;
-			case (byte)0x06: // gyro klart 
-				addToList(listEnum.gyro, getCurrentTime() + "GyroKlart");
-				break;
-			case (byte)0x07: // gyro aktiverat 
-				addToList(listEnum.gyro, getCurrentTime() + "GyroStart");
-				addToList(listEnum.rgb, System.currentTimeMillis() + "RÖD");
-				break;			
+		switch (data[0]){
+		case (byte)0x01: //Avståndssensorer
+			
+			break;
+		case (byte)0x02: //Linjesensorer
+			
+			break;
+		case (byte)0x03: // RGB BLÅ 
+			addToList(listEnum.rgb, getCurrentTime() + "RÖD");
+			changeRGBColor(Color.RED);
+			break;
+		case (byte)0x04: // RGB GRÖN 
+			addToList(listEnum.rgb, getCurrentTime() + "GRÖN");
+			changeRGBColor(Color.GREEN);
+			break;
+		case (byte)0x05: // RGB BLÅ 
+			addToList(listEnum.rgb, getCurrentTime() + "BLÅ");
+			changeRGBColor(Color.BLUE);
+			break;
+		case (byte)0x06: // gyro klart 
+			addToList(listEnum.gyro, getCurrentTime() + "GyroKlart");
+			break;
+		case (byte)0x07: // gyro aktiverat 
+			addToList(listEnum.gyro, getCurrentTime() + "GyroStart");
+			break;		
+		default: // If we dont get any real data, we still have a list where we write it so we know if it got wrong
+			String text = ""; 
+			for(int i = 0; i < data.length; i++){
+				text += data[i];
 			}
+			addToList(listEnum.garbage, getCurrentTime() + " " + text);
+			break; 
 		}
+		com.clearDataAvailable();
 	}
 	
 	// label buttons
@@ -165,19 +179,23 @@ public class Grafik {
 			toSend[0] = (byte)0x09; //00001001
 			break;
 		case goBackwards:
-			toSend[0] = (byte)0x0D; //00001101
-			break;
-		case goLeft://?
-			toSend[0] = (byte)0x09; //00001001
-			break;
-		case goRight://?
 			toSend[0] = (byte)0x0A; //00001010
 			break;
-		case turnLeft:
+		case goLeft://?
 			toSend[0] = (byte)0x0B; //00001011
 			break;
-		}
-		if(com.isSetup())
+		case goRight://?
+			toSend[0] = (byte)0x0C; //00001100
+			break;
+		case turnLeft:
+			toSend[0] = (byte)0x0D; //00001101
+			break;
+		case turnRight:
+			toSend[0] = (byte)0x0E; //00001110
+			break;
+		} 
+
+		if(com.GetIsSetup())
 			com.sendData(toSend);
 	}
 	
@@ -210,13 +228,11 @@ public class Grafik {
 	
 	//initialize some other stuff
 	private void init(){
-		lists = new DefaultListModel[8];
-		for(int i = 0; i < 8; i++){
+		lists = new DefaultListModel[listEnum.values().length];
+		for(int i = 0; i < listEnum.values().length; i++){
 			lists[i] = new DefaultListModel();
 			lists[i].addElement("");
 		}
-		
-		com = new COMunication();
 	}
 	
 	private static String getCurrentTime(){
@@ -389,11 +405,21 @@ public class Grafik {
 				String port = (String)graficList.getSelectedValue();
 				if((graficList.getModel() == comPorts) && port != null ){
 					com.setup(port, baudRate);
+					System.out.println("Port setup färdig");
 				}
 			}
 		});
 		com_btn.setBounds(484, 600, 80, 22);
 		frame.getContentPane().add(com_btn);
+		
+		Button garbage_btn = new Button("GarbageData");
+		garbage_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setJListVisible(listEnum.garbage);
+			}
+		});
+		garbage_btn.setBounds(750, 600, 80, 22);
+		frame.getContentPane().add(garbage_btn);
 		
 		Button refresh_com_btn = new Button("refresh list of COMport");
 		refresh_com_btn.addActionListener(new ActionListener() {
