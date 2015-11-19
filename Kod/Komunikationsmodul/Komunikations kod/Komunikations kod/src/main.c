@@ -13,8 +13,7 @@ void run(void);
 void initialize(void);
 void update_lcd(void);
 
-int main (void)
-{
+int main (void){
 	board_init();
 	initialize();
 	run();
@@ -24,17 +23,19 @@ void initialize(void){
 	bluetooth_setup((long)115200);
 	lcd_setup();
 	//i2c_setup(0x02);
-	sei();
+	
+	sei(); // Enable setup
 	_delay_ms(100);
 }
 
 void run(void){
-	char test[2][16] = {"test", "Mer Test"};
-	lcd_write_string(test);
-	//lcd_write_instruction(lcd_Clear);
-	_delay_us(80);
+	char rad1[] = "detta ar text";
+	char rad2[] = "mer text";
+	lcd_write_string(rad1, lcd_SetCursor |lcd_LineOne);
+	lcd_write_string(rad2, lcd_SetCursor |lcd_LineTwo);
 	//lcd_write_char('A');
-
+	_delay_us(80);
+	
 	//How many bytes is there during current read
 	short number_of_bytes_from_bt = 0;
 	//short number_of_bytes_from_i2c = 0;

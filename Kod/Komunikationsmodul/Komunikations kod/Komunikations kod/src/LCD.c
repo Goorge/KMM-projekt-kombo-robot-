@@ -11,27 +11,19 @@ bool directionLeft = true;
 //LCD Setup, inits all the variables
 void lcd_setup(void)	{
 	DDRA = 0xFF;
-	DDRD = (1 << E) | (1 << RS);
+	DDRD |= (1 << E) | (1 << RS);
 			
 	_delay_ms(100); // wait for vdd to rise to 4.5V 
 	//Function reset
-	lcd_write_instruction(lcd_FunctionReset); //b3 antal rader, b2 antal punkter, 8 eller 11  
-	_delay_us(80);
+	lcd_write_instruction(lcd_FunctionReset); //b3 antal rader, b2 antal punkter, 8 eller 11  // Kanske inte behövs
 	//Function set
 	lcd_write_instruction(lcd_FunctionSet); //b3 antal rader, b2 antal punkter, 8 eller 11  
-	_delay_us(80);
 	//Display on
 	lcd_write_instruction(lcd_DisplayOn); //b2 display, b1 cursor, b0 blink
-	_delay_us(80);
 	//Display clear
 	lcd_write_instruction(lcd_Clear);
-	_delay_ms(4);
 	//Entry Mode Set
 	lcd_write_instruction(lcd_EntryMode);//b1 inc/dec, b0, Entire shift
-	_delay_ms(1);
-	
-	lcd_write_instruction(lcd_SetCursor);
-	_delay_us(80);
 }
 
 // writes a char on current possition
@@ -53,10 +45,9 @@ void lcd_write_char(char letter){
 	PORTD |= (1 << RS); // sätt RS
 	PORTD |= (1 << E); // Sätt Enable
 	
-	_delay_us(1); //TSU2	// Vänta på att data ska stabiliseras
-	PORTD &= ~(1 << E);
-	PORTD &= ~(1 << RS);
-	_delay_us(1);
+	_delay_us(100); //TSU2	// Vänta på att data ska stabiliseras
+	PORTD &= ~(1 << E); // Nolställ E och RS så att dom är noll vid nästa instruktion/charläsning
+	PORTD &= ~(1 << RS); //
 }
 
 void lcd_write_instruction(uint8_t instruction){
@@ -76,22 +67,19 @@ void lcd_write_instruction(uint8_t instruction){
 	*/
 	
 	PORTA = instruction; // funkar inte detta prova bit för bit. Gäller isf även utskrift.
+
+	if(instruction == lcd_Home || instruction == lcd_Clear)
+		_delay_ms(3);
+	else
+		_delay_us(100);
 }
 
 //Erases data on LCD and write new one.
-void lcd_write_string(char string[2][16]){
-	lcd_write_instruction(lcd_Clear);
-	_delay_us(80);
-	lcd_write_instruction(lcd_SetCursor | lcd_LineOne);
-	_delay_us(80);	// Behövs troligtvis inte då clear borde 0, om jag inte fattar databladet fel
+void lcd_write_string(char text[], uint8_t row_instrucion){
+	lcd_write_instruction(row_instrucion);
 	
-	for(int line = 0; line < 2; line++){
-		for(int i = 0; i < NELEMS(string[line]); i++){
-			lcd_write_char(string[line][i]); 
-			_delay_us(80);
-		}
-		lcd_write_instruction(lcd_SetCursor | lcd_LineTwo);
-		_delay_us(80); 
+	for(int i = 0; i < NELEMS(text); i++){
+		lcd_write_char(text[i]); 
 	}
 }
 

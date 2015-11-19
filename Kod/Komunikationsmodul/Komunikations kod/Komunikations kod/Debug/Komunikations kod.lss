@@ -3,33 +3,33 @@ Komunikations kod.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000020  00800100  00000326  000003ba  2**0
+  0 .data         00000018  00800100  0000027c  00000310  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000326  00000000  00000000  00000094  2**1
+  1 .text         0000027c  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000002  00800120  00800120  000003da  2**0
+  2 .bss          00000002  00800118  00800118  00000328  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000003da  2**0
+  3 .comment      00000030  00000000  00000000  00000328  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  0000040c  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000358  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000000e0  00000000  00000000  0000044c  2**0
+  5 .debug_aranges 000000e0  00000000  00000000  00000398  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000bd2  00000000  00000000  0000052c  2**0
+  6 .debug_info   000009a0  00000000  00000000  00000478  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000053f  00000000  00000000  000010fe  2**0
+  7 .debug_abbrev 000004f7  00000000  00000000  00000e18  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000013cc  00000000  00000000  0000163d  2**0
+  8 .debug_line   000012fe  00000000  00000000  0000130f  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  0000019c  00000000  00000000  00002a0c  2**2
+  9 .debug_frame  00000188  00000000  00000000  00002610  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00011dc3  00000000  00000000  00002ba8  2**0
+ 10 .debug_str    00011dd7  00000000  00000000  00002798  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000002eb  00000000  00000000  0001496b  2**0
+ 11 .debug_loc    00000296  00000000  00000000  0001456f  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000e8  00000000  00000000  00014c56  2**0
+ 12 .debug_ranges 000000a0  00000000  00000000  00014805  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  00004684  00000000  00000000  00014d3e  2**0
+ 13 .debug_macro  00004684  00000000  00000000  000148a5  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -75,11 +75,11 @@ Disassembly of section .text:
   4a:	00 00       	nop
   4c:	3c c0       	rjmp	.+120    	; 0xc6 <__bad_interrupt>
   4e:	00 00       	nop
-  50:	60 c0       	rjmp	.+192    	; 0x112 <__vector_20>
+  50:	61 c0       	rjmp	.+194    	; 0x114 <__vector_20>
   52:	00 00       	nop
   54:	38 c0       	rjmp	.+112    	; 0xc6 <__bad_interrupt>
   56:	00 00       	nop
-  58:	70 c0       	rjmp	.+224    	; 0x13a <__vector_22>
+  58:	71 c0       	rjmp	.+226    	; 0x13c <__vector_22>
   5a:	00 00       	nop
   5c:	34 c0       	rjmp	.+104    	; 0xc6 <__bad_interrupt>
   5e:	00 00       	nop
@@ -118,20 +118,20 @@ Disassembly of section .text:
   98:	11 e0       	ldi	r17, 0x01	; 1
   9a:	a0 e0       	ldi	r26, 0x00	; 0
   9c:	b1 e0       	ldi	r27, 0x01	; 1
-  9e:	e6 e2       	ldi	r30, 0x26	; 38
-  a0:	f3 e0       	ldi	r31, 0x03	; 3
+  9e:	ec e7       	ldi	r30, 0x7C	; 124
+  a0:	f2 e0       	ldi	r31, 0x02	; 2
   a2:	00 e0       	ldi	r16, 0x00	; 0
   a4:	0b bf       	out	0x3b, r16	; 59
   a6:	02 c0       	rjmp	.+4      	; 0xac <__do_copy_data+0x14>
   a8:	07 90       	elpm	r0, Z+
   aa:	0d 92       	st	X+, r0
-  ac:	a0 32       	cpi	r26, 0x20	; 32
+  ac:	a8 31       	cpi	r26, 0x18	; 24
   ae:	b1 07       	cpc	r27, r17
   b0:	d9 f7       	brne	.-10     	; 0xa8 <__do_copy_data+0x10>
 
 000000b2 <__do_clear_bss>:
   b2:	21 e0       	ldi	r18, 0x01	; 1
-  b4:	a0 e2       	ldi	r26, 0x20	; 32
+  b4:	a8 e1       	ldi	r26, 0x18	; 24
   b6:	b1 e0       	ldi	r27, 0x01	; 1
   b8:	01 c0       	rjmp	.+2      	; 0xbc <.do_clear_bss_start>
 
@@ -139,11 +139,11 @@ Disassembly of section .text:
   ba:	1d 92       	st	X+, r1
 
 000000bc <.do_clear_bss_start>:
-  bc:	a2 32       	cpi	r26, 0x22	; 34
+  bc:	aa 31       	cpi	r26, 0x1A	; 26
   be:	b2 07       	cpc	r27, r18
   c0:	e1 f7       	brne	.-8      	; 0xba <.do_clear_bss_loop>
-  c2:	2c d1       	rcall	.+600    	; 0x31c <main>
-  c4:	2e c1       	rjmp	.+604    	; 0x322 <_exit>
+  c2:	d7 d0       	rcall	.+430    	; 0x272 <main>
+  c4:	d9 c0       	rjmp	.+434    	; 0x278 <_exit>
 
 000000c6 <__bad_interrupt>:
   c6:	9c cf       	rjmp	.-200    	; 0x0 <__vectors>
@@ -177,115 +177,114 @@ void bluetooth_send_byte(byte data){
   f2:	08 95       	ret
 
 000000f4 <bluetooth_setup>:
-  f4:	2a e0       	ldi	r18, 0x0A	; 10
-  f6:	2a b9       	out	0x0a, r18	; 10
-  f8:	cb 01       	movw	r24, r22
-  fa:	e7 cf       	rjmp	.-50     	; 0xca <usart_setup>
-  fc:	08 95       	ret
+  f4:	2a b1       	in	r18, 0x0a	; 10
+  f6:	2a 60       	ori	r18, 0x0A	; 10
+  f8:	2a b9       	out	0x0a, r18	; 10
+  fa:	cb 01       	movw	r24, r22
+  fc:	e6 cf       	rjmp	.-52     	; 0xca <usart_setup>
+  fe:	08 95       	ret
 
-000000fe <bluetooth_clear_to_send>:
+00000100 <bluetooth_clear_to_send>:
 }
 
 // Säg till blåtandsenheten att du är redo att ta emot mer data. 
 void bluetooth_clear_to_send(void){	PORTD &= ~(1 << RTS); }// Clear To Send;
-  fe:	5b 98       	cbi	0x0b, 3	; 11
- 100:	08 95       	ret
+ 100:	5b 98       	cbi	0x0b, 3	; 11
+ 102:	08 95       	ret
 
-00000102 <bluetooth_fetch_new_data>:
+00000104 <bluetooth_fetch_new_data>:
 
 //Hämta ut datan från BT
 byte bluetooth_fetch_new_data(void){
 	newData = false;
- 102:	10 92 21 01 	sts	0x0121, r1
+ 104:	10 92 19 01 	sts	0x0119, r1
 	return dataFromBT;
 }
- 106:	80 91 20 01 	lds	r24, 0x0120
- 10a:	08 95       	ret
+ 108:	80 91 18 01 	lds	r24, 0x0118
+ 10c:	08 95       	ret
 
-0000010c <bluetooth_get_new_data>:
+0000010e <bluetooth_get_new_data>:
 
 // Kolla om vi har fått in någon ny data
 bool bluetooth_get_new_data(void){ return newData; }
- 10c:	80 91 21 01 	lds	r24, 0x0121
- 110:	08 95       	ret
+ 10e:	80 91 19 01 	lds	r24, 0x0119
+ 112:	08 95       	ret
 
-00000112 <__vector_20>:
+00000114 <__vector_20>:
 
 
 //Hämtar datan
 ISR ( USART0_RX_vect ){ //recieve complete // USART0_RX_vect
- 112:	1f 92       	push	r1
- 114:	0f 92       	push	r0
- 116:	0f b6       	in	r0, 0x3f	; 63
- 118:	0f 92       	push	r0
- 11a:	11 24       	eor	r1, r1
- 11c:	8f 93       	push	r24
+ 114:	1f 92       	push	r1
+ 116:	0f 92       	push	r0
+ 118:	0f b6       	in	r0, 0x3f	; 63
+ 11a:	0f 92       	push	r0
+ 11c:	11 24       	eor	r1, r1
+ 11e:	8f 93       	push	r24
 	PORTD |= (1 << RTS);//Säg att du inte vill ha mer data atm
- 11e:	5b 9a       	sbi	0x0b, 3	; 11
+ 120:	5b 9a       	sbi	0x0b, 3	; 11
 	dataFromBT = UDR0;		// Hämta ut datan
- 120:	80 91 c6 00 	lds	r24, 0x00C6
- 124:	80 93 20 01 	sts	0x0120, r24
+ 122:	80 91 c6 00 	lds	r24, 0x00C6
+ 126:	80 93 18 01 	sts	0x0118, r24
 	newData = true; // Tala om för main att vi har fått data
- 128:	81 e0       	ldi	r24, 0x01	; 1
- 12a:	80 93 21 01 	sts	0x0121, r24
+ 12a:	81 e0       	ldi	r24, 0x01	; 1
+ 12c:	80 93 19 01 	sts	0x0119, r24
 }	
- 12e:	8f 91       	pop	r24
- 130:	0f 90       	pop	r0
- 132:	0f be       	out	0x3f, r0	; 63
- 134:	0f 90       	pop	r0
- 136:	1f 90       	pop	r1
- 138:	18 95       	reti
+ 130:	8f 91       	pop	r24
+ 132:	0f 90       	pop	r0
+ 134:	0f be       	out	0x3f, r0	; 63
+ 136:	0f 90       	pop	r0
+ 138:	1f 90       	pop	r1
+ 13a:	18 95       	reti
 
-0000013a <__vector_22>:
+0000013c <__vector_22>:
 
- 13a:	1f 92       	push	r1
- 13c:	0f 92       	push	r0
- 13e:	0f b6       	in	r0, 0x3f	; 63
- 140:	0f 92       	push	r0
- 142:	11 24       	eor	r1, r1
- 144:	0f 90       	pop	r0
- 146:	0f be       	out	0x3f, r0	; 63
- 148:	0f 90       	pop	r0
- 14a:	1f 90       	pop	r1
- 14c:	18 95       	reti
+ 13c:	1f 92       	push	r1
+ 13e:	0f 92       	push	r0
+ 140:	0f b6       	in	r0, 0x3f	; 63
+ 142:	0f 92       	push	r0
+ 144:	11 24       	eor	r1, r1
+ 146:	0f 90       	pop	r0
+ 148:	0f be       	out	0x3f, r0	; 63
+ 14a:	0f 90       	pop	r0
+ 14c:	1f 90       	pop	r1
+ 14e:	18 95       	reti
 
-0000014e <lcd_write_char>:
+00000150 <lcd_write_char>:
 	PORTA |= (letter & (1 << 3));
 	PORTA |= (letter & (1 << 2));
 	PORTA |= (letter & (1 << 1));
 	PORTA |= (letter & (1 << 0));
 */
 	PORTA = letter;	// Lägg ín data på pinnarna in data
- 14e:	82 b9       	out	0x02, r24	; 2
+ 150:	82 b9       	out	0x02, r24	; 2
 	PORTD &= ~(1 << E);	// Försäkring om att E är låg innan vi försöker skriva
- 150:	5f 98       	cbi	0x0b, 7	; 11
+ 152:	5f 98       	cbi	0x0b, 7	; 11
 	
 	PORTD |= (1 << RS); // sätt RS
- 152:	5e 9a       	sbi	0x0b, 6	; 11
+ 154:	5e 9a       	sbi	0x0b, 6	; 11
 	PORTD |= (1 << E); // Sätt Enable
- 154:	5f 9a       	sbi	0x0b, 7	; 11
+ 156:	5f 9a       	sbi	0x0b, 7	; 11
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 156:	85 e0       	ldi	r24, 0x05	; 5
- 158:	8a 95       	dec	r24
- 15a:	f1 f7       	brne	.-4      	; 0x158 <lcd_write_char+0xa>
+ 158:	80 e7       	ldi	r24, 0x70	; 112
+ 15a:	91 e0       	ldi	r25, 0x01	; 1
+ 15c:	01 97       	sbiw	r24, 0x01	; 1
+ 15e:	f1 f7       	brne	.-4      	; 0x15c <lcd_write_char+0xc>
+ 160:	00 c0       	rjmp	.+0      	; 0x162 <lcd_write_char+0x12>
 	
-	_delay_us(1); //TSU2	// Vänta på att data ska stabiliseras
-	PORTD &= ~(1 << E);
- 15c:	5f 98       	cbi	0x0b, 7	; 11
-	PORTD &= ~(1 << RS);
- 15e:	5e 98       	cbi	0x0b, 6	; 11
- 160:	85 e0       	ldi	r24, 0x05	; 5
- 162:	8a 95       	dec	r24
- 164:	f1 f7       	brne	.-4      	; 0x162 <lcd_write_char+0x14>
+	_delay_us(100); //TSU2	// Vänta på att data ska stabiliseras
+	PORTD &= ~(1 << E); // Nolställ E och RS så att dom är noll vid nästa instruktion/charläsning
+ 162:	5f 98       	cbi	0x0b, 7	; 11
+	PORTD &= ~(1 << RS); //
+ 164:	5e 98       	cbi	0x0b, 6	; 11
  166:	08 95       	ret
 
 00000168 <lcd_write_instruction>:
-	_delay_us(1);
 }
 
 void lcd_write_instruction(uint8_t instruction){
@@ -300,408 +299,268 @@ void lcd_write_instruction(uint8_t instruction){
 	
 	PORTA = instruction; // funkar inte detta prova bit för bit. Gäller isf även utskrift.
  16c:	82 b9       	out	0x02, r24	; 2
- 16e:	08 95       	ret
 
-00000170 <lcd_setup>:
+	if(instruction == lcd_Home || instruction == lcd_Clear)
+ 16e:	81 50       	subi	r24, 0x01	; 1
+ 170:	82 30       	cpi	r24, 0x02	; 2
+ 172:	28 f4       	brcc	.+10     	; 0x17e <lcd_write_instruction+0x16>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 174:	83 e3       	ldi	r24, 0x33	; 51
+ 176:	9b e2       	ldi	r25, 0x2B	; 43
+ 178:	01 97       	sbiw	r24, 0x01	; 1
+ 17a:	f1 f7       	brne	.-4      	; 0x178 <lcd_write_instruction+0x10>
+ 17c:	08 95       	ret
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 17e:	80 e7       	ldi	r24, 0x70	; 112
+ 180:	91 e0       	ldi	r25, 0x01	; 1
+ 182:	01 97       	sbiw	r24, 0x01	; 1
+ 184:	f1 f7       	brne	.-4      	; 0x182 <lcd_write_instruction+0x1a>
+ 186:	00 c0       	rjmp	.+0      	; 0x188 <lcd_write_instruction+0x20>
+ 188:	08 95       	ret
+
+0000018a <lcd_setup>:
 
 bool directionLeft = true;
 
 //LCD Setup, inits all the variables
 void lcd_setup(void)	{
 	DDRA = 0xFF;
- 170:	8f ef       	ldi	r24, 0xFF	; 255
- 172:	81 b9       	out	0x01, r24	; 1
-	DDRD = (1 << E) | (1 << RS);
- 174:	80 ec       	ldi	r24, 0xC0	; 192
- 176:	8a b9       	out	0x0a, r24	; 10
+ 18a:	8f ef       	ldi	r24, 0xFF	; 255
+ 18c:	81 b9       	out	0x01, r24	; 1
+	DDRD |= (1 << E) | (1 << RS);
+ 18e:	8a b1       	in	r24, 0x0a	; 10
+ 190:	80 6c       	ori	r24, 0xC0	; 192
+ 192:	8a b9       	out	0x0a, r24	; 10
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 178:	2f ef       	ldi	r18, 0xFF	; 255
- 17a:	8f e7       	ldi	r24, 0x7F	; 127
- 17c:	94 e0       	ldi	r25, 0x04	; 4
- 17e:	21 50       	subi	r18, 0x01	; 1
- 180:	80 40       	sbci	r24, 0x00	; 0
- 182:	90 40       	sbci	r25, 0x00	; 0
- 184:	e1 f7       	brne	.-8      	; 0x17e <lcd_setup+0xe>
- 186:	00 c0       	rjmp	.+0      	; 0x188 <lcd_setup+0x18>
- 188:	00 00       	nop
+ 194:	2f ef       	ldi	r18, 0xFF	; 255
+ 196:	8f e7       	ldi	r24, 0x7F	; 127
+ 198:	94 e0       	ldi	r25, 0x04	; 4
+ 19a:	21 50       	subi	r18, 0x01	; 1
+ 19c:	80 40       	sbci	r24, 0x00	; 0
+ 19e:	90 40       	sbci	r25, 0x00	; 0
+ 1a0:	e1 f7       	brne	.-8      	; 0x19a <lcd_setup+0x10>
+ 1a2:	00 c0       	rjmp	.+0      	; 0x1a4 <lcd_setup+0x1a>
+ 1a4:	00 00       	nop
 			
 	_delay_ms(100); // wait for vdd to rise to 4.5V 
 	//Function reset
-	lcd_write_instruction(lcd_FunctionReset); //b3 antal rader, b2 antal punkter, 8 eller 11  
- 18a:	80 e3       	ldi	r24, 0x30	; 48
- 18c:	ed df       	rcall	.-38     	; 0x168 <lcd_write_instruction>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
- 18e:	86 e2       	ldi	r24, 0x26	; 38
- 190:	91 e0       	ldi	r25, 0x01	; 1
- 192:	01 97       	sbiw	r24, 0x01	; 1
- 194:	f1 f7       	brne	.-4      	; 0x192 <lcd_setup+0x22>
- 196:	00 c0       	rjmp	.+0      	; 0x198 <lcd_setup+0x28>
- 198:	00 00       	nop
-	_delay_us(80);
+	lcd_write_instruction(lcd_FunctionReset); //b3 antal rader, b2 antal punkter, 8 eller 11  // Kanske inte behövs
+ 1a6:	80 e3       	ldi	r24, 0x30	; 48
+ 1a8:	df df       	rcall	.-66     	; 0x168 <lcd_write_instruction>
 	//Function set
 	lcd_write_instruction(lcd_FunctionSet); //b3 antal rader, b2 antal punkter, 8 eller 11  
- 19a:	88 e3       	ldi	r24, 0x38	; 56
- 19c:	e5 df       	rcall	.-54     	; 0x168 <lcd_write_instruction>
- 19e:	86 e2       	ldi	r24, 0x26	; 38
- 1a0:	91 e0       	ldi	r25, 0x01	; 1
- 1a2:	01 97       	sbiw	r24, 0x01	; 1
- 1a4:	f1 f7       	brne	.-4      	; 0x1a2 <lcd_setup+0x32>
- 1a6:	00 c0       	rjmp	.+0      	; 0x1a8 <lcd_setup+0x38>
- 1a8:	00 00       	nop
-	_delay_us(80);
+ 1aa:	88 e3       	ldi	r24, 0x38	; 56
+ 1ac:	dd df       	rcall	.-70     	; 0x168 <lcd_write_instruction>
 	//Display on
 	lcd_write_instruction(lcd_DisplayOn); //b2 display, b1 cursor, b0 blink
- 1aa:	8c e0       	ldi	r24, 0x0C	; 12
- 1ac:	dd df       	rcall	.-70     	; 0x168 <lcd_write_instruction>
- 1ae:	86 e2       	ldi	r24, 0x26	; 38
- 1b0:	91 e0       	ldi	r25, 0x01	; 1
- 1b2:	01 97       	sbiw	r24, 0x01	; 1
- 1b4:	f1 f7       	brne	.-4      	; 0x1b2 <lcd_setup+0x42>
- 1b6:	00 c0       	rjmp	.+0      	; 0x1b8 <lcd_setup+0x48>
- 1b8:	00 00       	nop
-	_delay_us(80);
+ 1ae:	8c e0       	ldi	r24, 0x0C	; 12
+ 1b0:	db df       	rcall	.-74     	; 0x168 <lcd_write_instruction>
 	//Display clear
 	lcd_write_instruction(lcd_Clear);
- 1ba:	81 e0       	ldi	r24, 0x01	; 1
- 1bc:	d5 df       	rcall	.-86     	; 0x168 <lcd_write_instruction>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
- 1be:	89 e9       	ldi	r24, 0x99	; 153
- 1c0:	99 e3       	ldi	r25, 0x39	; 57
- 1c2:	01 97       	sbiw	r24, 0x01	; 1
- 1c4:	f1 f7       	brne	.-4      	; 0x1c2 <lcd_setup+0x52>
- 1c6:	00 c0       	rjmp	.+0      	; 0x1c8 <lcd_setup+0x58>
-	_delay_ms(4);
+ 1b2:	81 e0       	ldi	r24, 0x01	; 1
+ 1b4:	d9 df       	rcall	.-78     	; 0x168 <lcd_write_instruction>
 	//Entry Mode Set
 	lcd_write_instruction(lcd_EntryMode);//b1 inc/dec, b0, Entire shift
- 1c8:	86 e0       	ldi	r24, 0x06	; 6
- 1ca:	ce df       	rcall	.-100    	; 0x168 <lcd_write_instruction>
- 1cc:	86 e6       	ldi	r24, 0x66	; 102
- 1ce:	9e e0       	ldi	r25, 0x0E	; 14
- 1d0:	01 97       	sbiw	r24, 0x01	; 1
- 1d2:	f1 f7       	brne	.-4      	; 0x1d0 <lcd_setup+0x60>
- 1d4:	00 00       	nop
-	_delay_ms(1);
-	
-	lcd_write_instruction(lcd_SetCursor);
- 1d6:	80 e8       	ldi	r24, 0x80	; 128
- 1d8:	c7 df       	rcall	.-114    	; 0x168 <lcd_write_instruction>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
+ 1b6:	86 e0       	ldi	r24, 0x06	; 6
+ 1b8:	d7 cf       	rjmp	.-82     	; 0x168 <lcd_write_instruction>
+ 1ba:	08 95       	ret
 
-	__builtin_avr_delay_cycles(__ticks_dc);
- 1da:	86 e2       	ldi	r24, 0x26	; 38
- 1dc:	91 e0       	ldi	r25, 0x01	; 1
- 1de:	01 97       	sbiw	r24, 0x01	; 1
- 1e0:	f1 f7       	brne	.-4      	; 0x1de <lcd_setup+0x6e>
- 1e2:	00 c0       	rjmp	.+0      	; 0x1e4 <lcd_setup+0x74>
- 1e4:	00 00       	nop
- 1e6:	08 95       	ret
-
-000001e8 <lcd_write_string>:
-	
-	PORTA = instruction; // funkar inte detta prova bit för bit. Gäller isf även utskrift.
+000001bc <lcd_write_string>:
+	else
+		_delay_us(100);
 }
 
 //Erases data on LCD and write new one.
-void lcd_write_string(char string[2][16]){
- 1e8:	ef 92       	push	r14
- 1ea:	ff 92       	push	r15
- 1ec:	0f 93       	push	r16
- 1ee:	1f 93       	push	r17
- 1f0:	cf 93       	push	r28
- 1f2:	df 93       	push	r29
- 1f4:	7c 01       	movw	r14, r24
-	lcd_write_instruction(lcd_Clear);
- 1f6:	81 e0       	ldi	r24, 0x01	; 1
- 1f8:	b7 df       	rcall	.-146    	; 0x168 <lcd_write_instruction>
- 1fa:	86 e2       	ldi	r24, 0x26	; 38
- 1fc:	91 e0       	ldi	r25, 0x01	; 1
- 1fe:	01 97       	sbiw	r24, 0x01	; 1
- 200:	f1 f7       	brne	.-4      	; 0x1fe <lcd_write_string+0x16>
- 202:	00 c0       	rjmp	.+0      	; 0x204 <lcd_write_string+0x1c>
- 204:	00 00       	nop
-	_delay_us(80);
-	lcd_write_instruction(lcd_SetCursor | lcd_LineOne);
- 206:	80 e8       	ldi	r24, 0x80	; 128
- 208:	af df       	rcall	.-162    	; 0x168 <lcd_write_instruction>
- 20a:	e6 e2       	ldi	r30, 0x26	; 38
- 20c:	f1 e0       	ldi	r31, 0x01	; 1
- 20e:	31 97       	sbiw	r30, 0x01	; 1
- 210:	f1 f7       	brne	.-4      	; 0x20e <lcd_write_string+0x26>
- 212:	00 c0       	rjmp	.+0      	; 0x214 <lcd_write_string+0x2c>
- 214:	00 00       	nop
- 216:	87 01       	movw	r16, r14
- 218:	e7 01       	movw	r28, r14
- 21a:	60 96       	adiw	r28, 0x10	; 16
-	_delay_us(80);	// Behövs troligtvis inte då clear borde 0, om jag inte fattar databladet fel
+void lcd_write_string(char text[], uint8_t row_instrucion){
+ 1bc:	cf 93       	push	r28
+ 1be:	df 93       	push	r29
+ 1c0:	ec 01       	movw	r28, r24
+ 1c2:	86 2f       	mov	r24, r22
+	lcd_write_instruction(row_instrucion);
+ 1c4:	d1 df       	rcall	.-94     	; 0x168 <lcd_write_instruction>
 	
-	for(int line = 0; line < 2; line++){
-		for(int i = 0; i < NELEMS(string[line]); i++){
-			lcd_write_char(string[line][i]); 
- 21c:	f8 01       	movw	r30, r16
- 21e:	81 91       	ld	r24, Z+
- 220:	8f 01       	movw	r16, r30
- 222:	95 df       	rcall	.-214    	; 0x14e <lcd_write_char>
- 224:	86 e2       	ldi	r24, 0x26	; 38
- 226:	91 e0       	ldi	r25, 0x01	; 1
- 228:	01 97       	sbiw	r24, 0x01	; 1
- 22a:	f1 f7       	brne	.-4      	; 0x228 <lcd_write_string+0x40>
- 22c:	00 c0       	rjmp	.+0      	; 0x22e <lcd_write_string+0x46>
- 22e:	00 00       	nop
-	_delay_us(80);
-	lcd_write_instruction(lcd_SetCursor | lcd_LineOne);
-	_delay_us(80);	// Behövs troligtvis inte då clear borde 0, om jag inte fattar databladet fel
-	
-	for(int line = 0; line < 2; line++){
-		for(int i = 0; i < NELEMS(string[line]); i++){
- 230:	0c 17       	cp	r16, r28
- 232:	1d 07       	cpc	r17, r29
- 234:	99 f7       	brne	.-26     	; 0x21c <lcd_write_string+0x34>
-			lcd_write_char(string[line][i]); 
-			_delay_us(80);
-		}
-		lcd_write_instruction(lcd_SetCursor | lcd_LineTwo);
- 236:	80 ec       	ldi	r24, 0xC0	; 192
- 238:	97 df       	rcall	.-210    	; 0x168 <lcd_write_instruction>
- 23a:	e6 e2       	ldi	r30, 0x26	; 38
- 23c:	f1 e0       	ldi	r31, 0x01	; 1
- 23e:	31 97       	sbiw	r30, 0x01	; 1
- 240:	f1 f7       	brne	.-4      	; 0x23e <lcd_write_string+0x56>
- 242:	00 c0       	rjmp	.+0      	; 0x244 <lcd_write_string+0x5c>
- 244:	00 00       	nop
- 246:	87 01       	movw	r16, r14
- 248:	00 5e       	subi	r16, 0xE0	; 224
- 24a:	1f 4f       	sbci	r17, 0xFF	; 255
-	lcd_write_instruction(lcd_SetCursor | lcd_LineOne);
-	_delay_us(80);	// Behövs troligtvis inte då clear borde 0, om jag inte fattar databladet fel
-	
-	for(int line = 0; line < 2; line++){
-		for(int i = 0; i < NELEMS(string[line]); i++){
-			lcd_write_char(string[line][i]); 
- 24c:	89 91       	ld	r24, Y+
- 24e:	7f df       	rcall	.-258    	; 0x14e <lcd_write_char>
- 250:	86 e2       	ldi	r24, 0x26	; 38
- 252:	91 e0       	ldi	r25, 0x01	; 1
- 254:	01 97       	sbiw	r24, 0x01	; 1
- 256:	f1 f7       	brne	.-4      	; 0x254 <lcd_write_string+0x6c>
- 258:	00 c0       	rjmp	.+0      	; 0x25a <lcd_write_string+0x72>
- 25a:	00 00       	nop
-	_delay_us(80);
-	lcd_write_instruction(lcd_SetCursor | lcd_LineOne);
-	_delay_us(80);	// Behövs troligtvis inte då clear borde 0, om jag inte fattar databladet fel
-	
-	for(int line = 0; line < 2; line++){
-		for(int i = 0; i < NELEMS(string[line]); i++){
- 25c:	c0 17       	cp	r28, r16
- 25e:	d1 07       	cpc	r29, r17
- 260:	a9 f7       	brne	.-22     	; 0x24c <lcd_write_string+0x64>
-			lcd_write_char(string[line][i]); 
-			_delay_us(80);
-		}
-		lcd_write_instruction(lcd_SetCursor | lcd_LineTwo);
- 262:	80 ec       	ldi	r24, 0xC0	; 192
- 264:	81 df       	rcall	.-254    	; 0x168 <lcd_write_instruction>
- 266:	e6 e2       	ldi	r30, 0x26	; 38
- 268:	f1 e0       	ldi	r31, 0x01	; 1
- 26a:	31 97       	sbiw	r30, 0x01	; 1
- 26c:	f1 f7       	brne	.-4      	; 0x26a <lcd_write_string+0x82>
- 26e:	00 c0       	rjmp	.+0      	; 0x270 <lcd_write_string+0x88>
- 270:	00 00       	nop
-		_delay_us(80); 
+	for(int i = 0; i < NELEMS(text); i++){
+		lcd_write_char(text[i]); 
+ 1c6:	88 81       	ld	r24, Y
+ 1c8:	c3 df       	rcall	.-122    	; 0x150 <lcd_write_char>
+ 1ca:	89 81       	ldd	r24, Y+1	; 0x01
+ 1cc:	c1 df       	rcall	.-126    	; 0x150 <lcd_write_char>
 	}
 }
- 272:	df 91       	pop	r29
- 274:	cf 91       	pop	r28
- 276:	1f 91       	pop	r17
- 278:	0f 91       	pop	r16
- 27a:	ff 90       	pop	r15
- 27c:	ef 90       	pop	r14
- 27e:	08 95       	ret
+ 1ce:	df 91       	pop	r29
+ 1d0:	cf 91       	pop	r28
+ 1d2:	08 95       	ret
 
-00000280 <initialize>:
+000001d4 <initialize>:
 	initialize();
 	run();
 }
 
 void initialize(void){
 	bluetooth_setup((long)115200);
- 280:	60 e0       	ldi	r22, 0x00	; 0
- 282:	72 ec       	ldi	r23, 0xC2	; 194
- 284:	81 e0       	ldi	r24, 0x01	; 1
- 286:	90 e0       	ldi	r25, 0x00	; 0
- 288:	35 df       	rcall	.-406    	; 0xf4 <bluetooth_setup>
+ 1d4:	60 e0       	ldi	r22, 0x00	; 0
+ 1d6:	72 ec       	ldi	r23, 0xC2	; 194
+ 1d8:	81 e0       	ldi	r24, 0x01	; 1
+ 1da:	90 e0       	ldi	r25, 0x00	; 0
+ 1dc:	8b df       	rcall	.-234    	; 0xf4 <bluetooth_setup>
 	lcd_setup();
- 28a:	72 df       	rcall	.-284    	; 0x170 <lcd_setup>
+ 1de:	d5 df       	rcall	.-86     	; 0x18a <lcd_setup>
 	//i2c_setup(0x02);
-	sei();
- 28c:	78 94       	sei
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
+	
+	sei(); // Enable setup
+ 1e0:	78 94       	sei
+ 1e2:	2f ef       	ldi	r18, 0xFF	; 255
+ 1e4:	8f e7       	ldi	r24, 0x7F	; 127
+ 1e6:	94 e0       	ldi	r25, 0x04	; 4
+ 1e8:	21 50       	subi	r18, 0x01	; 1
+ 1ea:	80 40       	sbci	r24, 0x00	; 0
+ 1ec:	90 40       	sbci	r25, 0x00	; 0
+ 1ee:	e1 f7       	brne	.-8      	; 0x1e8 <initialize+0x14>
+ 1f0:	00 c0       	rjmp	.+0      	; 0x1f2 <initialize+0x1e>
+ 1f2:	00 00       	nop
+ 1f4:	08 95       	ret
 
-	__builtin_avr_delay_cycles(__ticks_dc);
- 28e:	2f ef       	ldi	r18, 0xFF	; 255
- 290:	8f e7       	ldi	r24, 0x7F	; 127
- 292:	94 e0       	ldi	r25, 0x04	; 4
- 294:	21 50       	subi	r18, 0x01	; 1
- 296:	80 40       	sbci	r24, 0x00	; 0
- 298:	90 40       	sbci	r25, 0x00	; 0
- 29a:	e1 f7       	brne	.-8      	; 0x294 <initialize+0x14>
- 29c:	00 c0       	rjmp	.+0      	; 0x29e <initialize+0x1e>
- 29e:	00 00       	nop
- 2a0:	08 95       	ret
-
-000002a2 <run>:
+000001f6 <run>:
 	_delay_ms(100);
 }
 
 void run(void){
- 2a2:	cf 93       	push	r28
- 2a4:	df 93       	push	r29
- 2a6:	cd b7       	in	r28, 0x3d	; 61
- 2a8:	de b7       	in	r29, 0x3e	; 62
- 2aa:	a0 97       	sbiw	r28, 0x20	; 32
- 2ac:	0f b6       	in	r0, 0x3f	; 63
- 2ae:	f8 94       	cli
- 2b0:	de bf       	out	0x3e, r29	; 62
- 2b2:	0f be       	out	0x3f, r0	; 63
- 2b4:	cd bf       	out	0x3d, r28	; 61
-	char test[2][16] = {"test", "Mer Test"};
- 2b6:	80 e2       	ldi	r24, 0x20	; 32
- 2b8:	e0 e0       	ldi	r30, 0x00	; 0
- 2ba:	f1 e0       	ldi	r31, 0x01	; 1
- 2bc:	de 01       	movw	r26, r28
- 2be:	11 96       	adiw	r26, 0x01	; 1
- 2c0:	01 90       	ld	r0, Z+
- 2c2:	0d 92       	st	X+, r0
- 2c4:	8a 95       	dec	r24
- 2c6:	e1 f7       	brne	.-8      	; 0x2c0 <run+0x1e>
-	lcd_write_string(test);
- 2c8:	ce 01       	movw	r24, r28
- 2ca:	01 96       	adiw	r24, 0x01	; 1
- 2cc:	8d df       	rcall	.-230    	; 0x1e8 <lcd_write_string>
+ 1f6:	cf 93       	push	r28
+ 1f8:	df 93       	push	r29
+ 1fa:	cd b7       	in	r28, 0x3d	; 61
+ 1fc:	de b7       	in	r29, 0x3e	; 62
+ 1fe:	67 97       	sbiw	r28, 0x17	; 23
+ 200:	0f b6       	in	r0, 0x3f	; 63
+ 202:	f8 94       	cli
+ 204:	de bf       	out	0x3e, r29	; 62
+ 206:	0f be       	out	0x3f, r0	; 63
+ 208:	cd bf       	out	0x3d, r28	; 61
+	char rad1[] = "detta ar text";
+ 20a:	8e e0       	ldi	r24, 0x0E	; 14
+ 20c:	e0 e0       	ldi	r30, 0x00	; 0
+ 20e:	f1 e0       	ldi	r31, 0x01	; 1
+ 210:	de 01       	movw	r26, r28
+ 212:	11 96       	adiw	r26, 0x01	; 1
+ 214:	01 90       	ld	r0, Z+
+ 216:	0d 92       	st	X+, r0
+ 218:	8a 95       	dec	r24
+ 21a:	e1 f7       	brne	.-8      	; 0x214 <run+0x1e>
+	char rad2[] = "mer text";
+ 21c:	89 e0       	ldi	r24, 0x09	; 9
+ 21e:	ee e0       	ldi	r30, 0x0E	; 14
+ 220:	f1 e0       	ldi	r31, 0x01	; 1
+ 222:	de 01       	movw	r26, r28
+ 224:	1f 96       	adiw	r26, 0x0f	; 15
+ 226:	01 90       	ld	r0, Z+
+ 228:	0d 92       	st	X+, r0
+ 22a:	8a 95       	dec	r24
+ 22c:	e1 f7       	brne	.-8      	; 0x226 <run+0x30>
+	lcd_write_string(rad1, lcd_SetCursor |lcd_LineOne);
+ 22e:	60 e8       	ldi	r22, 0x80	; 128
+ 230:	ce 01       	movw	r24, r28
+ 232:	01 96       	adiw	r24, 0x01	; 1
+ 234:	c3 df       	rcall	.-122    	; 0x1bc <lcd_write_string>
+	lcd_write_string(rad2, lcd_SetCursor |lcd_LineTwo);
+ 236:	60 ec       	ldi	r22, 0xC0	; 192
+ 238:	ce 01       	movw	r24, r28
+ 23a:	0f 96       	adiw	r24, 0x0f	; 15
+ 23c:	bf df       	rcall	.-130    	; 0x1bc <lcd_write_string>
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 2ce:	86 e2       	ldi	r24, 0x26	; 38
- 2d0:	91 e0       	ldi	r25, 0x01	; 1
- 2d2:	01 97       	sbiw	r24, 0x01	; 1
- 2d4:	f1 f7       	brne	.-4      	; 0x2d2 <run+0x30>
- 2d6:	00 c0       	rjmp	.+0      	; 0x2d8 <run+0x36>
- 2d8:	00 00       	nop
+ 23e:	86 e2       	ldi	r24, 0x26	; 38
+ 240:	91 e0       	ldi	r25, 0x01	; 1
+ 242:	01 97       	sbiw	r24, 0x01	; 1
+ 244:	f1 f7       	brne	.-4      	; 0x242 <run+0x4c>
+ 246:	00 c0       	rjmp	.+0      	; 0x248 <run+0x52>
+ 248:	00 00       	nop
 	//How many bytes is there during current read
 	short number_of_bytes_from_bt = 0;
 	//short number_of_bytes_from_i2c = 0;
 	
 	// how many bytes is left to read=
 	short bytes_left_from_bt = -1;
- 2da:	0f ef       	ldi	r16, 0xFF	; 255
- 2dc:	1f ef       	ldi	r17, 0xFF	; 255
-			if(bytes_left_from_bt != 0)// Om rts är 0 lagara blåtandseneheten data å skickar via usart när usarten är redo
-				bluetooth_clear_to_send(); // Säg att du vill ha mer BT data
-		} 
-		
-		if( bytes_left_from_bt == 0){
-			bytes_left_from_bt = -1; 
- 2de:	ee 24       	eor	r14, r14
- 2e0:	ea 94       	dec	r14
- 2e2:	ff 24       	eor	r15, r15
- 2e4:	fa 94       	dec	r15
+ 24a:	0f ef       	ldi	r16, 0xFF	; 255
+ 24c:	1f ef       	ldi	r17, 0xFF	; 255
+	byte data_to_bt[16];
 	//byte data_to_i2c[16];
 	
 	while(true)	{		
-
-		// Ta emot data från BT
+		// Hantera eventuell ny data ifrån BT
 		if(bluetooth_get_new_data() == true){ // Om vi har fått data sätts newData till true i BT och vi kollar på den här
- 2e6:	12 df       	rcall	.-476    	; 0x10c <bluetooth_get_new_data>
- 2e8:	88 23       	and	r24, r24
- 2ea:	71 f0       	breq	.+28     	; 0x308 <run+0x66>
+ 24e:	5f df       	rcall	.-322    	; 0x10e <bluetooth_get_new_data>
+ 250:	88 23       	and	r24, r24
+ 252:	69 f0       	breq	.+26     	; 0x26e <run+0x78>
 			byte data = bluetooth_fetch_new_data(); // Hämta ut data å sätt newData false
- 2ec:	0a df       	rcall	.-492    	; 0x102 <bluetooth_fetch_new_data>
+ 254:	57 df       	rcall	.-338    	; 0x104 <bluetooth_fetch_new_data>
 			
 			// Om vi inte har någon kö för stunden så kör
 			if (bytes_left_from_bt == -1){ 
- 2ee:	0f 3f       	cpi	r16, 0xFF	; 255
- 2f0:	9f ef       	ldi	r25, 0xFF	; 255
- 2f2:	19 07       	cpc	r17, r25
- 2f4:	21 f4       	brne	.+8      	; 0x2fe <run+0x5c>
+ 256:	0f 3f       	cpi	r16, 0xFF	; 255
+ 258:	9f ef       	ldi	r25, 0xFF	; 255
+ 25a:	19 07       	cpc	r17, r25
+ 25c:	21 f4       	brne	.+8      	; 0x266 <run+0x70>
 				number_of_bytes_from_bt = (data >> 4); 
- 2f6:	82 95       	swap	r24
- 2f8:	8f 70       	andi	r24, 0x0F	; 15
- 2fa:	08 2f       	mov	r16, r24
- 2fc:	10 e0       	ldi	r17, 0x00	; 0
+ 25e:	82 95       	swap	r24
+ 260:	8f 70       	andi	r24, 0x0F	; 15
+ 262:	08 2f       	mov	r16, r24
+ 264:	10 e0       	ldi	r17, 0x00	; 0
 				bytes_left_from_bt = number_of_bytes_from_bt;
 			}
 			
 			// Lägg in datan i vektorn
 			data_from_bt[number_of_bytes_from_bt - bytes_left_from_bt] = data;
 			--bytes_left_from_bt;
- 2fe:	01 50       	subi	r16, 0x01	; 1
- 300:	11 09       	sbc	r17, r1
+ 266:	01 50       	subi	r16, 0x01	; 1
+ 268:	11 09       	sbc	r17, r1
+ 26a:	08 f0       	brcs	.+2      	; 0x26e <run+0x78>
 			
 			// Vill vi ha mer data från samma sändning? 				
-			if(bytes_left_from_bt != 0)// Om rts är 0 lagara blåtandseneheten data å skickar via usart när usarten är redo
- 302:	41 f0       	breq	.+16     	; 0x314 <run+0x72>
+			if(bytes_left_from_bt != -1)// Om rts är 0 lagara blåtandseneheten data å skickar via usart när usarten är redo
 				bluetooth_clear_to_send(); // Säg att du vill ha mer BT data
- 304:	fc de       	rcall	.-520    	; 0xfe <bluetooth_clear_to_send>
- 306:	08 c0       	rjmp	.+16     	; 0x318 <run+0x76>
-		} 
-		
-		if( bytes_left_from_bt == 0){
- 308:	01 15       	cp	r16, r1
- 30a:	11 05       	cpc	r17, r1
- 30c:	29 f4       	brne	.+10     	; 0x318 <run+0x76>
-			bytes_left_from_bt = -1; 
- 30e:	0e 2d       	mov	r16, r14
- 310:	1f 2d       	mov	r17, r15
- 312:	02 c0       	rjmp	.+4      	; 0x318 <run+0x76>
- 314:	0e 2d       	mov	r16, r14
- 316:	1f 2d       	mov	r17, r15
+ 26c:	49 df       	rcall	.-366    	; 0x100 <bluetooth_clear_to_send>
 			// Då det bara kommer skickas styrdata via bt är det dags att skicka data till styrmodulen
 			// i2csendstuff.
 		} 
 		
 		// Skicka data via BT
 		if(((PIND & (1<<CTS)) == 0) && bytes_left_to_bt != -1){ // Vi har tillåtelse att skicka data & data att skicka
- 318:	89 b1       	in	r24, 0x09	; 9
- 31a:	e5 cf       	rjmp	.-54     	; 0x2e6 <run+0x44>
+ 26e:	89 b1       	in	r24, 0x09	; 9
+ 270:	ee cf       	rjmp	.-36     	; 0x24e <run+0x58>
 
-0000031c <main>:
+00000272 <main>:
+void run(void);
 void initialize(void);
 void update_lcd(void);
 
-int main (void)
-{
+int main (void){
 	board_init();
- 31c:	d5 de       	rcall	.-598    	; 0xc8 <board_init>
+ 272:	2a df       	rcall	.-428    	; 0xc8 <board_init>
 	initialize();
- 31e:	b0 df       	rcall	.-160    	; 0x280 <initialize>
+ 274:	af df       	rcall	.-162    	; 0x1d4 <initialize>
 	run();
- 320:	c0 df       	rcall	.-128    	; 0x2a2 <run>
+ 276:	bf df       	rcall	.-130    	; 0x1f6 <run>
 
-00000322 <_exit>:
- 322:	f8 94       	cli
+00000278 <_exit>:
+ 278:	f8 94       	cli
 
-00000324 <__stop_program>:
- 324:	ff cf       	rjmp	.-2      	; 0x324 <__stop_program>
+0000027a <__stop_program>:
+ 27a:	ff cf       	rjmp	.-2      	; 0x27a <__stop_program>

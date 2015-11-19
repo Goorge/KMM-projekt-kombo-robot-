@@ -25,7 +25,7 @@ void usart_setup(unsigned int baudrate){
 }
 
 void bluetooth_setup(unsigned long baudrate){
-	DDRD = (1 << TXD) | (1 << RTS);// Sätter blåtandsdelen av D porten, Sedan behöver LCD köra sin init för att ändra RS/E. Men blåtand init måste ske först. 
+	DDRD |= (1 << TXD) | (1 << RTS);// Sätter blåtandsdelen av D porten, Sedan behöver LCD köra sin init för att ändra RS/E. Men blåtand init måste ske först. 
 	
 	//EIMSK = 1<<INT0;	// Enable INT0
 	//MCUCR = 1<<ISC11;	// Falling edge | 1<<ISC10; Behövs nog inte
