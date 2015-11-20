@@ -135,6 +135,7 @@ public class Grafik {
 			String text = ""; 
 			for(int i = 0; i < data.length; i++){
 				text += data[i];
+				System.out.println(" " + data[i]);
 			}
 			addToList(listEnum.garbage, getCurrentTime() + " " + text);
 			break; 
@@ -164,7 +165,7 @@ public class Grafik {
 			wheel_left_btn.setLabel(value);
             break;
 		case line:  		
-			line_btn.setLabel(value);
+			line_btn.setLabel(value);	
             break;
 		default:  
             break;

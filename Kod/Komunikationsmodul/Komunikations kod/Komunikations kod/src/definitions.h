@@ -26,7 +26,7 @@ typedef unsigned char byte;
 #define lcd_DisplayOn       0b00001100          // display on, cursor off, don't blink character
 #define lcd_FunctionReset   0b00110000			// reset the LCD
 #define lcd_FunctionSet		0b00111000          
-#define lcd_SetCursor       0b10000000          // set cursor position
+#define lcd_SetCursor       0b10000000          // set cursor position DDRAM
 
 // BLUETOOTh pinnar
 #define RXD PD0
