@@ -14,6 +14,13 @@
 
 typedef unsigned char byte;
 
+// Räkna ut antalet element i en array
+#define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
+
+// LCD defenitions
+#define RS PD6
+#define E PD7
+
 // LCD module information
 #define lcd_LineOne     0x00                    // start of line 1
 #define lcd_LineTwo     0x40                    // start of line 2
@@ -33,10 +40,6 @@ typedef unsigned char byte;
 #define TXD PD1
 #define CTS PD2
 #define RTS PD3
-
-// global bt data
-// extern byte dataFromBT;
-// extern bool newData;
 
 #define F_CPU 14745600UL
 #include <util/delay.h>

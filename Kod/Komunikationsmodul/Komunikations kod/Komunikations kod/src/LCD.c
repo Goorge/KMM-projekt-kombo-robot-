@@ -2,13 +2,6 @@
 #include "LCD.h"
 #include  "bluetooth.h"
 
-#define RS PD6
-#define E PD7
-#define DataPort PORTA;
-#define NELEMS(x)  (sizeof(x) / sizeof((x)[0]))
-
-bool directionLeft = true;
-
 //LCD Setup, inits all the variables
 void lcd_setup(void){
 	DDRA = 0xFF;
@@ -38,21 +31,26 @@ void lcd_write_char(uint8_t letter){
 	PORTD |= (1 << E); // Sätt Enable
 	
 	_delay_us(100); //TSU2	// Vänta på att data ska stabiliseras
-	PORTD &= ~(1 << E); // Nolställ E och RS så att dom är noll vid nästa instruktion/charläsning
-	PORTD &= ~(1 << RS); //
+	PORTD &= ~((1 << E) | (1 << RS)); // Nolställ E och RS så att dom är noll vid nästa instruktion/charläsning
 }
 
+// Writes instruction 
 void lcd_write_instruction(uint8_t instruction){
-	PORTD &= ~(1 << E);
-	PORTD &= ~(1 << RS);
-
+	PORTD &= ~((1 << E) | (1 << RS));// Se till att E är låg från början
 	PORTA = instruction; // funkar inte detta prova bit för bit. Gäller isf även utskrift.
-
+	
+	// Ettsätt E för att skriva in instruktionen, och nolla den sedan så att den är låg för framtida användare.
+	PORTD |= (1 << E);
+	_delay_us(3);
+	PORTD &= ~(1 << E);
+	
+	// Lägg in behövd delay ( 1.53 ms för clear och home & 39 us för de andra )
 	if(instruction == lcd_Home || instruction == lcd_Clear)
 		_delay_ms(3);
 	else
 		_delay_us(100);
 }
+
 
 //Erases data on LCD and write new one.
 void lcd_write_string(uint8_t text[], uint8_t row_instrucion){
