@@ -1,26 +1,22 @@
+#include "bluetooth.h"
 void i2c_setup(byte adress_);
 void requestToSend(byte adress, byte* data);
 byte incomingData();
 void i2c_send(byte prossesor,byte data);
 byte i2c_recive();
 
-byte* dataToSend;
+byte dataToSend[15];
 byte reciverAdress;
 int bytesSent = 0;
-
-byte firstdata;
+int bytefrom_i2c=0;
 byte extradata[15];
-int datatoget=0;
+bool newdata = false;
 
-byte return_firstdata(){
-	return firstdata;
-	}
+
 
 ISR(TWI_vect){
-	cli();
-	firstdata=incomingData();
-	sei();
-	
+	incomingData();	
+	TWCR = (1 << TWIE) | (1 << TWEN)| (1<<TWEA) | (1<<TWINT);
 }
 
 void i2c_setup(byte adress_) {
@@ -36,12 +32,16 @@ void requestToSend(byte adress, byte* data){
 }
 
 
-byte incomingData(){
-	
+byte incomingData(){	
 	int counter=0;
 	if((TWSR & 0xF8)==0x60)
 	{	
-		return i2c_recive();
+		extradata[bytefrom_i2c] = i2c_recive();
+		if(bytefrom_i2c==extradata[0]>>4 &0x0f){
+			newdata=true;
+			TWCR &= ~(1 << TWINT) ;
+		}
+		return extradata[bytefrom_i2c++];
 	}
 	else if((TWSR & 0xF8)==0xA8)
 	{
@@ -62,9 +62,8 @@ void i2c_send(byte prossesor,byte data){
 };
 
 byte i2c_recive(){
-	TWCR = (1<<TWEA) | (1<<TWINT) & (0<<TWSTO);
-	//if((TWSR & 0xF8)!=0x80)
-	//	return false;
+	if((TWSR & 0xF8)!=0x80)
+		return false;
 	TWCR = (1<<TWEA) | (1<<TWINT);
 	return TWDR;	
 };

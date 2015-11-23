@@ -33,8 +33,7 @@ bool i2c_send(byte prossesor,byte data[]){
 	TWDR = prossesor&0xfe;//sista bit R/W
 	TWCR = (1<<TWINT) | (1<<TWEN);// start transmito of addres
 	while(!(TWCR & (1<<TWINT))); // wait for SLA+W transmited and ACK/NACK recived
-	//_delay_ms(1);
-	if((TWSR & 0xF8) !=0x20)
+	if((TWSR & 0xF8) !=0x18)
 	{
 		TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP	
 		return false;
@@ -43,7 +42,7 @@ bool i2c_send(byte prossesor,byte data[]){
 	TWDR = data[counter];
 	TWCR = (1<<TWINT) | (1<<TWEN);	// start send data	
 	while(!(TWCR & (1<<TWINT))); //wait for data transmitted and ACK/NACK	
-	if((TWSR & 0xF8) != TW_MT_DATA_NACK)
+	if((TWSR & 0xF8) != TW_MT_DATA_ACK)
 	{
 		TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP
 		return false;
@@ -51,7 +50,7 @@ bool i2c_send(byte prossesor,byte data[]){
 	counter++;
 	
 	start=TW_REP_START;
-	}while (counter < number_bytes);
+	}while (counter <= number_bytes);
 	TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP	
 	return true;
 };

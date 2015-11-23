@@ -29,6 +29,5 @@ void run(void){
 	while(true)	{
 		bluetooth_handle_data();
 		_delay_ms(500);
-		bluetooth_send_byte(firstdata);
 	}
 }

@@ -33,7 +33,7 @@ int main(){
 	i2c_setup(1);
 	
 	//sei();				//Enable Global Interrupt
-	byte data[1]={0x0f};
+	byte data[2]={0x12,0x0f};
 	while(1){
 		//FUNKTIONSLOP
 		_delay_ms(1000);
