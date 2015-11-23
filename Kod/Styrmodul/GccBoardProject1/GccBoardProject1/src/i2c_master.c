@@ -10,38 +10,49 @@ void i2c_setup(bool master) {
 		DDRC =1<<PC7;
 		//PORTC = 1 <<PC7;
 		
-		EIMSK = 1<<INT0;					// Enable INT0
-		MCUCR = 1<<ISC01 | 1<<ISC00;	// Trigger INT0 on rising edge
-		TWBR = 0x01;
+		//EIMSK = 1<<INT0;					// Enable INT0
+		//MCUCR = 1<<ISC01 | 1<<ISC00;	// Trigger INT0 on rising edge
+		TWBR = 0x10;
 		TWSR = (0<<TWPS1)|(0<<TWPS0);
-		TWAR = 0x04; // namnge
 	}
 	
 };
 	
-bool i2c_send(byte prossesor,byte* data){
+bool i2c_send(byte prossesor,byte data[]){
 	int number_bytes =( data[0]>>4 ) & 0x0f;
 	int counter = 0;
 	int start = TW_START;
+	
 	do{
+	
 	TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN); //send START
 	while(!(TWCR & (1<<TWINT))); //Wait for TWINT, START is now sent
+	
 	if((TWSR & 0xF8) != start) // om status en start
-		return false;
-	TWDR = prossesor|0x01;//sista bit R/W
+		return false;		
+	TWDR = prossesor&0xfe;//sista bit R/W
 	TWCR = (1<<TWINT) | (1<<TWEN);// start transmito of addres
 	while(!(TWCR & (1<<TWINT))); // wait for SLA+W transmited and ACK/NACK recived
-	if((TWSR & 0xF8) != TW_MT_SLA_ACK) 
+	//_delay_ms(1);
+	if((TWSR & 0xF8) !=0x20)
+	{
+		TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP	
 		return false;
+	}
+	led_test();	
 	TWDR = data[counter];
-	TWCR = (1<<TWINT) | (1<<TWEN);	// start send data
-	while(!(TWCR & (1<<TWINT))); //wait for data transmitted and ACK/NACK
-	if((TWSR & 0xF8) != TW_MT_DATA_ACK)
+	TWCR = (1<<TWINT) | (1<<TWEN);	// start send data	
+	while(!(TWCR & (1<<TWINT))); //wait for data transmitted and ACK/NACK	
+	if((TWSR & 0xF8) != TW_MT_DATA_NACK)
+	{
+		TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP
 		return false;
+	}
 	counter++;
+	
 	start=TW_REP_START;
 	}while (counter < number_bytes);
-	TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP
+	TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP	
 	return true;
 };
 	
@@ -55,10 +66,10 @@ byte* i2c_recive(byte prossesor){
 	while(!(TWCR & (1<<TWINT))); //Wait for TWINT, START is now sent
 	if((TWSR & 0xF8) != start) // om status en start eventuellt bara tw_start
 		return 0;
-	TWDR = prossesor & 0xfe;
-	TWCR = (1<<TWINT)|(1<<TWEN);
+	TWDR = prossesor | 0x01;
+	TWCR = (1<<TWINT)|(1<<TWEN) & (TWSTO<<0) & (TWSTA<<0);
 	while(!(TWCR & (1<<TWINT))); // wait for SLA+R transmited and ACK/NACK recived
-	if((TWSR & 0xF8) != TW_MT_SLA_ACK)
+	if((TWSR & 0xF8) != TW_MR_SLA_ACK)
 		return false;
 	while(!TWINT);
 	if(counter == 0){

@@ -3,33 +3,33 @@ Komunikations kod.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000004  00800100  000002a8  0000033c  2**0
+  0 .data         00000004  00800100  000003a8  0000043c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000002a8  00000000  00000000  00000094  2**1
+  1 .text         000003a8  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000027  00800104  00800104  00000340  2**0
+  2 .bss          0000003c  00800104  00800104  00000440  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000340  2**0
+  3 .comment      00000030  00000000  00000000  00000440  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000370  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000470  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000000e0  00000000  00000000  000003b0  2**0
+  5 .debug_aranges 00000118  00000000  00000000  000004b0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000098b  00000000  00000000  00000490  2**0
+  6 .debug_info   00000bf8  00000000  00000000  000005c8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000451  00000000  00000000  00000e1b  2**0
+  7 .debug_abbrev 00000565  00000000  00000000  000011c0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000013a8  00000000  00000000  0000126c  2**0
+  8 .debug_line   000014fb  00000000  00000000  00001725  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  0000016c  00000000  00000000  00002614  2**2
+  9 .debug_frame  00000224  00000000  00000000  00002c20  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00011d47  00000000  00000000  00002780  2**0
+ 10 .debug_str    00011df4  00000000  00000000  00002e44  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000212  00000000  00000000  000144c7  2**0
+ 11 .debug_loc    0000031f  00000000  00000000  00014c38  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000a0  00000000  00000000  000146d9  2**0
+ 12 .debug_ranges 000000d8  00000000  00000000  00014f57  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  0000468c  00000000  00000000  00014779  2**0
+ 13 .debug_macro  00004690  00000000  00000000  0001502f  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -87,7 +87,7 @@ Disassembly of section .text:
   62:	00 00       	nop
   64:	30 c0       	rjmp	.+96     	; 0xc6 <__bad_interrupt>
   66:	00 00       	nop
-  68:	2e c0       	rjmp	.+92     	; 0xc6 <__bad_interrupt>
+  68:	57 c1       	rjmp	.+686    	; 0x318 <__vector_26>
   6a:	00 00       	nop
   6c:	2c c0       	rjmp	.+88     	; 0xc6 <__bad_interrupt>
   6e:	00 00       	nop
@@ -119,7 +119,7 @@ Disassembly of section .text:
   9a:	a0 e0       	ldi	r26, 0x00	; 0
   9c:	b1 e0       	ldi	r27, 0x01	; 1
   9e:	e8 ea       	ldi	r30, 0xA8	; 168
-  a0:	f2 e0       	ldi	r31, 0x02	; 2
+  a0:	f3 e0       	ldi	r31, 0x03	; 3
   a2:	00 e0       	ldi	r16, 0x00	; 0
   a4:	0b bf       	out	0x3b, r16	; 59
   a6:	02 c0       	rjmp	.+4      	; 0xac <__do_copy_data+0x14>
@@ -139,11 +139,11 @@ Disassembly of section .text:
   ba:	1d 92       	st	X+, r1
 
 000000bc <.do_clear_bss_start>:
-  bc:	ab 32       	cpi	r26, 0x2B	; 43
+  bc:	a0 34       	cpi	r26, 0x40	; 64
   be:	b2 07       	cpc	r27, r18
   c0:	e1 f7       	brne	.-8      	; 0xba <.do_clear_bss_loop>
-  c2:	ec d0       	rcall	.+472    	; 0x29c <main>
-  c4:	ef c0       	rjmp	.+478    	; 0x2a4 <_exit>
+  c2:	6d d1       	rcall	.+730    	; 0x39e <main>
+  c4:	6f c1       	rjmp	.+734    	; 0x3a4 <_exit>
 
 000000c6 <__bad_interrupt>:
   c6:	9c cf       	rjmp	.-200    	; 0x0 <__vectors>
@@ -164,7 +164,7 @@ void board_init(void)
 
 // Kolla om vi har fått in någon ny data
 bool bluetooth_get_new_data(void){ return newData; }
-  ca:	88 ed       	ldi	r24, 0xD8	; 216
+  ca:	88 e9       	ldi	r24, 0x98	; 152
   cc:	80 93 c1 00 	sts	0x00C1, r24
   d0:	86 e0       	ldi	r24, 0x06	; 6
   d2:	80 93 c2 00 	sts	0x00C2, r24
@@ -252,7 +252,7 @@ byte bluetooth_fetch_new_data(void){
  156:	f0 91 08 01 	lds	r31, 0x0108
  15a:	e8 1b       	sub	r30, r24
  15c:	f9 0b       	sbc	r31, r25
- 15e:	e5 5e       	subi	r30, 0xE5	; 229
+ 15e:	e3 5e       	subi	r30, 0xE3	; 227
  160:	fe 4f       	sbci	r31, 0xFE	; 254
  162:	20 83       	st	Z, r18
 		--bytes_left_from_bt;
@@ -267,11 +267,11 @@ byte bluetooth_fetch_new_data(void){
 			bluetooth_clear_to_send(); // Säg att du vill ha mer BT data
  172:	ce df       	rcall	.-100    	; 0x110 <bluetooth_clear_to_send>
  174:	38 c0       	rjmp	.+112    	; 0x1e6 <bluetooth_handle_data+0xd2>
- 176:	eb e1       	ldi	r30, 0x1B	; 27
+ 176:	ed e1       	ldi	r30, 0x1D	; 29
  178:	f1 e0       	ldi	r31, 0x01	; 1
- 17a:	ab e0       	ldi	r26, 0x0B	; 11
+ 17a:	ad e0       	ldi	r26, 0x0D	; 13
  17c:	b1 e0       	ldi	r27, 0x01	; 1
- 17e:	2b e2       	ldi	r18, 0x2B	; 43
+ 17e:	2d e2       	ldi	r18, 0x2D	; 45
  180:	31 e0       	ldi	r19, 0x01	; 1
 		else dataSend = true;	
 	} 
@@ -322,7 +322,7 @@ byte bluetooth_fetch_new_data(void){
  1c2:	f0 91 06 01 	lds	r31, 0x0106
  1c6:	e8 1b       	sub	r30, r24
  1c8:	f9 0b       	sbc	r31, r25
- 1ca:	e5 5f       	subi	r30, 0xF5	; 245
+ 1ca:	e3 5f       	subi	r30, 0xF3	; 243
  1cc:	fe 4f       	sbci	r31, 0xFE	; 254
  1ce:	80 81       	ld	r24, Z
  1d0:	97 df       	rcall	.-210    	; 0x100 <bluetooth_send_byte>
@@ -499,46 +499,234 @@ void lcd_setup(void){
  288:	c8 cf       	rjmp	.-112    	; 0x21a <lcd_write_instruction>
  28a:	08 95       	ret
 
-0000028c <initialize>:
+0000028c <i2c_setup>:
+};
+
+void requestToSend(byte adress, byte* data){
+	dataToSend = data;
+	reciverAdress = adress;
+	bytesSent = 0;
+ 28c:	80 93 ba 00 	sts	0x00BA, r24
+ 290:	10 92 b9 00 	sts	0x00B9, r1
+ 294:	85 e4       	ldi	r24, 0x45	; 69
+ 296:	80 93 bc 00 	sts	0x00BC, r24
+ 29a:	08 95       	ret
+
+0000029c <i2c_send>:
+}
+
+
+
+void i2c_send(byte prossesor,byte data){
+	TWDR = data;
+ 29c:	60 93 bb 00 	sts	0x00BB, r22
+	while(!(TWCR & (1<<TWINT))); // wait for SLA+W transmited and ACK/NACK recived
+ 2a0:	ec eb       	ldi	r30, 0xBC	; 188
+ 2a2:	f0 e0       	ldi	r31, 0x00	; 0
+ 2a4:	80 81       	ld	r24, Z
+ 2a6:	88 23       	and	r24, r24
+ 2a8:	ec f7       	brge	.-6      	; 0x2a4 <i2c_send+0x8>
+};
+ 2aa:	08 95       	ret
+
+000002ac <i2c_recive>:
+
+byte i2c_recive(){
+	TWCR = (1<<TWEA) | (1<<TWINT) & (0<<TWSTO);
+ 2ac:	ec eb       	ldi	r30, 0xBC	; 188
+ 2ae:	f0 e0       	ldi	r31, 0x00	; 0
+ 2b0:	80 e4       	ldi	r24, 0x40	; 64
+ 2b2:	80 83       	st	Z, r24
+	//if((TWSR & 0xF8)!=0x80)
+	//	return false;
+	TWCR = (1<<TWEA) | (1<<TWINT);
+ 2b4:	80 ec       	ldi	r24, 0xC0	; 192
+ 2b6:	80 83       	st	Z, r24
+	return TWDR;	
+ 2b8:	80 91 bb 00 	lds	r24, 0x00BB
+ 2bc:	08 95       	ret
+
+000002be <incomingData>:
+
+
+byte incomingData(){
+	
+	int counter=0;
+	if((TWSR & 0xF8)==0x60)
+ 2be:	80 91 b9 00 	lds	r24, 0x00B9
+ 2c2:	88 7f       	andi	r24, 0xF8	; 248
+ 2c4:	80 36       	cpi	r24, 0x60	; 96
+ 2c6:	11 f4       	brne	.+4      	; 0x2cc <incomingData+0xe>
+	{	
+		return i2c_recive();
+ 2c8:	f1 cf       	rjmp	.-30     	; 0x2ac <i2c_recive>
+ 2ca:	08 95       	ret
+	}
+	else if((TWSR & 0xF8)==0xA8)
+ 2cc:	80 91 b9 00 	lds	r24, 0x00B9
+ 2d0:	88 7f       	andi	r24, 0xF8	; 248
+ 2d2:	88 3a       	cpi	r24, 0xA8	; 168
+ 2d4:	c1 f4       	brne	.+48     	; 0x306 <incomingData+0x48>
+	{
+		i2c_send(reciverAdress,dataToSend[bytesSent++]);
+ 2d6:	20 91 3c 01 	lds	r18, 0x013C
+ 2da:	30 91 3d 01 	lds	r19, 0x013D
+ 2de:	80 91 0b 01 	lds	r24, 0x010B
+ 2e2:	90 91 0c 01 	lds	r25, 0x010C
+ 2e6:	ac 01       	movw	r20, r24
+ 2e8:	4f 5f       	subi	r20, 0xFF	; 255
+ 2ea:	5f 4f       	sbci	r21, 0xFF	; 255
+ 2ec:	50 93 0c 01 	sts	0x010C, r21
+ 2f0:	40 93 0b 01 	sts	0x010B, r20
+ 2f4:	f9 01       	movw	r30, r18
+ 2f6:	e8 0f       	add	r30, r24
+ 2f8:	f9 1f       	adc	r31, r25
+ 2fa:	60 81       	ld	r22, Z
+ 2fc:	80 91 3f 01 	lds	r24, 0x013F
+ 300:	cd df       	rcall	.-102    	; 0x29c <i2c_send>
+	}
+	else if((TWSR & 0xF8)==0x80)// blir 0xF8
+	{
+		return i2c_recive();
+	}
+	return 0x00;
+ 302:	80 e0       	ldi	r24, 0x00	; 0
+ 304:	08 95       	ret
+	}
+	else if((TWSR & 0xF8)==0xA8)
+	{
+		i2c_send(reciverAdress,dataToSend[bytesSent++]);
+	}
+	else if((TWSR & 0xF8)==0x80)// blir 0xF8
+ 306:	80 91 b9 00 	lds	r24, 0x00B9
+ 30a:	88 7f       	andi	r24, 0xF8	; 248
+ 30c:	80 38       	cpi	r24, 0x80	; 128
+ 30e:	11 f4       	brne	.+4      	; 0x314 <incomingData+0x56>
+	{
+		return i2c_recive();
+ 310:	cd cf       	rjmp	.-102    	; 0x2ac <i2c_recive>
+ 312:	08 95       	ret
+	}
+	return 0x00;
+ 314:	80 e0       	ldi	r24, 0x00	; 0
+}
+ 316:	08 95       	ret
+
+00000318 <__vector_26>:
+
+byte return_firstdata(){
+	return firstdata;
+	}
+
+ISR(TWI_vect){
+ 318:	1f 92       	push	r1
+ 31a:	0f 92       	push	r0
+ 31c:	0f b6       	in	r0, 0x3f	; 63
+ 31e:	0f 92       	push	r0
+ 320:	11 24       	eor	r1, r1
+ 322:	0b b6       	in	r0, 0x3b	; 59
+ 324:	0f 92       	push	r0
+ 326:	2f 93       	push	r18
+ 328:	3f 93       	push	r19
+ 32a:	4f 93       	push	r20
+ 32c:	5f 93       	push	r21
+ 32e:	6f 93       	push	r22
+ 330:	7f 93       	push	r23
+ 332:	8f 93       	push	r24
+ 334:	9f 93       	push	r25
+ 336:	af 93       	push	r26
+ 338:	bf 93       	push	r27
+ 33a:	ef 93       	push	r30
+ 33c:	ff 93       	push	r31
+	cli();
+ 33e:	f8 94       	cli
+	firstdata=incomingData();
+ 340:	be df       	rcall	.-132    	; 0x2be <incomingData>
+ 342:	80 93 3e 01 	sts	0x013E, r24
+	sei();
+ 346:	78 94       	sei
+	
+}
+ 348:	ff 91       	pop	r31
+ 34a:	ef 91       	pop	r30
+ 34c:	bf 91       	pop	r27
+ 34e:	af 91       	pop	r26
+ 350:	9f 91       	pop	r25
+ 352:	8f 91       	pop	r24
+ 354:	7f 91       	pop	r23
+ 356:	6f 91       	pop	r22
+ 358:	5f 91       	pop	r21
+ 35a:	4f 91       	pop	r20
+ 35c:	3f 91       	pop	r19
+ 35e:	2f 91       	pop	r18
+ 360:	0f 90       	pop	r0
+ 362:	0b be       	out	0x3b, r0	; 59
+ 364:	0f 90       	pop	r0
+ 366:	0f be       	out	0x3f, r0	; 63
+ 368:	0f 90       	pop	r0
+ 36a:	1f 90       	pop	r1
+ 36c:	18 95       	reti
+
+0000036e <initialize>:
 	initialize();
 	run();
 }
 
 void initialize(void){
 	bluetooth_setup((long)115200);
- 28c:	60 e0       	ldi	r22, 0x00	; 0
- 28e:	72 ec       	ldi	r23, 0xC2	; 194
- 290:	81 e0       	ldi	r24, 0x01	; 1
- 292:	90 e0       	ldi	r25, 0x00	; 0
- 294:	2f df       	rcall	.-418    	; 0xf4 <bluetooth_setup>
+ 36e:	60 e0       	ldi	r22, 0x00	; 0
+ 370:	72 ec       	ldi	r23, 0xC2	; 194
+ 372:	81 e0       	ldi	r24, 0x01	; 1
+ 374:	90 e0       	ldi	r25, 0x00	; 0
+ 376:	be de       	rcall	.-644    	; 0xf4 <bluetooth_setup>
 	lcd_setup();
- 296:	de df       	rcall	.-68     	; 0x254 <lcd_setup>
-	
+ 378:	6d df       	rcall	.-294    	; 0x254 <lcd_setup>
+	i2c_setup(0x02);
+ 37a:	82 e0       	ldi	r24, 0x02	; 2
+ 37c:	87 df       	rcall	.-242    	; 0x28c <i2c_setup>
 	sei(); // Enable interrupt
- 298:	78 94       	sei
- 29a:	08 95       	ret
+ 37e:	78 94       	sei
+ 380:	08 95       	ret
 
-0000029c <main>:
-
-void run(void);
-void initialize(void);
-
-int main (void){
-	board_init();
- 29c:	15 df       	rcall	.-470    	; 0xc8 <board_init>
-	initialize();
- 29e:	f6 df       	rcall	.-20     	; 0x28c <initialize>
+00000382 <run>:
 	//_delay_ms(100);
 }
 
 void run(void){
 	while(true)	{
 		bluetooth_handle_data();
- 2a0:	39 df       	rcall	.-398    	; 0x114 <bluetooth_handle_data>
- 2a2:	fe cf       	rjmp	.-4      	; 0x2a0 <main+0x4>
+ 382:	c8 de       	rcall	.-624    	; 0x114 <bluetooth_handle_data>
+ 384:	2f ef       	ldi	r18, 0xFF	; 255
+ 386:	8f e7       	ldi	r24, 0x7F	; 127
+ 388:	96 e1       	ldi	r25, 0x16	; 22
+ 38a:	21 50       	subi	r18, 0x01	; 1
+ 38c:	80 40       	sbci	r24, 0x00	; 0
+ 38e:	90 40       	sbci	r25, 0x00	; 0
+ 390:	e1 f7       	brne	.-8      	; 0x38a <run+0x8>
+ 392:	00 c0       	rjmp	.+0      	; 0x394 <run+0x12>
+ 394:	00 00       	nop
+		_delay_ms(500);
+		bluetooth_send_byte(firstdata);
+ 396:	80 91 3e 01 	lds	r24, 0x013E
+ 39a:	b2 de       	rcall	.-668    	; 0x100 <bluetooth_send_byte>
+	}
+ 39c:	f2 cf       	rjmp	.-28     	; 0x382 <run>
 
-000002a4 <_exit>:
- 2a4:	f8 94       	cli
+0000039e <main>:
 
-000002a6 <__stop_program>:
- 2a6:	ff cf       	rjmp	.-2      	; 0x2a6 <__stop_program>
+void run(void);
+void initialize(void);
+
+int main (void){
+	board_init();
+ 39e:	94 de       	rcall	.-728    	; 0xc8 <board_init>
+	initialize();
+ 3a0:	e6 df       	rcall	.-52     	; 0x36e <initialize>
+	run();
+ 3a2:	ef df       	rcall	.-34     	; 0x382 <run>
+
+000003a4 <_exit>:
+ 3a4:	f8 94       	cli
+
+000003a6 <__stop_program>:
+ 3a6:	ff cf       	rjmp	.-2      	; 0x3a6 <__stop_program>

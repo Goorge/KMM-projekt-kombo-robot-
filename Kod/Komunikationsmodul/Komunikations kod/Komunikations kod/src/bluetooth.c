@@ -32,7 +32,7 @@ bool dataSend = false;
 //PortD3 RTS (OUT)
 
 void usart_setup(unsigned int baudrate){
-	UCSR0B = (1<<RXCIE0)|(1<<TXCIE0)|(1<<RXEN0)|(1<<TXEN0);/* Enable receiver and transmitter */
+	UCSR0B = (1<<RXCIE0)|(1<<RXEN0)|(1<<TXEN0);/* Enable receiver and transmitter */
 	UCSR0C = (3<<UCSZ00);/* Set frame format: 8data, 1stop bit */
 	
 	/* Set baud rate */
