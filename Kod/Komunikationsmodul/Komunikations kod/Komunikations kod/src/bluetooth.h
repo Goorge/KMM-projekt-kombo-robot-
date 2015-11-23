@@ -9,5 +9,5 @@ void bluetooth_setup(unsigned long baudrate);
 void bluetooth_send_byte(byte data);
 void bluetooth_clear_to_send(void);
 byte bluetooth_fetch_new_data(void);
-
+void bluetooth_handle_data(void);
 #endif
