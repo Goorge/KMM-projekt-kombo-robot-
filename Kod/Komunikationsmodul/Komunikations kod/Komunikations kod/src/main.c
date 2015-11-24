@@ -22,12 +22,14 @@ void initialize(void){
 	lcd_setup();
 	i2c_setup(0x02);
 	sei(); // Enable interrupt
-	//_delay_ms(100);
+	_delay_ms(1000);
 }
 
 void run(void){
 	while(true)	{
 		bluetooth_handle_data();
-		_delay_ms(500);
+		_delay_ms(1000);
+		byte data[1] = {0x0f};
+		requestToSend(0x04, data);
 	}
 }
