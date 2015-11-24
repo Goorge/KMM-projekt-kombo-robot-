@@ -20,15 +20,19 @@ ISR(TWI_vect){
 }
 
 void i2c_setup(byte adress_) {
+	DDRC |= (1 << PC6);
 	TWAR = adress_;
 	TWSR =0x00;
 	TWCR = (1 << TWIE) | (1 << TWEN)| (1<<TWEA) | (1<<TWINT) & (0<<TWSTA) & (0<<TWSTO);
 };
 
-void requestToSend(byte adress, byte* data){
-	dataToSend = data;
+void requestToSend(byte adress, byte data[]){
+	for(int i = 0; i < NELEMS(data); i++)
+		dataToSend[i] = data[i];
 	reciverAdress = adress;
 	bytesSent = 0;
+	//TWCR = (1 << TWIE) | (1 << TWEN)| (1<<TWEA) | (1<<TWINT);
+	PORTC |= (1 << PC6);
 }
 
 
@@ -45,6 +49,7 @@ byte incomingData(){
 	}
 	else if((TWSR & 0xF8)==0xA8)
 	{
+		PORTC &= ~(1 << PC6);
 		i2c_send(reciverAdress,dataToSend[bytesSent++]);
 	}
 	else if((TWSR & 0xF8)==0x80)// blir 0xF8
@@ -58,7 +63,15 @@ byte incomingData(){
 
 void i2c_send(byte prossesor,byte data){
 	TWDR = data;
-	while(!(TWCR & (1<<TWINT))); // wait for SLA+W transmited and ACK/NACK recived
+	TWCR = (1<<TWEA) | (1<<TWINT);
+	bluetooth_send_byte(0x0A);
+	//while(!(TWCR & (1<<TWINT))); // wait for SLA+W transmited and ACK/NACK recived
+	//if((TWSR & 0xF8)!=0xB8){
+	//	bluetooth_send_byte(0x0f);
+	//	return false;
+	//}
+	bluetooth_send_byte(0x09);
+	TWCR = (1<<TWEA) | (1<<TWINT);
 };
 
 byte i2c_recive(){

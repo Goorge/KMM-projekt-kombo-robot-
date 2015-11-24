@@ -2,6 +2,7 @@
 #include "bluetooth.h"
 
 bool newData = false;
+bool new_data_bt = false;
 
 byte dataFromBT = 0x00;
 byte dataToSendBT = 0x00;
@@ -63,9 +64,13 @@ void bluetooth_send_byte(byte data){
 void bluetooth_clear_to_send(void){	PORTD &= ~(1 << RTS); }// Clear To Send;
 
 //Hämta ut datan från BT
-byte bluetooth_fetch_new_data(void){
-	newData = false;
-	return dataFromBT;
+byte* bluetooth_fetch_new_data(void){
+	new_data_bt = false;
+	bluetooth_clear_to_send(); // Säg att du vill ha mer BT data
+	byte data[number_of_bytes_from_bt];
+	for(int i = 0; i < number_of_bytes_from_bt; i++)
+		data[i] = data_from_bt[i];
+	return data;
 }
 
 // Kolla om vi har fått in någon ny data
@@ -74,8 +79,8 @@ bool bluetooth_get_new_data(void){ return newData; }
 // Behandla bluetooth
 void bluetooth_handle_data( void ){		
 	// Hantera eventuell ny data ifrån BT
-	if(bluetooth_get_new_data() == true){ // Om vi har fått data sätts newData till true i BT och vi kollar på den här
-		byte data = bluetooth_fetch_new_data(); // Hämta ut data å sätt newData false
+	if(newData == true){ // Om vi har fått data sätts newData till true i BT och vi kollar på den här
+		byte data = dataFromBT; // Hämta ut data å sätt newData false
 			
 		// Om vi inte har någon kö för stunden så kör
 		if (bytes_left_from_bt == -1){ 
@@ -88,27 +93,39 @@ void bluetooth_handle_data( void ){
 		--bytes_left_from_bt;
 			
 		// Vill vi ha mer data från samma sändning? 				
-		if(bytes_left_from_bt != -1)// Om rts är 0 lagara blåtandseneheten data å skickar via usart när usarten är redo
-			bluetooth_clear_to_send(); // Säg att du vill ha mer BT data
-		else dataSend = true;	
+		if(bytes_left_from_bt != -1){// Om rts är 0 lagara blåtandseneheten data å skickar via usart när usarten är redo
+			new_data_bt = true;
+		}
+		//else dataSend = true;	
 	} 
 
-	if( dataSend ){ //bytes_left_from_bt == -1 && bytes_left_to_bt == -1){
-		for(int i = 0; i < NELEMS(data_from_bt); i++)
-			data_to_bt[i] = data_from_bt[i];
-		dataSend = false;
-		number_of_bytes_to_bt = number_of_bytes_from_bt;
-		bytes_left_to_bt = number_of_bytes_from_bt;
-		bluetooth_clear_to_send();
+	//if( bytes_left_to_bt != -1 ){
+		//for(int i = 0; i < NELEMS(data_from_bt); i++)
+		//	data_to_bt[i] = data_from_bt[i];
+		//dataSend = false;
+		//number_of_bytes_to_bt = number_of_bytes_from_bt;
+		//bytes_left_to_bt = number_of_bytes_from_bt;
+		//bluetooth_clear_to_send();
 		// Då det bara kommer skickas styrdata via bt är det dags att skicka data till styrmodulen
 		// i2csendstuff.
-	}
+	//}
 	
 	// Skicka data via BT
 	if(((PIND & (1<<CTS)) == 0) && bytes_left_to_bt != -1){ // Vi har tillåtelse att skicka data & data att skicka
 		bluetooth_send_byte(data_to_bt[number_of_bytes_to_bt - bytes_left_to_bt]);
 		--bytes_left_to_bt;
 	}
+}
+
+bool bluetooth_add_to_send_queue(byte* data){
+	int nr_of_bytes = NELEMS(data);
+	if(number_of_bytes_to_bt + nr_of_bytes > 15)
+		return false;
+	bytes_left_to_bt += nr_of_bytes;
+	for(int i = number_of_bytes_to_bt; i < nr_of_bytes + number_of_bytes_to_bt; i++)
+		data_to_bt[i] = data[i - number_of_bytes_to_bt];
+	number_of_bytes_to_bt += nr_of_bytes;
+	return true;
 }
 
 //Hämtar datan
