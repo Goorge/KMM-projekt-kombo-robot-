@@ -77,11 +77,6 @@ byte* i2c_recive(byte prossesor){
 		TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP
 		return false;
 	}
-	if((TWSR & 0xF8) != 0x40)
-	{
-		TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP
-		return false;
-	}
 	TWCR = (1<<TWINT)|(1<<TWEN);
 	if(counter == 0){
 		data = data[TWDR<<4&0x0f];

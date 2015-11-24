@@ -62,16 +62,16 @@ byte incomingData(){
 
 
 void i2c_send(byte prossesor,byte data){
+	
+	TWCR = (1<<TWEA) | (1<<TWINT);
 	TWDR = data;
-	TWCR = (1<<TWEA) | (1<<TWINT);
 	bluetooth_send_byte(0x0A);
-	//while(!(TWCR & (1<<TWINT))); // wait for SLA+W transmited and ACK/NACK recived
-	//if((TWSR & 0xF8)!=0xB8){
-	//	bluetooth_send_byte(0x0f);
-	//	return false;
-	//}
-	bluetooth_send_byte(0x09);
-	TWCR = (1<<TWEA) | (1<<TWINT);
+	while(!(TWCR & (1<<TWINT)));
+	if((TWSR & 0xF8) != TW_ST_DATA_ACK)
+	{
+		TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP
+		return false;
+	}
 };
 
 byte i2c_recive(){
