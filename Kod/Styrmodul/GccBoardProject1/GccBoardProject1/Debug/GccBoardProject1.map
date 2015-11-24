@@ -84,6 +84,8 @@ Discarded input sections
  .text          0x00000000        0x0 src/main.o
  .data          0x00000000        0x0 src/main.o
  .bss           0x00000000        0x0 src/main.o
+ .text.led_test
+                0x00000000        0x8 src/main.o
  .text.linje_setup
                 0x00000000        0x2 src/main.o
  .text.linje_get_error
@@ -98,8 +100,10 @@ Discarded input sections
                 0x00000000       0x12 src/main.o
  .text.SPI_MasterTransmit
                 0x00000000       0x3e src/main.o
- .text.i2c_recive
-                0x00000000       0x56 src/main.o
+ .text.SPI_Recive
+                0x00000000       0x1e src/main.o
+ .text.i2c_send
+                0x00000000       0xdc src/main.o
  .debug_macro   0x00000000      0xa66 src/main.o
  .debug_macro   0x00000000       0x10 src/main.o
  .debug_macro   0x00000000      0x1ad src/main.o
@@ -125,6 +129,7 @@ Discarded input sections
  .debug_macro   0x00000000       0x40 src/main.o
  .debug_macro   0x00000000      0x100 src/main.o
  .debug_macro   0x00000000      0x273 src/main.o
+ COMMON         0x00000000       0x11 src/main.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_divmodhi4.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_divmodhi4.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_divmodhi4.o)
@@ -324,7 +329,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x256
+.text           0x00000000      0x1f2
  *(.vectors)
  .vectors       0x00000000       0x8c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega1284p/avr51/crtatmega1284p.o
                 0x00000000                __vector_default
@@ -420,28 +425,22 @@ END GROUP
  .text.board_init
                 0x000000c8        0x2 src/ASF/common/boards/user_board/init.o
                 0x000000c8                board_init
- .text.led_test
-                0x000000ca        0x8 src/main.o
-                0x000000ca                led_test
- .text.SPI_Recive
-                0x000000d2       0x1e src/main.o
-                0x000000d2                SPI_Recive
  .text.i2c_setup
-                0x000000f0       0x18 src/main.o
-                0x000000f0                i2c_setup
- .text.i2c_send
-                0x00000108      0x106 src/main.o
-                0x00000108                i2c_send
+                0x000000ca       0x1c src/main.o
+                0x000000ca                i2c_setup
+ .text.i2c_recive
+                0x000000e6       0x8a src/main.o
+                0x000000e6                i2c_recive
  .text.__vector_1
-                0x0000020e        0xe src/main.o
-                0x0000020e                __vector_1
- .text.main     0x0000021c       0x36 src/main.o
-                0x0000021c                main
-                0x00000252                . = ALIGN (0x2)
+                0x00000170       0x50 src/main.o
+                0x00000170                __vector_1
+ .text.main     0x000001c0       0x2e src/main.o
+                0x000001c0                main
+                0x000001ee                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000252        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
-                0x00000252                _exit
-                0x00000252                exit
+ .fini9         0x000001ee        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
+                0x000001ee                _exit
+                0x000001ee                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -460,11 +459,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000252        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
+ .fini0         0x000001ee        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000256                _etext = .
+                0x000001f2                _etext = .
 
-.data           0x00800100        0x0 load address 0x00000256
+.data           0x00800100        0x0 load address 0x000001f2
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -475,27 +474,21 @@ END GROUP
                 0x00800100                _edata = .
                 0x00800100                PROVIDE (__data_end, .)
 
-.bss            0x00800100       0x11
+.bss            0x00800100        0x0
                 0x00800100                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  *(COMMON)
- COMMON         0x00800100       0x11 src/main.o
-                0x00800100                recive_flag
-                0x00800101                Reflex_data
-                0x00800103                recived_data
-                0x0080010d                Reflex_data_raw
-                0x00800110                RGB_data
-                0x00800111                PROVIDE (__bss_end, .)
-                0x00000256                __data_load_start = LOADADDR (.data)
-                0x00000256                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00800100                PROVIDE (__bss_end, .)
+                0x000001f2                __data_load_start = LOADADDR (.data)
+                0x000001f2                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800111        0x0
-                0x00800111                PROVIDE (__noinit_start, .)
+.noinit         0x00800100        0x0
+                0x00800100                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00800111                PROVIDE (__noinit_end, .)
-                0x00800111                _end = .
-                0x00800111                PROVIDE (__heap_start, .)
+                0x00800100                PROVIDE (__noinit_end, .)
+                0x00800100                _end = .
+                0x00800100                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
  *(.eeprom*)
@@ -570,25 +563,25 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x566
+.debug_info     0x00000000      0x580
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000       0x7c src/ASF/common/boards/user_board/init.o
- .debug_info    0x0000007c      0x4ea src/main.o
+ .debug_info    0x0000007c      0x504 src/main.o
 
-.debug_abbrev   0x00000000      0x2bf
+.debug_abbrev   0x00000000      0x296
  *(.debug_abbrev)
  .debug_abbrev  0x00000000       0x47 src/ASF/common/boards/user_board/init.o
- .debug_abbrev  0x00000047      0x278 src/main.o
+ .debug_abbrev  0x00000047      0x24f src/main.o
 
-.debug_line     0x00000000      0xbd0
+.debug_line     0x00000000      0xc07
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x392 src/ASF/common/boards/user_board/init.o
- .debug_line    0x00000392      0x83e src/main.o
+ .debug_line    0x00000392      0x875 src/main.o
 
-.debug_frame    0x00000000      0x188
+.debug_frame    0x00000000      0x1a4
  *(.debug_frame)
  .debug_frame   0x00000000       0x24 src/ASF/common/boards/user_board/init.o
- .debug_frame   0x00000024      0x164 src/main.o
+ .debug_frame   0x00000024      0x180 src/main.o
 
 .debug_str      0x00000000    0x11b6b
  *(.debug_str)
@@ -597,9 +590,9 @@ END GROUP
  .debug_str     0x000112f9      0x872 src/main.o
                               0x11d12 (size before relaxing)
 
-.debug_loc      0x00000000      0x485
+.debug_loc      0x00000000      0x4f0
  *(.debug_loc)
- .debug_loc     0x00000000      0x485 src/main.o
+ .debug_loc     0x00000000      0x4f0 src/main.o
 
 .debug_macinfo
  *(.debug_macinfo)

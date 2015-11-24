@@ -15,12 +15,10 @@ typedef unsigned char byte;
 ISR(INT0_vect)
 {
 	if (PC6){	//komunikation vill skicka
-		//i2c_recive(0x02); // processor 1
-		SPI_Recive(0x01);
+		i2c_recive(0x02); // processor 1
 	}
 	else if(PC7){ //sensor vill skicka
-		//i2c_recive(0x06); // processor 3
-		SPI_Recive(0x03);
+		i2c_recive(0x06); // processor 3
 	}
 	
 }
@@ -31,15 +29,12 @@ int main(){
 	board_init();
 	//SPI_MasterInit();
 	i2c_setup(1);
-	
-	//sei();				//Enable Global Interrupt
+	_delay_ms(1000);
+	sei();				//Enable Global Interrupt
 	byte data[2]={0x12,0x0f};
 	while(1){
 		//FUNKTIONSLOP
 		_delay_ms(1000);
-		i2c_send(0x02, data);
-		//SPI_MasterTransmit(0x0a,0x01);
-		
 	};
 	return 0;
 
