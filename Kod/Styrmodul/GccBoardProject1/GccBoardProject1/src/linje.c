@@ -1,4 +1,4 @@
-void led_test();
+void led_test(bool lys);
 void linje_setup();
 signed char linje_RGBsveng();	
 signed char linje_get_error();
@@ -7,9 +7,9 @@ char Reflex_data_raw[3];
 int Reflex_data;
 //Reflex_data=Reflex_data_raw[2]*0x10000+Reflex_data_raw[1]*0x100+Reflex_data_raw[0]; // göras då data tas emot
 
-void led_test(){
+void led_test(bool lys){
 	DDRD =1<<PD1;
-	PORTD=1<<PD1;	
+	PORTD=lys<<PD1;	
 };
 
 
