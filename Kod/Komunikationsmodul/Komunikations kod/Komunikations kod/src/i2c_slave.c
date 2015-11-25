@@ -1,9 +1,4 @@
-void i2c_setup(byte adress_);
-void requestToSend(byte adress, byte* data);
-byte incomingData();
-void i2c_send(byte prossesor,byte data);
-byte i2c_recive();
-void i2c_handel_data();
+#include "i2c_slave.h"
 
 byte dataToSend[15];
 byte reciverAdress;
@@ -27,27 +22,25 @@ void i2c_setup(byte adress_) {
 	DDRC |= (1 << PC6);
 };
 
-void requestToSend(byte adress, byte data[]){
+void i2c_requestToSend(byte adress, byte data[]){
 	bytes_to_send_i2c = (data[0] >> 4) & 0x0f;
 	for(int i = 0; i < bytes_to_send_i2c+1; i++)
 		dataToSend[i] = data[i];
 	reciverAdress = adress;
 	bytesSent = 0;
-	//TWCR = (1 << TWIE) | (1 << TWEN)| (1<<TWEA) | (1<<TWINT);
 	PORTC |= (1 << PC6);
 	PORTC &= ~(1 << PC6);
 }
 
 
-byte incomingData(){	
-	int counter=0;
-	if((TWSR & 0xF8)==0x60){ // rec data, ack sent	
+byte incomingData(void){	
+	if((TWSR & 0xF8) == 0x60){ // rec data, ack sent	
 		i2c_data[bytefrom_i2c] = i2c_recive();
-		if(bytefrom_i2c==i2c_data[0]>>4 &0x0f){
-			newdata=true;
+		if(bytefrom_i2c == ((i2c_data[0]>>4) &0x0f)){
+			newdata = true;
 			TWCR &= ~(1 << TWINT);
 		}
-		if(bytefrom_i2c+1==(i2c_data[0]>>4)&0x0f)
+		if((bytefrom_i2c+1) == ((i2c_data[0]>>4)&0x0f))
 			i2c_new_data=true;
 		return i2c_data[bytefrom_i2c++];
 		
@@ -75,25 +68,21 @@ void i2c_send(byte prossesor,byte data){
 			PORTC |= (1 << PC6);
 			PORTC &= ~(1 << PC6);
 		}
-		
-		return false;
+		return ;
 	}
 }
 
-byte i2c_recive(){
+byte i2c_recive(void){
 	if((TWSR & 0xF8)!=0x80)
 		return false;
 	TWCR |= (1<<TWEA) | (1<<TWINT);
 	return TWDR;	
 }
 
-void i2c_store_data(byte data){
-	
-}
-
-void i2c_handel_data(){
+void i2c_handle_data(void){
 	if(i2c_new_data==true)
 	{
+		bluetooth_add_to_send_queue(i2c_data);
 		i2c_new_data=false;
 		switch (i2c_data[0] & 0x0f){
 			case 0x00 :
@@ -148,6 +137,4 @@ void i2c_handel_data(){
 			break;
 		}
 	}
-	
-	
 }

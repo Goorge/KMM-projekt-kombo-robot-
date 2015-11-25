@@ -1,11 +1,7 @@
+
 import java.awt.EventQueue;
-import java.awt.Image;
-
 import javax.swing.JFrame;
-import javax.swing.JToggleButton;
 import javax.swing.ScrollPaneConstants;
-
-import java.awt.BorderLayout;
 
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -13,18 +9,14 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.concurrent.TimeUnit;
 import java.awt.event.ActionEvent;
-import javax.swing.SpringLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import java.awt.Canvas;
 import java.awt.Color;
 
 import javax.swing.JList;
 import java.awt.Button;
 import javax.swing.JLabel;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-import java.awt.Component;
 
 enum listEnum{leftDistance, rightDistance, frontDistance, gyro, leftWheel, rightWheel, line, rgb, garbage};
 enum directions{goForwards, goBackwards, goLeft, goRight, turnLeft, turnRight}; 

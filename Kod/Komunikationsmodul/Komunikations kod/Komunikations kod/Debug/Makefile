@@ -52,6 +52,7 @@ SUBDIRS :=  \
 C_SRCS +=  \
 ../src/ASF/common/boards/user_board/init.c \
 ../src/bluetooth.c \
+../src/i2c_slave.c \
 ../src/LCD.c \
 ../src/main.c
 
@@ -65,24 +66,28 @@ ASM_SRCS +=
 OBJS +=  \
 src/ASF/common/boards/user_board/init.o \
 src/bluetooth.o \
+src/i2c_slave.o \
 src/LCD.o \
 src/main.o
 
 OBJS_AS_ARGS +=  \
 src/ASF/common/boards/user_board/init.o \
 src/bluetooth.o \
+src/i2c_slave.o \
 src/LCD.o \
 src/main.o
 
 C_DEPS +=  \
 src/ASF/common/boards/user_board/init.d \
 src/bluetooth.d \
+src/i2c_slave.d \
 src/LCD.d \
 src/main.d
 
 C_DEPS_AS_ARGS +=  \
 src/ASF/common/boards/user_board/init.d \
 src/bluetooth.d \
+src/i2c_slave.d \
 src/LCD.d \
 src/main.d
 
@@ -108,6 +113,13 @@ src/ASF/common/boards/user_board/init.o: ../src/ASF/common/boards/user_board/ini
 	
 
 src/bluetooth.o: ../src/bluetooth.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 4.9.2
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=USER_BOARD  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.90\include" -I"../common/applications/user_application/user_board/config" -I"../src/config" -I"../src/ASF/common/boards" -I"../src/ASF/mega/utils" -I"../src/ASF/common/utils" -I"../src/ASF/mega/utils/preprocessor" -I"../src" -I"../src/ASF/common/boards/user_board"  -O1 -fdata-sections -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g3 -Wall -mmcu=atmega1284p -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.90\gcc\dev\atmega1284p" -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/i2c_slave.o: ../src/i2c_slave.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 4.9.2
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -DDEBUG -DBOARD=USER_BOARD  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.90\include" -I"../common/applications/user_application/user_board/config" -I"../src/config" -I"../src/ASF/common/boards" -I"../src/ASF/mega/utils" -I"../src/ASF/common/utils" -I"../src/ASF/mega/utils/preprocessor" -I"../src" -I"../src/ASF/common/boards/user_board"  -O1 -fdata-sections -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g3 -Wall -mmcu=atmega1284p -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.0.90\gcc\dev\atmega1284p" -c -std=gnu99 -fno-strict-aliasing -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -mrelax -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
