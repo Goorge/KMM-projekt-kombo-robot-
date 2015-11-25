@@ -91,11 +91,11 @@ void bluetooth_handle_data( void ){
 
 	// Om ny data, skicka vidare
 	if(new_data_bt){ //Här är lite fel data_from_bt funkar inte...
-		int nr_of_bytes = ((data_from_bt[0] >> 4) & 0x0f);
-		byte data[nr_of_bytes];
-		for(int i = 0; i < nr_of_bytes; i++)
-			data[i] = data_from_bt[i];
-		i2c_requestToSend(0x04, data);
+		//int nr_of_bytes = ((data_from_bt[0] >> 4) & 0x0f) + 1;
+		//byte data[nr_of_bytes];
+		//for(int i = 0; i < nr_of_bytes; i++)
+		//	data[i] = data_from_bt[i];
+		//i2c_requestToSend(0x04, data);
 		bluetooth_add_to_send_queue(data_from_bt); // Ta bort när den skickar över i2c. 
 		new_data_bt = false;
 		bluetooth_clear_to_send();
@@ -106,14 +106,18 @@ void bluetooth_handle_data( void ){
 		bluetooth_send_byte(data_to_bt[number_of_bytes_to_bt - bytes_left_to_bt--]);
 }
 
+// Lägg in data i kö för att skicka över BT
 bool bluetooth_add_to_send_queue(byte* data){
-	int nr_of_bytes = (data[0] >> 4) & 0x0f;
-	if(number_of_bytes_to_bt + nr_of_bytes > 15)
-		return false;
-	bytes_left_to_bt += nr_of_bytes;
-	for(int i = number_of_bytes_to_bt; i < nr_of_bytes + number_of_bytes_to_bt; i++)
-		data_to_bt[i] = data[i - number_of_bytes_to_bt];
-	number_of_bytes_to_bt += nr_of_bytes;
+	int nr_of_bytes = NELEMS(data);
+	//if(number_of_bytes_to_bt + nr_of_bytes > 15)
+	//	return false;
+	//for(int i = number_of_bytes_to_bt; i < number_of_bytes_to_bt + nr_of_bytes; i++)
+	//	data_to_bt[i] = data[i - number_of_bytes_to_bt];
+	number_of_bytes_to_bt = nr_of_bytes;
+	bytes_left_to_bt = nr_of_bytes;
+	for(int i = 0; i < nr_of_bytes; i++)
+		data_to_bt[i] = data[i];
+	
 	return true;
 }
 

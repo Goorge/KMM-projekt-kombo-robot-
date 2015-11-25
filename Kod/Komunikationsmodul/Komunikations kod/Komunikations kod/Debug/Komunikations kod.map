@@ -143,6 +143,10 @@ Discarded input sections
  .text          0x00000000        0x0 src/i2c_slave.o
  .data          0x00000000        0x0 src/i2c_slave.o
  .bss           0x00000000        0x0 src/i2c_slave.o
+ .text.i2c_requestToSend
+                0x00000000       0x3e src/i2c_slave.o
+ .text.i2c_handle_data
+                0x00000000       0x16 src/i2c_slave.o
  .debug_macro   0x00000000      0xa66 src/i2c_slave.o
  .debug_macro   0x00000000       0x10 src/i2c_slave.o
  .debug_macro   0x00000000      0x1ad src/i2c_slave.o
@@ -462,7 +466,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x560
+.text           0x00000000      0x476
  *(.vectors)
  .vectors       0x00000000       0x8c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega1284p/avr51/crtatmega1284p.o
                 0x00000000                __vector_default
@@ -570,53 +574,47 @@ END GROUP
                 0x00000110        0x4 src/bluetooth.o
                 0x00000110                bluetooth_clear_to_send
  .text.bluetooth_add_to_send_queue
-                0x00000114       0x6a src/bluetooth.o
+                0x00000114       0x28 src/bluetooth.o
                 0x00000114                bluetooth_add_to_send_queue
  .text.bluetooth_handle_data
-                0x0000017e      0x130 src/bluetooth.o
-                0x0000017e                bluetooth_handle_data
+                0x0000013c       0xb6 src/bluetooth.o
+                0x0000013c                bluetooth_handle_data
  .text.__vector_20
-                0x000002ae       0x28 src/bluetooth.o
-                0x000002ae                __vector_20
+                0x000001f2       0x28 src/bluetooth.o
+                0x000001f2                __vector_20
  .text.i2c_setup
-                0x000002d6        0xe src/i2c_slave.o
-                0x000002d6                i2c_setup
- .text.i2c_requestToSend
-                0x000002e4       0x3e src/i2c_slave.o
-                0x000002e4                i2c_requestToSend
+                0x0000021a        0xe src/i2c_slave.o
+                0x0000021a                i2c_setup
  .text.i2c_send
-                0x00000322       0x48 src/i2c_slave.o
-                0x00000322                i2c_send
+                0x00000228       0x48 src/i2c_slave.o
+                0x00000228                i2c_send
  .text.i2c_recive
-                0x0000036a       0x1e src/i2c_slave.o
-                0x0000036a                i2c_recive
+                0x00000270       0x1e src/i2c_slave.o
+                0x00000270                i2c_recive
  .text.incomingData
-                0x00000388       0xc4 src/i2c_slave.o
-                0x00000388                incomingData
+                0x0000028e       0xc4 src/i2c_slave.o
+                0x0000028e                incomingData
  .text.__vector_26
-                0x0000044c       0x54 src/i2c_slave.o
-                0x0000044c                __vector_26
- .text.i2c_handle_data
-                0x000004a0       0x14 src/i2c_slave.o
-                0x000004a0                i2c_handle_data
+                0x00000352       0x54 src/i2c_slave.o
+                0x00000352                __vector_26
  .text.lcd_write_instruction
-                0x000004b4       0x3a src/LCD.o
-                0x000004b4                lcd_write_instruction
+                0x000003a6       0x3a src/LCD.o
+                0x000003a6                lcd_write_instruction
  .text.lcd_setup
-                0x000004ee       0x38 src/LCD.o
-                0x000004ee                lcd_setup
+                0x000003e0       0x38 src/LCD.o
+                0x000003e0                lcd_setup
  .text.initialize
-                0x00000526       0x26 src/main.o
-                0x00000526                initialize
- .text.run      0x0000054c        0xa src/main.o
-                0x0000054c                run
- .text.main     0x00000556        0x6 src/main.o
-                0x00000556                main
-                0x0000055c                . = ALIGN (0x2)
+                0x00000418       0x26 src/main.o
+                0x00000418                initialize
+ .text.run      0x0000043e       0x2e src/main.o
+                0x0000043e                run
+ .text.main     0x0000046c        0x6 src/main.o
+                0x0000046c                main
+                0x00000472                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000055c        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
-                0x0000055c                _exit
-                0x0000055c                exit
+ .fini9         0x00000472        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
+                0x00000472                _exit
+                0x00000472                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -635,11 +633,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000055c        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
+ .fini0         0x00000472        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000560                _etext = .
+                0x00000476                _etext = .
 
-.data           0x00800100        0x4 load address 0x00000560
+.data           0x00800100        0x4 load address 0x00000476
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -697,8 +695,8 @@ END GROUP
                 0x00800142                dataToSend
                 0x00800151                reciverAdress
                 0x00800152                PROVIDE (__bss_end, .)
-                0x00000560                __data_load_start = LOADADDR (.data)
-                0x00000564                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00000476                __data_load_start = LOADADDR (.data)
+                0x0000047a                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800152        0x0
                 0x00800152                PROVIDE (__noinit_start, .)
@@ -789,42 +787,52 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xe60
+.debug_info     0x00000000      0xe53
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000       0x7c src/ASF/common/boards/user_board/init.o
- .debug_info    0x0000007c      0x430 src/bluetooth.o
- .debug_info    0x000004ac      0x31e src/i2c_slave.o
- .debug_info    0x000007ca      0x46c src/LCD.o
- .debug_info    0x00000c36      0x22a src/main.o
+ .debug_info    0x0000007c      0x39c src/bluetooth.o
+ .debug_info    0x00000418      0x31e src/i2c_slave.o
+ .debug_info    0x00000736      0x46c src/LCD.o
+ .debug_info    0x00000ba2      0x2b1 src/main.o
 
-.debug_abbrev   0x00000000      0x6ff
+.debug_abbrev   0x00000000      0x6d5
  *(.debug_abbrev)
  .debug_abbrev  0x00000000       0x47 src/ASF/common/boards/user_board/init.o
- .debug_abbrev  0x00000047      0x23a src/bluetooth.o
- .debug_abbrev  0x00000281      0x1a1 src/i2c_slave.o
- .debug_abbrev  0x00000422      0x175 src/LCD.o
- .debug_abbrev  0x00000597      0x168 src/main.o
+ .debug_abbrev  0x00000047      0x1d1 src/bluetooth.o
+ .debug_abbrev  0x00000218      0x1a1 src/i2c_slave.o
+ .debug_abbrev  0x000003b9      0x175 src/LCD.o
+ .debug_abbrev  0x0000052e      0x1a7 src/main.o
 
-.debug_line     0x00000000     0x1b7c
+.debug_line     0x00000000     0x1b21
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x392 src/ASF/common/boards/user_board/init.o
- .debug_line    0x00000392      0x69d src/bluetooth.o
- .debug_line    0x00000a2f      0x638 src/i2c_slave.o
- .debug_line    0x00001067      0x5e4 src/LCD.o
- .debug_line    0x0000164b      0x531 src/main.o
+ .debug_line    0x00000392      0x639 src/bluetooth.o
+ .debug_line    0x000009cb      0x638 src/i2c_slave.o
+ .debug_line    0x00001003      0x5e4 src/LCD.o
+ .debug_line    0x000015e7      0x53a src/main.o
 
-.debug_frame    0x00000000      0x284
+.debug_frame    0x00000000      0x264
  *(.debug_frame)
  .debug_frame   0x00000000       0x24 src/ASF/common/boards/user_board/init.o
- .debug_frame   0x00000024       0xe4 src/bluetooth.o
- .debug_frame   0x00000108       0xd8 src/i2c_slave.o
- .debug_frame   0x000001e0       0x60 src/LCD.o
- .debug_frame   0x00000240       0x44 src/main.o
+ .debug_frame   0x00000024       0xb4 src/bluetooth.o
+ .debug_frame   0x000000d8       0xd8 src/i2c_slave.o
+ .debug_frame   0x000001b0       0x60 src/LCD.o
+ .debug_frame   0x00000210       0x54 src/main.o
 
 .debug_str      0x00000000    0x11ede
  *(.debug_str)
  .debug_str     0x00000000    0x11304 src/ASF/common/boards/user_board/init.o
                               0x114c1 (size before relaxing)
+<<<<<<< HEAD
+ .debug_str     0x00011304      0xa56 src/bluetooth.o
+                              0x11e7a (size before relaxing)
+ .debug_str     0x00011d5a       0xf4 src/i2c_slave.o
+                              0x11df0 (size before relaxing)
+ .debug_str     0x00011e4e       0x6d src/LCD.o
+                              0x11d5e (size before relaxing)
+ .debug_str     0x00011ebb       0x1e src/main.o
+                              0x11d7f (size before relaxing)
+=======
  .debug_str     0x00011304      0xa6d src/bluetooth.o
                               0x11e91 (size before relaxing)
  .debug_str     0x00011d71       0xe2 src/i2c_slave.o
@@ -833,12 +841,14 @@ END GROUP
                               0x11d63 (size before relaxing)
  .debug_str     0x00011ec0       0x1e src/main.o
                               0x11d64 (size before relaxing)
+>>>>>>> 995ccda9d9aad9f027ce947551e122ab82d7c768
 
-.debug_loc      0x00000000      0x62f
+.debug_loc      0x00000000      0x47a
  *(.debug_loc)
- .debug_loc     0x00000000      0x2fd src/bluetooth.o
- .debug_loc     0x000002fd      0x1fc src/i2c_slave.o
- .debug_loc     0x000004f9      0x136 src/LCD.o
+ .debug_loc     0x00000000      0x100 src/bluetooth.o
+ .debug_loc     0x00000100      0x1fc src/i2c_slave.o
+ .debug_loc     0x000002fc      0x136 src/LCD.o
+ .debug_loc     0x00000432       0x48 src/main.o
 
 .debug_macinfo
  *(.debug_macinfo)

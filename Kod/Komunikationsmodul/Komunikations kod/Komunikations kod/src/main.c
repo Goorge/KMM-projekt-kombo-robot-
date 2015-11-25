@@ -26,8 +26,11 @@ void initialize(void){
 
 void run(void){		
 	bluetooth_send_byte(0x0f);
+	byte data[1] = {0x0F};
 	while(true)	{
 		bluetooth_handle_data();
-		i2c_handle_data();
+		//i2c_handle_data();
+		bluetooth_add_to_send_queue(data);
+		_delay_ms(1000);
 	}
 }
