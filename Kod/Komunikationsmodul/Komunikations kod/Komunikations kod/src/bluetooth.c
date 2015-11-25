@@ -91,10 +91,13 @@ void bluetooth_handle_data( void ){
 
 	// Om ny data, skicka vidare
 	if(new_data_bt){ //Här är lite fel data_from_bt funkar inte...
-		i2c_requestToSend(0x04, data_from_bt);
-		bluetooth_add_to_send_queue(data_from_bt);
+		int nr_of_bytes = ((data_from_bt[0] >> 4) & 0x0f);
+		byte data[nr_of_bytes];
+		for(int i = 0; i < nr_of_bytes; i++)
+			data[i] = data_from_bt[i];
+		i2c_requestToSend(0x04, data);
+		bluetooth_add_to_send_queue(data_from_bt); // Ta bort när den skickar över i2c. 
 		new_data_bt = false;
-		bluetooth_send_byte(0x0f);
 		bluetooth_clear_to_send();
 	}
 
