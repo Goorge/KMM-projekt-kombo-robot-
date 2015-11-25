@@ -3,6 +3,7 @@ void requestToSend(byte adress, byte* data);
 byte incomingData();
 void i2c_send(byte prossesor,byte data);
 byte i2c_recive();
+void i2c_handel_data();
 
 byte dataToSend[15];
 byte reciverAdress;
@@ -46,7 +47,10 @@ byte incomingData(){
 			newdata=true;
 			TWCR &= ~(1 << TWINT);
 		}
+		if(bytefrom_i2c+1==(i2c_data[0]>>4)&0x0f)
+			i2c_new_data=true;
 		return i2c_data[bytefrom_i2c++];
+		
 	}
 	else if((TWSR & 0xF8)==0xA8){ // send data, ack sent
 		i2c_send(reciverAdress,dataToSend[bytesSent++]);
@@ -84,5 +88,66 @@ byte i2c_recive(){
 }
 
 void i2c_store_data(byte data){
+	
+}
+
+void i2c_handel_data(){
+	if(i2c_new_data==true)
+	{
+		i2c_new_data=false;
+		switch (i2c_data[0] & 0x0f){
+			case 0x00 :
+			
+			break;
+			case 0x01 :
+			
+			break;
+			case 0x02 :
+			
+			break;
+			case 0x03 :
+			
+			break;
+			case 0x04 :
+			
+			break;
+			case 0x05 :
+			
+			break;
+			case 0x06 :
+			
+			break;
+			case 0x07 :
+			
+			break;
+			case 0x08 :
+			
+			break;
+			case 0x09 :
+			
+			break;
+			case 0x0a :
+			
+			break;
+			case 0x0b :
+			
+			break;
+			case 0x0c :
+			
+			break;
+			case 0x0d :
+			
+			break;
+			case 0x0e :
+			
+			break;
+			case 0x0f :
+			
+			break;
+			default :
+			break;
+		}
+	}
+	
 	
 }

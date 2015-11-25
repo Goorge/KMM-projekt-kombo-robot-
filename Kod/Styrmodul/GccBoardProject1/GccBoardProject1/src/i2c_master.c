@@ -10,6 +10,7 @@ bool i2c_newdata=false;
 
 ISR(INT0_vect)
 {	
+	
 	if (PINC&(1<<PC6)!=0){	//komunikation vill skicka
 		i2c_store_data(i2c_recive(0x02)); // processor 1
 		
@@ -131,10 +132,11 @@ void i2c_store_data(byte data)
 		counter++;
 	}
 	else
-		{
-			counter=0;
-			i2c_newdata=true;  
-		}
+	{
+		counter=0;
+		i2c_newdata=true;
+		EIMSK &= ~(1<<INT0);  
+	}
 	
 }
 
@@ -142,6 +144,7 @@ void i2c_store_data(byte data)
 void i2c_handel_data(){
 	if(i2c_newdata==true)
 	{
+		i2c_newdata=false;
 		if((i2c_data[0]>>3)&0x01==0)
 			i2c_send(0x02,i2c_data);
 		switch (i2c_data[0] & 0x0f){
@@ -197,6 +200,6 @@ void i2c_handel_data(){
 				break;
 		}
 	}
-	
+	EIMSK |= (1<<INT0);
 	
 }
