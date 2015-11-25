@@ -10,7 +10,7 @@ c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/..
 Allocating common symbols
 Common symbol       size              file
 
-extradata           0xf               src/main.o
+i2c_data            0xf               src/main.o
 dataToSend          0xf               src/main.o
 data_to_bt          0x10              src/bluetooth.o
 data_from_bt        0x10              src/bluetooth.o
@@ -204,6 +204,10 @@ Discarded input sections
  .text          0x00000000        0x0 src/main.o
  .data          0x00000000        0x0 src/main.o
  .bss           0x00000000        0x0 src/main.o
+ .text.i2c_store_data
+                0x00000000        0x2 src/main.o
+ .bss.i2c_new_data
+                0x00000000        0x1 src/main.o
  .debug_macro   0x00000000      0xa66 src/main.o
  .debug_macro   0x00000000       0x10 src/main.o
  .debug_macro   0x00000000      0x1ad src/main.o
@@ -619,7 +623,7 @@ END GROUP
                 0x00800112                data_to_bt
                 0x00800122                data_from_bt
  COMMON         0x00800132       0x1f src/main.o
-                0x00800132                extradata
+                0x00800132                i2c_data
                 0x00800141                dataToSend
                 0x00800150                reciverAdress
                 0x00800151                PROVIDE (__bss_end, .)
@@ -698,7 +702,7 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x118
+.debug_aranges  0x00000000      0x120
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x20 src/ASF/common/boards/user_board/init.o
@@ -707,17 +711,17 @@ END GROUP
  .debug_aranges
                 0x00000080       0x38 src/LCD.o
  .debug_aranges
-                0x000000b8       0x60 src/main.o
+                0x000000b8       0x68 src/main.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xd3b
+.debug_info     0x00000000      0xd75
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000       0x7c src/ASF/common/boards/user_board/init.o
  .debug_info    0x0000007c      0x3b8 src/bluetooth.o
  .debug_info    0x00000434      0x46c src/LCD.o
- .debug_info    0x000008a0      0x49b src/main.o
+ .debug_info    0x000008a0      0x4d5 src/main.o
 
 .debug_abbrev   0x00000000      0x5f2
  *(.debug_abbrev)
@@ -726,21 +730,21 @@ END GROUP
  .debug_abbrev  0x00000231      0x175 src/LCD.o
  .debug_abbrev  0x000003a6      0x24c src/main.o
 
-.debug_line     0x00000000     0x1584
+.debug_line     0x00000000     0x1595
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x392 src/ASF/common/boards/user_board/init.o
  .debug_line    0x00000392      0x5e2 src/bluetooth.o
  .debug_line    0x00000974      0x566 src/LCD.o
- .debug_line    0x00000eda      0x6aa src/main.o
+ .debug_line    0x00000eda      0x6bb src/main.o
 
-.debug_frame    0x00000000      0x258
+.debug_frame    0x00000000      0x268
  *(.debug_frame)
  .debug_frame   0x00000000       0x24 src/ASF/common/boards/user_board/init.o
  .debug_frame   0x00000024       0xcc src/bluetooth.o
  .debug_frame   0x000000f0       0x60 src/LCD.o
- .debug_frame   0x00000150      0x108 src/main.o
+ .debug_frame   0x00000150      0x118 src/main.o
 
-.debug_str      0x00000000    0x11eac
+.debug_str      0x00000000    0x11ec7
  *(.debug_str)
  .debug_str     0x00000000    0x11304 src/ASF/common/boards/user_board/init.o
                               0x114c1 (size before relaxing)
@@ -748,8 +752,8 @@ END GROUP
                               0x11b97 (size before relaxing)
  .debug_str     0x00011a77       0x7c src/LCD.o
                               0x11a72 (size before relaxing)
- .debug_str     0x00011af3      0x3b9 src/main.o
-                              0x11e0b (size before relaxing)
+ .debug_str     0x00011af3      0x3d4 src/main.o
+                              0x11e26 (size before relaxing)
 
 .debug_loc      0x00000000      0x546
  *(.debug_loc)
@@ -775,12 +779,12 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0xd8
+.debug_ranges   0x00000000       0xe0
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x10 src/ASF/common/boards/user_board/init.o
  .debug_ranges  0x00000010       0x50 src/bluetooth.o
  .debug_ranges  0x00000060       0x28 src/LCD.o
- .debug_ranges  0x00000088       0x50 src/main.o
+ .debug_ranges  0x00000088       0x58 src/main.o
 
 .debug_macro    0x00000000     0x4690
  *(.debug_macro)

@@ -9,9 +9,9 @@ byte reciverAdress;
 int bytes_to_send_i2c = 0;
 int bytesSent = 0;
 int bytefrom_i2c=0;
-byte extradata[15];
+byte i2c_data[15];
 bool newdata = false;
-
+bool i2c_new_data = false;
 
 
 ISR(TWI_vect){
@@ -41,12 +41,12 @@ void requestToSend(byte adress, byte data[]){
 byte incomingData(){	
 	int counter=0;
 	if((TWSR & 0xF8)==0x60){ // rec data, ack sent	
-		extradata[bytefrom_i2c] = i2c_recive();
-		if(bytefrom_i2c==extradata[0]>>4 &0x0f){
+		i2c_data[bytefrom_i2c] = i2c_recive();
+		if(bytefrom_i2c==i2c_data[0]>>4 &0x0f){
 			newdata=true;
 			TWCR &= ~(1 << TWINT);
 		}
-		return extradata[bytefrom_i2c++];
+		return i2c_data[bytefrom_i2c++];
 	}
 	else if((TWSR & 0xF8)==0xA8){ // send data, ack sent
 		i2c_send(reciverAdress,dataToSend[bytesSent++]);
@@ -81,4 +81,8 @@ byte i2c_recive(){
 		return false;
 	TWCR |= (1<<TWEA) | (1<<TWINT);
 	return TWDR;	
+}
+
+void i2c_store_data(byte data){
+	
 }
