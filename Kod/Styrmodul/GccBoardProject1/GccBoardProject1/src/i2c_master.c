@@ -1,7 +1,9 @@
 void i2c_setup(bool master);
 bool i2c_send(byte prossesor,byte* data);
 byte i2c_recive(byte prossesor);
-void i2c_handle_data(byte data);
+void i2c_store_data(byte data);
+void i2c_handel_data();
+
 
 byte i2c_data[15];
 bool i2c_newdata=false;
@@ -9,11 +11,11 @@ bool i2c_newdata=false;
 ISR(INT0_vect)
 {	
 	if (PINC&(1<<PC6)!=0){	//komunikation vill skicka
-		i2c_handle_data(i2c_recive(0x02)); // processor 1
+		i2c_store_data(i2c_recive(0x02)); // processor 1
 		
 	}
 	else if(PINC&(1<<PC7)!=0){ //sensor vill skicka
-		i2c_handle_data(i2c_recive(0x06)); // processor 3
+		i2c_store_data(i2c_recive(0x06)); // processor 3
 	}
 }
 
@@ -117,10 +119,10 @@ byte i2c_recive(byte prossesor){
 
 
 
-void i2c_handle_data(byte data)
+void i2c_store_data(byte data)
 {
 	static int counter;
-	int size;
+	static int size;
 	if(counter=0)
 		size= (data>>4) & 0x0f;
 	else if(counter<size)
@@ -131,7 +133,70 @@ void i2c_handle_data(byte data)
 	else
 		{
 			counter=0;
-			i2c_newdata=true;
+			i2c_newdata=true;  
 		}
+	
+}
+
+
+void i2c_handel_data(){
+	if(i2c_newdata==true)
+	{
+		if((i2c_data[0]>>3)&0x01==0)
+			i2c_send(0x02,i2c_data);
+		switch (i2c_data[0] & 0x0f){
+			case 0x00 :
+				
+				break;
+			case 0x01 :
+			
+				break;
+			case 0x02 :
+			
+				break;
+			case 0x03 :
+			
+				break;
+			case 0x04 :
+			
+				break;		
+			case 0x05 :
+			
+				break;
+			case 0x06 :
+			
+				break;
+			case 0x07 :
+			
+				break;
+			case 0x08 :
+			
+				break;
+			case 0x09 :
+			
+				break;
+			case 0x0a :
+			
+				break;
+			case 0x0b :
+			
+				break;
+			case 0x0c :
+			
+				break;
+			case 0x0d :
+			
+				break;
+			case 0x0e :
+			
+				break;
+			case 0x0f :
+						
+				break;		
+			default :
+				break;
+		}
+	}
+	
 	
 }
