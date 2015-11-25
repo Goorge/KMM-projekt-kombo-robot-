@@ -821,18 +821,18 @@ END GROUP
  .debug_frame   0x000001e0       0x60 src/LCD.o
  .debug_frame   0x00000240       0x44 src/main.o
 
-.debug_str      0x00000000    0x11ed9
+.debug_str      0x00000000    0x11ede
  *(.debug_str)
  .debug_str     0x00000000    0x11304 src/ASF/common/boards/user_board/init.o
                               0x114c1 (size before relaxing)
- .debug_str     0x00011304      0xa68 src/bluetooth.o
-                              0x11e8c (size before relaxing)
- .debug_str     0x00011d6c       0xe2 src/i2c_slave.o
-                              0x11df0 (size before relaxing)
- .debug_str     0x00011e4e       0x6d src/LCD.o
-                              0x11d5e (size before relaxing)
- .debug_str     0x00011ebb       0x1e src/main.o
-                              0x11d5f (size before relaxing)
+ .debug_str     0x00011304      0xa6d src/bluetooth.o
+                              0x11e91 (size before relaxing)
+ .debug_str     0x00011d71       0xe2 src/i2c_slave.o
+                              0x11df5 (size before relaxing)
+ .debug_str     0x00011e53       0x6d src/LCD.o
+                              0x11d63 (size before relaxing)
+ .debug_str     0x00011ec0       0x1e src/main.o
+                              0x11d64 (size before relaxing)
 
 .debug_loc      0x00000000      0x62f
  *(.debug_loc)
