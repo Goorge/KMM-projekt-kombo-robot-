@@ -14,26 +14,31 @@ void req_gyro_turn(void){
 	;
 }
 
-void turn_left(){
+void turn_left(void){
 	PORTB &= ~(1 << motor_dir_right);
 	PORTB |= (1 << motor_dir_left);
 	motor_left = left;
 	motor_right = right;
 }
 
-void turn_right(){
+void turn_right(void){
 	PORTB |= (1 << motor_dir_right);
 	PORTB &= ~(1 << motor_dir_left);
 	motor_left = left;
 	motor_right = right;	
 }
 
+void drive_forward(void){
+	PORTB &= ~(1 << motor_dir_left) | (1 << motor_dir_right);
+	motor_left = left;
+	motor_right = right;
+	
+}
+
 void waypoint_lab(void){
 	
 	if(!ongoing_turn && sensor_front > 15){    //---kör fram i korsningen för att prepa sväng
-			PORTB &= (0 << motor_dir_left) | (0 << motor_dir_right);
-			motor_left = left;
-			motor_right = right;	
+			drive_forward();	
 			turn_done=false;
 			
 	}
@@ -57,9 +62,7 @@ void waypoint_lab(void){
 		turn_done=true;
 		count_waypoint=0;	
 		gyro_turn=0;
-		PORTB &= (0 << motor_dir_left) | (0 << motor_dir_right);
-		motor_left = left;
-		motor_right = right;	
+		drive_forward();	
 		}
 	else if(turn_done && count_waypoint >= 5){
 			waypoint = 0;						//sväng är klar, återgå till reglering
@@ -71,12 +74,10 @@ void waypoint_lab(void){
 
 
 
-void oneway_turn(void){
+void oneway_turn_lab(void){
 	
 	if(!ongoing_turn && sensor_front > 15){    //---kör fram i korsningen för att prepa sväng
-		PORTB &= (0 << motor_dir_left) | (0 << motor_dir_right);
-		motor_left = left;
-		motor_right = right;
+		drive_forward();
 		turn_done=false;
 		
 	}
@@ -92,10 +93,18 @@ void oneway_turn(void){
 		else if(sensor_right > 57){
 			turn_right();	
 		}
-		start_turn=0;
-		
+		start_turn=false;	
 	}
-	
+	else if(ongoing_turn && gyro_turn==1){
+		turn_done=true;
+		count_waypoint=0;
+		gyro_turn=0;
+		drive_forward();
+	}
+	else if(turn_done && count_waypoint >= 5){
+		oneway_turn = 0;						//sväng är klar, återgå till reglering
+		ongoing_turn = false;
+	}
 	
 	
 }
