@@ -13,7 +13,7 @@ ISR(INT0_vect)
 {	
 	
 	if (PINC&(1<<PC6)!=0){	//komunikation vill skicka
-		i2c_store_data(i2c_recive(0x02)); // processor 1
+		i2c_store_data(i2c_recive(0x06)); // processor 1
 		
 	}
 	else if(PINC&(1<<PC7)!=0){ //sensor vill skicka
@@ -49,8 +49,10 @@ bool i2c_send(byte prossesor,byte data[]){
 	TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN); //send START
 	while(!(TWCR & (1<<TWINT))); //Wait for TWINT, START is now sent
 	
-	if((TWSR & 0xF8) != start) // om status en start
-		return false;		
+	if((TWSR & 0xF8) != start){ // om status en start
+		TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP	
+		return false;	
+		}
 	TWDR = prossesor&0xfe;//sista bit R/W
 	TWCR = (1<<TWINT) | (1<<TWEN);// start transmito of addres
 	while(!(TWCR & (1<<TWINT))); // wait for SLA+W transmited and ACK/NACK recived

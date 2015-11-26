@@ -19,17 +19,17 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   7 .debug_abbrev 00000251  00000000  00000000  000013eb  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000011d6  00000000  00000000  0000163c  2**0
+  8 .debug_line   000011dc  00000000  00000000  0000163c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000002c0  00000000  00000000  00002814  2**2
+  9 .debug_frame  000002c0  00000000  00000000  00002818  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00010175  00000000  00000000  00002ad4  2**0
+ 10 .debug_str    00010175  00000000  00000000  00002ad8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000005c2  00000000  00000000  00012c49  2**0
+ 11 .debug_loc    000005b2  00000000  00000000  00012c4d  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000108  00000000  00000000  0001320b  2**0
+ 12 .debug_ranges 00000108  00000000  00000000  000131ff  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  00003d7c  00000000  00000000  00013313  2**0
+ 13 .debug_macro  00003d7c  00000000  00000000  00013307  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -771,7 +771,7 @@ void board_init(void)
  660:	ff 93       	push	r31
  662:	30 9b       	sbis	0x06, 0	; 6
  664:	04 c0       	rjmp	.+8      	; 0x66e <__vector_1+0x32>
- 666:	82 e0       	ldi	r24, 0x02	; 2
+ 666:	86 e0       	ldi	r24, 0x06	; 6
  668:	92 df       	rcall	.-220    	; 0x58e <i2c_recive>
  66a:	df df       	rcall	.-66     	; 0x62a <i2c_store_data>
  66c:	05 c0       	rjmp	.+10     	; 0x678 <__vector_1+0x3c>
