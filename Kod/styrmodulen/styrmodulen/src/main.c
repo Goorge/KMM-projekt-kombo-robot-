@@ -62,9 +62,9 @@ int main(void)
 					regulator();
 					regler_ready=0;	
 				}
-				start=0;
+				//start=0;
 			}
-			else{										// Drivemode is manual
+			else if(drive_mode==0){										// Drivemode is manual
 				manual_drive();
 				//start=0;								// Set start mode to off (0)
 			}

@@ -60,6 +60,7 @@ ISR(INT1_vect){						// INT1 is Manual/ auto button
 		PORTD &= ~(1 << PD0);
 	}
 	else{
+		start=0;
 		drive_mode=1;
 		PORTD |= (1 << PD0);
 		PORTD &= ~(1 << PD1);
