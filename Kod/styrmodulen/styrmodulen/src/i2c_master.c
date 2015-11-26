@@ -14,7 +14,7 @@ ISR(INT0_vect)
 	
 	if (PINC&(1<<PC6)!=0){	//komunikation vill skicka
 		i2c_store_data(i2c_recive(0x02)); // processor 1
-		
+		PORTD |= (1 << PD0); // heej
 	}
 	else if(PINC&(1<<PC7)!=0){ //sensor vill skicka
 		i2c_store_data(i2c_recive(0x06)); // processor 3
@@ -121,7 +121,7 @@ byte i2c_recive(byte prossesor){
 
 
 
-void i2c_store_data(byte data)
+/*void i2c_store_data(byte data)
 {
 	static int counter;
 	static int size;
@@ -140,18 +140,41 @@ void i2c_store_data(byte data)
 		
 	}
 	
+}*/
+void i2c_store_data(byte data)
+{
+	static int counter;
+	static int size;
+	if(counter == 0){
+		size = (data>>4) & 0x0f;
+		i2c_data[counter] = data;
+		counter++;
+	}
+	else if(counter < size){
+		i2c_data[counter] = data;
+		counter++;
+	}
+	else{
+		i2c_data[counter] = data;
+		i2c_newdata = true;
+		counter = 0;
+		EIMSK &= ~(1<<INT0);
+	}
+	
 }
+
 
 //Reflex_data=Reflex_data_raw[2]*0x10000+Reflex_data_raw[1]*0x100+Reflex_data_raw[0];
 void i2c_handel_data(void){
 	if(i2c_newdata==true)
 	{
 		i2c_newdata=false;
-		if((i2c_data[0]>>3)&0x01==0)
-			i2c_send(0x02,i2c_data);
+		//if((i2c_data[0]>>3)&0x01==0)
+			//i2c_send(0x02,i2c_data);
 		switch (i2c_data[0] & 0x0f){
 			case 0x00 :
-			PORTD ^= (1 << PD0);
+			//PORTD ^= (1 << PD0);
+			
 				break;
 			case 0x01 :
 			
@@ -180,25 +203,30 @@ void i2c_handel_data(void){
 			case 0x09 :
 				manual_function=1;
 				counter=0;
-				PORTD |= (1 << PD0);
+				PORTD |= (1 << PD0); // heej
 				break;
 			case 0x0a :
+			PORTD |= (1 << PD0); // heej
 				manual_function=2;
 				counter=0;
 				break;
 			case 0x0b :
+			PORTD |= (1 << PD0); // heej
 				manual_function=4;
 				counter=0;
 				break;
 			case 0x0c :
+			PORTD |= (1 << PD0); // heej
 				manual_function=3;
 				counter=0;
 				break;
 			case 0x0d :
+			PORTD |= (1 << PD0); // heej
 				manual_function=6;
 				counter=0;
 				break;
 			case 0x0e :
+			PORTD |= (1 << PD0); // heej
 				manual_function=5;
 				counter=0;
 				break;
@@ -208,7 +236,8 @@ void i2c_handel_data(void){
 			default :
 				break;
 		}
+		EIMSK |= (1<<INT0);
 	}
-	EIMSK |= (1<<INT0);
+	//EIMSK |= (1<<INT0);
 	
 }
