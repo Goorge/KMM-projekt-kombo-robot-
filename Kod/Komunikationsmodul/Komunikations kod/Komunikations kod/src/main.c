@@ -1,10 +1,9 @@
 #include <asf.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
-#include <compat/twi.h>
 
 #include "definitions.h"
-#include "i2c_slave.c"
+#include "i2c_slave.h"
 #include "bluetooth.h"
 #include "LCD.h"
 
@@ -25,12 +24,13 @@ void initialize(void){
 	_delay_ms(2000);
 }
 
-void run(void){
-	byte data[4] = {0x3A, 0x0f, 0x12, 0x13};
-		
+void run(void){		
+	bluetooth_send_byte(0x0f);
+	byte data[1] = {0x0F};
 	while(true)	{
 		bluetooth_handle_data();
+		//i2c_handle_data();
+		bluetooth_add_to_send_queue(data);
 		_delay_ms(1000);
-		requestToSend(0x04, data);
 	}
 }
