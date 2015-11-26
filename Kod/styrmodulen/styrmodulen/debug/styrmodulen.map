@@ -90,12 +90,10 @@ Discarded input sections
  .bss           0x00000000        0x0 src/main.o
  .text.req_gyro_turn
                 0x00000000        0x2 src/main.o
+ .text.oneway_turn
+                0x00000000       0x66 src/main.o
  .text.i2c_send
                 0x00000000       0xdc src/main.o
- .text.i2c_handel_data
-                0x00000000       0xcc src/main.o
- .progmem.gcc_sw_table.i2c_handel_data
-                0x00000000       0x1a src/main.o
  .text.linje_setup
                 0x00000000        0x2 src/main.o
  .text.linje_get_error
@@ -171,7 +169,6 @@ Discarded input sections
                 0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_tablejump2.o)
  .text.libgcc.div
                 0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_tablejump2.o)
- .text.libgcc   0x00000000       0x12 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_tablejump2.o)
  .text.libgcc.prologue
                 0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_tablejump2.o)
  .text.libgcc.builtins
@@ -345,49 +342,51 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x75c
+.text           0x00000000      0x85e
  *(.vectors)
  .vectors       0x00000000       0x8c C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega1284p/avr51/crtatmega1284p.o
                 0x00000000                __vector_default
                 0x00000000                __vectors
  *(.vectors)
  *(.progmem.gcc*)
-                0x0000008c                . = ALIGN (0x2)
-                0x0000008c                __trampolines_start = .
+ .progmem.gcc_sw_table.i2c_handel_data
+                0x0000008c       0x1a src/main.o
+                0x000000a6                . = ALIGN (0x2)
+                0x000000a6                __trampolines_start = .
  *(.trampolines)
- .trampolines   0x0000008c        0x0 linker stubs
+ .trampolines   0x000000a6        0x0 linker stubs
  *(.trampolines*)
-                0x0000008c                __trampolines_end = .
+                0x000000a6                __trampolines_end = .
  *(.progmem*)
-                0x0000008c                . = ALIGN (0x2)
+                0x000000a6                . = ALIGN (0x2)
  *(.jumptables)
  *(.jumptables*)
  *(.lowtext)
  *(.lowtext*)
-                0x0000008c                __ctors_start = .
+                0x000000a6                __ctors_start = .
  *(.ctors)
-                0x0000008c                __ctors_end = .
-                0x0000008c                __dtors_start = .
+                0x000000a6                __ctors_end = .
+                0x000000a6                __dtors_start = .
  *(.dtors)
-                0x0000008c                __dtors_end = .
+                0x000000a6                __dtors_end = .
  SORT(*)(.ctors)
  SORT(*)(.dtors)
  *(.init0)
- .init0         0x0000008c        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega1284p/avr51/crtatmega1284p.o
-                0x0000008c                __init
+ .init0         0x000000a6        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega1284p/avr51/crtatmega1284p.o
+                0x000000a6                __init
  *(.init0)
  *(.init1)
  *(.init1)
  *(.init2)
- .init2         0x0000008c        0xc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega1284p/avr51/crtatmega1284p.o
+ .init2         0x000000a6        0xc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega1284p/avr51/crtatmega1284p.o
  *(.init2)
  *(.init3)
  *(.init3)
  *(.init4)
- .init4         0x00000098       0x1a c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_copy_data.o)
-                0x00000098                __do_copy_data
- .init4         0x000000b2       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_clear_bss.o)
-                0x000000b2                __do_clear_bss
+ .init4         0x000000b2       0x1a c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_copy_data.o)
+                0x000000b2                __do_copy_data
+ .init4         0x000000cc       0x10 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_clear_bss.o)
+                0x000000cc                __do_clear_bss
  *(.init4)
  *(.init5)
  *(.init5)
@@ -398,105 +397,116 @@ END GROUP
  *(.init8)
  *(.init8)
  *(.init9)
- .init9         0x000000c2        0x4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega1284p/avr51/crtatmega1284p.o
+ .init9         0x000000dc        0x4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega1284p/avr51/crtatmega1284p.o
  *(.init9)
  *(.text)
- .text          0x000000c6        0x2 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega1284p/avr51/crtatmega1284p.o
-                0x000000c6                __vector_22
-                0x000000c6                __vector_28
-                0x000000c6                __vector_32
-                0x000000c6                __vector_34
-                0x000000c6                __vector_24
-                0x000000c6                __vector_12
-                0x000000c6                __bad_interrupt
-                0x000000c6                __vector_6
-                0x000000c6                __vector_31
-                0x000000c6                __vector_23
-                0x000000c6                __vector_30
-                0x000000c6                __vector_25
-                0x000000c6                __vector_11
-                0x000000c6                __vector_17
-                0x000000c6                __vector_19
-                0x000000c6                __vector_7
-                0x000000c6                __vector_27
-                0x000000c6                __vector_5
-                0x000000c6                __vector_33
-                0x000000c6                __vector_4
-                0x000000c6                __vector_9
-                0x000000c6                __vector_21
-                0x000000c6                __vector_15
-                0x000000c6                __vector_29
-                0x000000c6                __vector_8
-                0x000000c6                __vector_26
-                0x000000c6                __vector_14
-                0x000000c6                __vector_10
-                0x000000c6                __vector_16
-                0x000000c6                __vector_18
-                0x000000c6                __vector_20
-                0x000000c8                . = ALIGN (0x2)
+ .text          0x000000e0        0x2 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.0.90/gcc/dev/atmega1284p/avr51/crtatmega1284p.o
+                0x000000e0                __vector_22
+                0x000000e0                __vector_28
+                0x000000e0                __vector_32
+                0x000000e0                __vector_34
+                0x000000e0                __vector_24
+                0x000000e0                __vector_12
+                0x000000e0                __bad_interrupt
+                0x000000e0                __vector_6
+                0x000000e0                __vector_31
+                0x000000e0                __vector_23
+                0x000000e0                __vector_30
+                0x000000e0                __vector_25
+                0x000000e0                __vector_11
+                0x000000e0                __vector_17
+                0x000000e0                __vector_19
+                0x000000e0                __vector_7
+                0x000000e0                __vector_27
+                0x000000e0                __vector_5
+                0x000000e0                __vector_33
+                0x000000e0                __vector_4
+                0x000000e0                __vector_9
+                0x000000e0                __vector_21
+                0x000000e0                __vector_15
+                0x000000e0                __vector_29
+                0x000000e0                __vector_8
+                0x000000e0                __vector_26
+                0x000000e0                __vector_14
+                0x000000e0                __vector_10
+                0x000000e0                __vector_16
+                0x000000e0                __vector_18
+                0x000000e0                __vector_20
+                0x000000e2                . = ALIGN (0x2)
  *(.text.*)
  .text.board_init
-                0x000000c8        0x2 src/ASF/common/boards/user_board/init.o
-                0x000000c8                board_init
+                0x000000e2        0x2 src/ASF/common/boards/user_board/init.o
+                0x000000e2                board_init
  .text.manual_drive
-                0x000000ca       0xa6 src/main.o
-                0x000000ca                manual_drive
- .text.labyreg  0x00000170       0xb6 src/main.o
-                0x00000170                labyreg
- .text.linje    0x00000226       0xbe src/main.o
-                0x00000226                linje
+                0x000000e4       0xa6 src/main.o
+                0x000000e4                manual_drive
+ .text.labyreg  0x0000018a       0xb6 src/main.o
+                0x0000018a                labyreg
+ .text.linje    0x00000240       0xbe src/main.o
+                0x00000240                linje
+ .text.turn_left
+                0x000002fe       0x12 src/main.o
+                0x000002fe                turn_left
+ .text.turn_right
+                0x00000310       0x12 src/main.o
+                0x00000310                turn_right
  .text.waypoint_lab
-                0x000002e4       0xc8 src/main.o
-                0x000002e4                waypoint_lab
+                0x00000322       0xac src/main.o
+                0x00000322                waypoint_lab
  .text.regulator
-                0x000003ac       0x22 src/main.o
-                0x000003ac                regulator
+                0x000003ce       0x22 src/main.o
+                0x000003ce                regulator
  .text.initengine
-                0x000003ce       0x1a src/main.o
-                0x000003ce                initengine
- .text.reset    0x000003e8       0x28 src/main.o
-                0x000003e8                reset
+                0x000003f0       0x1a src/main.o
+                0x000003f0                initengine
+ .text.reset    0x0000040a       0x28 src/main.o
+                0x0000040a                reset
  .text.timerinit
-                0x00000410       0x28 src/main.o
-                0x00000410                timerinit
+                0x00000432       0x28 src/main.o
+                0x00000432                timerinit
  .text.__vector_13
-                0x00000438       0x7a src/main.o
-                0x00000438                __vector_13
+                0x0000045a       0x7a src/main.o
+                0x0000045a                __vector_13
  .text.interrupt_init
-                0x000004b2       0x12 src/main.o
-                0x000004b2                interrupt_init
+                0x000004d4       0x12 src/main.o
+                0x000004d4                interrupt_init
  .text.__vector_2
-                0x000004c4       0x48 src/main.o
-                0x000004c4                __vector_2
+                0x000004e6       0x48 src/main.o
+                0x000004e6                __vector_2
  .text.__vector_3
-                0x0000050c       0x40 src/main.o
-                0x0000050c                __vector_3
+                0x0000052e       0x40 src/main.o
+                0x0000052e                __vector_3
  .text.i2c_setup
-                0x0000054c       0x20 src/main.o
-                0x0000054c                i2c_setup
+                0x0000056e       0x20 src/main.o
+                0x0000056e                i2c_setup
  .text.i2c_recive
-                0x0000056c       0x9c src/main.o
-                0x0000056c                i2c_recive
+                0x0000058e       0x9c src/main.o
+                0x0000058e                i2c_recive
  .text.i2c_store_data
-                0x00000608       0x12 src/main.o
-                0x00000608                i2c_store_data
+                0x0000062a       0x12 src/main.o
+                0x0000062a                i2c_store_data
  .text.__vector_1
-                0x0000061a       0x62 src/main.o
-                0x0000061a                __vector_1
- .text.main     0x0000067c       0x8e src/main.o
-                0x0000067c                main
+                0x0000063c       0x62 src/main.o
+                0x0000063c                __vector_1
+ .text.i2c_handel_data
+                0x0000069e       0xcc src/main.o
+                0x0000069e                i2c_handel_data
+ .text.main     0x0000076a       0x90 src/main.o
+                0x0000076a                main
  .text.libgcc.div
-                0x0000070a       0x26 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_divmodhi4.o)
-                0x0000070a                _div
-                0x0000070a                __divmodhi4
+                0x000007fa       0x26 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_divmodhi4.o)
+                0x000007fa                _div
+                0x000007fa                __divmodhi4
+ .text.libgcc   0x00000820       0x12 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_tablejump2.o)
+                0x00000820                __tablejump2__
  .text.libgcc.div
-                0x00000730       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_udivmodhi4.o)
-                0x00000730                __udivmodhi4
-                0x00000758                . = ALIGN (0x2)
+                0x00000832       0x28 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_udivmodhi4.o)
+                0x00000832                __udivmodhi4
+                0x0000085a                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000758        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
-                0x00000758                _exit
-                0x00000758                exit
+ .fini9         0x0000085a        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
+                0x0000085a                _exit
+                0x0000085a                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -515,11 +525,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000758        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
+ .fini0         0x0000085a        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/4.9.2/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000075c                _etext = .
+                0x0000085e                _etext = .
 
-.data           0x00800100       0x48 load address 0x0000075c
+.data           0x00800100       0x48 load address 0x0000085e
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -554,7 +564,7 @@ END GROUP
                 0x00800148                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
- .bss.counter.1989
+ .bss.counter.1998
                 0x00800148        0x2 src/main.o
  .bss.count_arre
                 0x0080014a        0x2 src/main.o
@@ -628,8 +638,8 @@ END GROUP
                 0x0080018e                current_error_lab
                 0x00800190                RGB_data
                 0x00800191                PROVIDE (__bss_end, .)
-                0x0000075c                __data_load_start = LOADADDR (.data)
-                0x000007a4                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000085e                __data_load_start = LOADADDR (.data)
+                0x000008a6                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800191        0x0
                 0x00800191                PROVIDE (__noinit_start, .)
@@ -701,42 +711,42 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0xf8
+.debug_aranges  0x00000000      0x110
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x20 src/ASF/common/boards/user_board/init.o
  .debug_aranges
-                0x00000020       0xd8 src/main.o
+                0x00000020       0xf0 src/main.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x8b7
+.debug_info     0x00000000      0x92f
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000       0x7c src/ASF/common/boards/user_board/init.o
- .debug_info    0x0000007c      0x83b src/main.o
+ .debug_info    0x0000007c      0x8b3 src/main.o
 
 .debug_abbrev   0x00000000      0x251
  *(.debug_abbrev)
  .debug_abbrev  0x00000000       0x47 src/ASF/common/boards/user_board/init.o
  .debug_abbrev  0x00000047      0x20a src/main.o
 
-.debug_line     0x00000000     0x111b
+.debug_line     0x00000000     0x11d6
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x392 src/ASF/common/boards/user_board/init.o
- .debug_line    0x00000392      0xd89 src/main.o
+ .debug_line    0x00000392      0xe44 src/main.o
 
-.debug_frame    0x00000000      0x290
+.debug_frame    0x00000000      0x2c0
  *(.debug_frame)
  .debug_frame   0x00000000       0x24 src/ASF/common/boards/user_board/init.o
- .debug_frame   0x00000024      0x26c src/main.o
+ .debug_frame   0x00000024      0x29c src/main.o
 
-.debug_str      0x00000000    0x1016f
+.debug_str      0x00000000    0x10175
  *(.debug_str)
- .debug_str     0x00000000     0xfb4b src/ASF/common/boards/user_board/init.o
-                               0xfd08 (size before relaxing)
- .debug_str     0x0000fb4b      0x624 src/main.o
-                              0x10339 (size before relaxing)
+ .debug_str     0x00000000     0xfb30 src/ASF/common/boards/user_board/init.o
+                               0xfced (size before relaxing)
+ .debug_str     0x0000fb30      0x645 src/main.o
+                              0x1033f (size before relaxing)
 
 .debug_loc      0x00000000      0x5c2
  *(.debug_loc)
@@ -760,10 +770,10 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0xf0
+.debug_ranges   0x00000000      0x108
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x10 src/ASF/common/boards/user_board/init.o
- .debug_ranges  0x00000010       0xe0 src/main.o
+ .debug_ranges  0x00000010       0xf8 src/main.o
 
 .debug_macro    0x00000000     0x3d7c
  *(.debug_macro)
