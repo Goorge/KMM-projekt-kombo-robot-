@@ -49,29 +49,21 @@ int main(void)
 	motor_left=left;      
 	motor_right=right;
 	while(1){
-		i2c_handel_data();  //test av fregulito
-		/*if(MCUSR & 2){									// If EXTRF flag is set (extern RESET flag have been set, reset all variables).
-			reset();
-		}*/	
-		//else if(start==1){								// start if startbutton have been pressed
-			
-			if(drive_mode == 1 && start == 1){						// Drivemode is auto    // (drive_mode == 1 && start == 1)
+		i2c_handel_data();  //test av fregulito	
+			if(drive_mode == 1){						// Drivemode is auto    // (drive_mode == 1 && start == 1)
 				PORTB &= (0 << motor_dir_left) | (0 << motor_dir_right);		// Set motor direction to forward
 				current_position = arre[count_arre];	// används för att simulera linjeföljning, arrayen ändras i globala
-				if(regler_ready==1){
+				if(regler_ready==1 && start == 1){
 					regulator();
 					regler_ready=0;	
 				}
-				//start=0;
+				else if(start == 0){					// if start is zero then turn off the auto, stops motors
+					motor_left=0;
+					motor_right=0;
+				}
 			}
 			else if(drive_mode==0){										// Drivemode is manual
 				manual_drive();
-				//start=0;								// Set start mode to off (0)
 			}
-		//}
-		/*else{
-			motor_left=0;
-			motor_right=0;
-		}*/
 	}
 }

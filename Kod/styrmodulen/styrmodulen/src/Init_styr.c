@@ -15,16 +15,6 @@ void initengine(void){
 	PORTB &=  (0 << motor_dir_left) | (0 << motor_dir_right);			//set motors to move forward as default
 }
 // ------------------------------------------------------------------------------------------------------
-// -- Reset mabe overkill, if flag is set reset variables and 0 flag
-// ------------------------------------------------------------------------------------------------------
-void reset(void){					// If reset button have been pressed, reset alla important variables.
-	manual_function=0;
-	drive_mode=0;
-	start=0;
-	regler_ready=0;
-	MCUSR &= ~(1 << EXTRF);			//reset flag
-}
-// ------------------------------------------------------------------------------------------------------
 // -- Timer init with interrupt, first time
 // ------------------------------------------------------------------------------------------------------
 void timerinit(void){

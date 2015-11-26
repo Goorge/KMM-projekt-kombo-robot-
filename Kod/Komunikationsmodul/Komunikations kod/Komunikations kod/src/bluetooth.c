@@ -80,8 +80,8 @@ void bluetooth_handle_data( void ){
 		}
 			
 		// Lägg in datan i vektorn
-		data_from_bt[number_of_bytes_from_bt - bytes_left_from_bt--] = data;
-			
+		data_from_bt[number_of_bytes_from_bt - bytes_left_from_bt] = data;
+		bytes_left_from_bt--;
 		// Vill vi ha mer data från samma sändning? 				
 		if(bytes_left_from_bt != -1)// Om rts är 0 lagara blåtandseneheten data å skickar via usart när usarten är redo
 			bluetooth_clear_to_send();
@@ -91,29 +91,36 @@ void bluetooth_handle_data( void ){
 
 	// Om ny data, skicka vidare
 	if(new_data_bt){ //Här är lite fel data_from_bt funkar inte...
-		int nr_of_bytes = ((data_from_bt[0] >> 4) & 0x0f);
-		byte data[nr_of_bytes];
-		for(int i = 0; i < nr_of_bytes; i++)
-			data[i] = data_from_bt[i];
-		i2c_requestToSend(0x04, data);
+		//int nr_of_bytes = ((data_from_bt[0] >> 4) & 0x0f) + 1;
+		//byte data[nr_of_bytes];
+		//for(int i = 0; i < nr_of_bytes; i++)
+		//	data[i] = data_from_bt[i];
+		i2c_requestToSend(0x04, data_from_bt);
 		bluetooth_add_to_send_queue(data_from_bt); // Ta bort när den skickar över i2c. 
 		new_data_bt = false;
 		bluetooth_clear_to_send();
 	}
 
 	// Skicka data via BT
-	if(((PIND & (1<<CTS)) == 0) && bytes_left_to_bt != -1) // Vi har tillåtelse att skicka data & data att skicka
-		bluetooth_send_byte(data_to_bt[number_of_bytes_to_bt - bytes_left_to_bt--]);
+	if(((PIND & (1<<CTS)) == 0) && bytes_left_to_bt != -1){ // Vi har tillåtelse att skicka data & data att skicka
+		bluetooth_send_byte(data_to_bt[number_of_bytes_to_bt - bytes_left_to_bt]);
+		bytes_left_to_bt--;
+	}
 }
 
+// Lägg in data i kö för att skicka över BT
 bool bluetooth_add_to_send_queue(byte* data){
-	int nr_of_bytes = (data[0] >> 4) & 0x0f;
-	if(number_of_bytes_to_bt + nr_of_bytes > 15)
-		return false;
-	bytes_left_to_bt += nr_of_bytes;
-	for(int i = number_of_bytes_to_bt; i < nr_of_bytes + number_of_bytes_to_bt; i++)
-		data_to_bt[i] = data[i - number_of_bytes_to_bt];
-	number_of_bytes_to_bt += nr_of_bytes;
+	//int nr_of_bytes = NELEMS(data);
+	int nr_of_bytes = ((data[0] >> 4) & 0x0f);
+	//if(number_of_bytes_to_bt + nr_of_bytes > 15)
+	//	return false;
+	//for(int i = number_of_bytes_to_bt; i < number_of_bytes_to_bt + nr_of_bytes; i++)
+	//	data_to_bt[i] = data[i - number_of_bytes_to_bt];
+	number_of_bytes_to_bt = nr_of_bytes;
+	bytes_left_to_bt = nr_of_bytes;
+	for(int i = 0; i <= nr_of_bytes; i++)
+		data_to_bt[i] = data[i];
+	
 	return true;
 }
 

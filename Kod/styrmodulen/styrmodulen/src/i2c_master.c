@@ -151,6 +151,7 @@ void i2c_handel_data(void){
 			i2c_send(0x02,i2c_data);
 		switch (i2c_data[0] & 0x0f){
 			case 0x00 :
+			PORTD ^= (1 << PD0);
 				break;
 			case 0x01 :
 			
