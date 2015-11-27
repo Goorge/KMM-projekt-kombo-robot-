@@ -45,7 +45,7 @@ int main(void)
 	//***********Set motors speed value here *****************
 	left=100;				// kanske räcker med en variable för båda om båda kör exakt lika fort
 	right=93;
-	//********************************************************
+	//*********************************************************
 	motor_left=left;      
 	motor_right=right;
 	while(1){

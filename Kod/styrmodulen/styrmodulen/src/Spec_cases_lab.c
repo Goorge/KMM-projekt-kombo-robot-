@@ -13,7 +13,7 @@ int RGB_sensor=0;
 void req_gyro_turn(void){
 	;
 }
-
+//hej
 void turn_left(){
 	PORTB &= ~(1 << motor_dir_right);
 	PORTB |= (1 << motor_dir_left);
