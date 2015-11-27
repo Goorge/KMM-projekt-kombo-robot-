@@ -8,7 +8,7 @@ void i2c_handel_data();
 byte i2c_data[15];
 bool i2c_newdata=false;
 int Reflex_data;
-
+//aidshub was here
 ISR(INT0_vect)
 {	
 	if (PORTC|(1<< PC6)>0){	//komunikation vill skicka
