@@ -75,7 +75,7 @@
 #define motor_dir_right (PB6)
 // Global variables
 extern int regler_ready;
-extern int counter;
+extern int counter_timer;
 extern int manual_function;
 extern int drive_mode;
 extern int start;

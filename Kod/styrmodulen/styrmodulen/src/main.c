@@ -21,7 +21,7 @@ int right=0;				// Set speed for right motor
 int regler_ready=0;			// Ready for new values from sensors if 1
 int gyro_turn=0;			// When 1 the gyro has turned 90 degree
 int count_waypoint=0;		// Time to move away from waypoint
-int counter=0;				// Counter for how long time a manual function going to run
+int counter_timer=0;				// Counter for how long time a manual function going to run
 
 //*********************************for test only
 int count_arre=0;
@@ -43,8 +43,8 @@ int main(void)
 	linje_setup();
 	sei();
 	//***********Set motors speed value here *****************
-	left=60;				// kanske räcker med en variable för båda om båda kör exakt lika fort
-	right=60;
+	left=100;				// kanske räcker med en variable för båda om båda kör exakt lika fort
+	right=93;
 	//********************************************************
 	motor_left=left;      
 	motor_right=right;

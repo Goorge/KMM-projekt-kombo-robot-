@@ -99,21 +99,21 @@ byte i2c_recive(byte prossesor){
 	
 	TWCR |= (1<<TWINT)|(1<<TWEN);
 	while(!(TWCR & (1<<TWINT)));
-	if((TWSR & 0xF8) != 0x50)
+	/*if((TWSR & 0xF8) != 0x50)
 	{
 		TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP
 		
 		return false;
-	}
-	if(counter == 0){
+	}*/
+	/*if(counter == 0){
 		data = data[(TWDR>>4) & 0x0f];
 		size= (TWDR>>4) & 0x0f;
-	}
-	data[counter]=TWDR;
+	}*/
+	data=TWDR;
 	counter++;	
 	start=TW_REP_START;
-	TWCR = (1<<TWINT);
-	while(!(TWCR & (1<<TWINT)));
+	//TWCR = (1<<TWINT);
+	//while(!(TWCR & (1<<TWINT)));
 	TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP
 	return data;
 };
@@ -225,33 +225,33 @@ void i2c_handel_data(void){
 				break;
 			case 0x09 :
 				manual_function=1;
-				counter=0;
+				counter_timer=0;
 				PORTD |= (1 << PD0); // heej
 				break;
 			case 0x0a :
 			PORTD |= (1 << PD0); // heej
 				manual_function=2;
-				counter=0;
+				counter_timer=0;
 				break;
 			case 0x0b :
 			PORTD |= (1 << PD0); // heej
 				manual_function=4;
-				counter=0;
+				counter_timer=0;
 				break;
 			case 0x0c :
 			PORTD |= (1 << PD0); // heej
 				manual_function=3;
-				counter=0;
+				counter_timer=0;
 				break;
 			case 0x0d :
 			PORTD |= (1 << PD0); // heej
 				manual_function=6;
-				counter=0;
+				counter_timer=0;
 				break;
 			case 0x0e :
 			PORTD |= (1 << PD0); // heej
 				manual_function=5;
-				counter=0;
+				counter_timer=0;
 				break;
 			case 0x0f :
 						
