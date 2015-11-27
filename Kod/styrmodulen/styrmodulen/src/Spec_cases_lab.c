@@ -71,7 +71,8 @@ void waypoint_lab(void){
 
 
 
-void oneway_turn(void){
+void oneway_turn_lab(void){//ska den heta _lab eller inte
+	
 	
 	if(!ongoing_turn && sensor_front > 15){    //---kör fram i korsningen för att prepa sväng
 		PORTB &= (0 << motor_dir_left) | (0 << motor_dir_right);

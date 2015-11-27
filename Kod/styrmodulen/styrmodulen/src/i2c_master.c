@@ -11,12 +11,11 @@ int Reflex_data;
 
 ISR(INT0_vect)
 {	
-	
-	if (PINC&(1<<PC6)!=0){	//komunikation vill skicka
+	if (PORTC|(1<< PC6)>0){	//komunikation vill skicka
 		i2c_store_data(i2c_recive(0x02)); // processor 1
-		PORTD |= (1 << PD0); // heej
+
 	}
-	else if(PINC&(1<<PC7)!=0){ //sensor vill skicka
+	else if(PORTC|(1<< PC7)>0){ //sensor vill skicka
 		i2c_store_data(i2c_recive(0x06)); // processor 3
 	}
 }
