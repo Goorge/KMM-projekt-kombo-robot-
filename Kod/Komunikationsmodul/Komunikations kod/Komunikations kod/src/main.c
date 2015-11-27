@@ -31,7 +31,7 @@ void run(void){
 	data[2]=0x8f;
 	bluetooth_send_byte(0x0f);
 	while(true)	{
-		i2c_requestToSend(0x04,data);
+		//i2c_requestToSend(0x04,data);
 		bluetooth_handle_data();
 		i2c_handle_data();
 		_delay_ms(300);
