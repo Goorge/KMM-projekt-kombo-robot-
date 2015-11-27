@@ -27,8 +27,8 @@ void timerinit(void){
 // -- Interrupt
 ISR(TIMER1_COMPA_vect){
 	regler_ready=1;
-	if(counter<10)
-	counter++;
+	if(counter_timer<11)
+	counter_timer++;
 	count_arre++;				//array räknare
 	count_waypoint++;			//räknare för att köra ur svängar i labyrinter
 	if(count_arre >= 29){

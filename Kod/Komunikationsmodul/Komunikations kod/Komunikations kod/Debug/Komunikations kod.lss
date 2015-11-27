@@ -387,13 +387,26 @@ ISR ( USART0_RX_vect ){ //recieve complete // USART0_RX_vect
  22e:	18 95       	reti
 
 00000230 <i2c_setup>:
+	incomingData();	
+	TWCR = (1 << TWIE) | (1 << TWEN)| (1<<TWEA) | (1<<TWINT);//TWCR |= (1<<TWEA) | (1<<TWINT); 
+}
+
+void i2c_setup(byte adress_) {
+	TWAR = adress_;
  230:	80 93 ba 00 	sts	0x00BA, r24
+	//TWSR = 0x00; // Ska nog inte vara med
+	TWCR = (1 << TWIE) | (1 << TWEN)| (1<<TWEA) | (1<<TWINT);
  234:	85 ec       	ldi	r24, 0xC5	; 197
  236:	80 93 bc 00 	sts	0x00BC, r24
+	DDRC |= (1 << PC6);
  23a:	3e 9a       	sbi	0x07, 6	; 7
  23c:	08 95       	ret
 
 0000023e <i2c_requestToSend>:
+};
+
+void i2c_requestToSend(byte adress, byte data[]){
+	bytes_to_send_i2c = (data[0] >> 4) & 0x0f;
  23e:	fb 01       	movw	r30, r22
  240:	20 81       	ld	r18, Z
  242:	22 95       	swap	r18
@@ -409,34 +422,59 @@ ISR ( USART0_RX_vect ){ //recieve complete // USART0_RX_vect
  25a:	3f 4f       	sbci	r19, 0xFF	; 255
  25c:	62 0f       	add	r22, r18
  25e:	73 1f       	adc	r23, r19
+	for(int i = 0; i < bytes_to_send_i2c+1; i++)
+		dataToSend[i] = data[i];
  260:	91 91       	ld	r25, Z+
  262:	9d 93       	st	X+, r25
+	DDRC |= (1 << PC6);
+};
+
+void i2c_requestToSend(byte adress, byte data[]){
+	bytes_to_send_i2c = (data[0] >> 4) & 0x0f;
+	for(int i = 0; i < bytes_to_send_i2c+1; i++)
  264:	e6 17       	cp	r30, r22
  266:	f7 07       	cpc	r31, r23
  268:	d9 f7       	brne	.-10     	; 0x260 <i2c_requestToSend+0x22>
+		dataToSend[i] = data[i];
+	reciverAdress = adress;
  26a:	80 93 51 01 	sts	0x0151, r24
+	bytesSent = 0;
  26e:	10 92 10 01 	sts	0x0110, r1
  272:	10 92 0f 01 	sts	0x010F, r1
+	PORTC |= (1 << PC6);
  276:	46 9a       	sbi	0x08, 6	; 8
+	PORTC &= ~(1 << PC6);
  278:	46 98       	cbi	0x08, 6	; 8
  27a:	08 95       	ret
 
 0000027c <i2c_send>:
+}
+
+
+
+void i2c_send(byte prossesor,byte data){
+	TWDR = data;
  27c:	60 93 bb 00 	sts	0x00BB, r22
+	TWCR |= (1<<TWEA) | (1<<TWINT);
  280:	ec eb       	ldi	r30, 0xBC	; 188
  282:	f0 e0       	ldi	r31, 0x00	; 0
  284:	80 81       	ld	r24, Z
  286:	80 6c       	ori	r24, 0xC0	; 192
  288:	80 83       	st	Z, r24
+	while(!(TWCR & (1<<TWINT)));
  28a:	80 81       	ld	r24, Z
  28c:	88 23       	and	r24, r24
  28e:	ec f7       	brge	.-6      	; 0x28a <i2c_send+0xe>
+	if((TWSR & 0xF8) != TW_ST_DATA_ACK){
  290:	80 91 b9 00 	lds	r24, 0x00B9
  294:	88 7f       	andi	r24, 0xF8	; 248
  296:	88 3b       	cpi	r24, 0xB8	; 184
  298:	a1 f0       	breq	.+40     	; 0x2c2 <i2c_send+0x46>
+		TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP
  29a:	84 e9       	ldi	r24, 0x94	; 148
  29c:	80 93 bc 00 	sts	0x00BC, r24
+
+		if(bytes_to_send_i2c >= bytesSent){
  2a0:	20 91 11 01 	lds	r18, 0x0111
  2a4:	30 91 12 01 	lds	r19, 0x0112
  2a8:	80 91 0f 01 	lds	r24, 0x010F
@@ -454,38 +492,68 @@ ISR ( USART0_RX_vect ){ //recieve complete // USART0_RX_vect
  2b8:	8a 95       	dec	r24
  2ba:	f1 f7       	brne	.-4      	; 0x2b8 <i2c_send+0x3c>
  2bc:	00 00       	nop
+			_delay_us(20);
+			PORTC |= (1 << PC6);
  2be:	46 9a       	sbi	0x08, 6	; 8
+			PORTC &= ~(1 << PC6);
  2c0:	46 98       	cbi	0x08, 6	; 8
  2c2:	08 95       	ret
 
 000002c4 <i2c_recive>:
+		return ;
+	}
+}
+
+byte i2c_recive(void){
+	if((TWSR & 0xF8)!=0x80)
  2c4:	80 91 b9 00 	lds	r24, 0x00B9
  2c8:	88 7f       	andi	r24, 0xF8	; 248
  2ca:	80 38       	cpi	r24, 0x80	; 128
  2cc:	41 f4       	brne	.+16     	; 0x2de <i2c_recive+0x1a>
+		return false;
+	TWCR |= (1<<TWEA) | (1<<TWINT);
  2ce:	ec eb       	ldi	r30, 0xBC	; 188
  2d0:	f0 e0       	ldi	r31, 0x00	; 0
  2d2:	80 81       	ld	r24, Z
  2d4:	80 6c       	ori	r24, 0xC0	; 192
  2d6:	80 83       	st	Z, r24
+	return TWDR;	
  2d8:	80 91 bb 00 	lds	r24, 0x00BB
  2dc:	08 95       	ret
+	}
+}
+
+byte i2c_recive(void){
+	if((TWSR & 0xF8)!=0x80)
+		return false;
  2de:	80 e0       	ldi	r24, 0x00	; 0
+	TWCR |= (1<<TWEA) | (1<<TWINT);
+	return TWDR;	
+}
  2e0:	08 95       	ret
 
 000002e2 <incomingData>:
+	PORTC |= (1 << PC6);
+	PORTC &= ~(1 << PC6);
+}
+
+
+byte incomingData(void){	
  2e2:	cf 93       	push	r28
  2e4:	df 93       	push	r29
+	if((TWSR & 0xF8) == 0x60){ // rec data, ack sent	
  2e6:	80 91 b9 00 	lds	r24, 0x00B9
  2ea:	88 7f       	andi	r24, 0xF8	; 248
  2ec:	80 36       	cpi	r24, 0x60	; 96
  2ee:	b9 f5       	brne	.+110    	; 0x35e <incomingData+0x7c>
+		i2c_data[bytefrom_i2c] = i2c_recive();
  2f0:	c0 91 0d 01 	lds	r28, 0x010D
  2f4:	d0 91 0e 01 	lds	r29, 0x010E
  2f8:	e5 df       	rcall	.-54     	; 0x2c4 <i2c_recive>
  2fa:	cd 5c       	subi	r28, 0xCD	; 205
  2fc:	de 4f       	sbci	r29, 0xFE	; 254
  2fe:	88 83       	st	Y, r24
+		if(bytefrom_i2c == ((i2c_data[0]>>4) &0x0f)){
  300:	80 91 33 01 	lds	r24, 0x0133
  304:	82 95       	swap	r24
  306:	8f 70       	andi	r24, 0x0F	; 15
@@ -495,13 +563,17 @@ ISR ( USART0_RX_vect ){ //recieve complete // USART0_RX_vect
  312:	82 17       	cp	r24, r18
  314:	93 07       	cpc	r25, r19
  316:	41 f4       	brne	.+16     	; 0x328 <incomingData+0x46>
+			newdata = true;
  318:	81 e0       	ldi	r24, 0x01	; 1
  31a:	80 93 0c 01 	sts	0x010C, r24
+			TWCR &= ~(1 << TWINT);
  31e:	ec eb       	ldi	r30, 0xBC	; 188
  320:	f0 e0       	ldi	r31, 0x00	; 0
  322:	80 81       	ld	r24, Z
  324:	8f 77       	andi	r24, 0x7F	; 127
  326:	80 83       	st	Z, r24
+		}
+		if((bytefrom_i2c+1) == ((i2c_data[0]>>4)&0x0f))
  328:	20 91 0d 01 	lds	r18, 0x010D
  32c:	30 91 0e 01 	lds	r19, 0x010E
  330:	a9 01       	movw	r20, r18
@@ -514,8 +586,10 @@ ISR ( USART0_RX_vect ){ //recieve complete // USART0_RX_vect
  340:	48 17       	cp	r20, r24
  342:	59 07       	cpc	r21, r25
  344:	19 f4       	brne	.+6      	; 0x34c <incomingData+0x6a>
+			i2c_new_data=true;
  346:	81 e0       	ldi	r24, 0x01	; 1
  348:	80 93 0b 01 	sts	0x010B, r24
+		return i2c_data[bytefrom_i2c++];
  34c:	50 93 0e 01 	sts	0x010E, r21
  350:	40 93 0d 01 	sts	0x010D, r20
  354:	f9 01       	movw	r30, r18
@@ -523,10 +597,14 @@ ISR ( USART0_RX_vect ){ //recieve complete // USART0_RX_vect
  358:	fe 4f       	sbci	r31, 0xFE	; 254
  35a:	80 81       	ld	r24, Z
  35c:	21 c0       	rjmp	.+66     	; 0x3a0 <incomingData+0xbe>
+		
+	}
+	else if((TWSR & 0xF8)==0xA8){ // send data, ack sent
  35e:	80 91 b9 00 	lds	r24, 0x00B9
  362:	88 7f       	andi	r24, 0xF8	; 248
  364:	88 3a       	cpi	r24, 0xA8	; 168
  366:	a1 f4       	brne	.+40     	; 0x390 <incomingData+0xae>
+		i2c_send(reciverAdress,dataToSend[bytesSent++]);
  368:	80 91 0f 01 	lds	r24, 0x010F
  36c:	90 91 10 01 	lds	r25, 0x0110
  370:	9c 01       	movw	r18, r24
@@ -540,20 +618,41 @@ ISR ( USART0_RX_vect ){ //recieve complete // USART0_RX_vect
  384:	60 81       	ld	r22, Z
  386:	80 91 51 01 	lds	r24, 0x0151
  38a:	78 df       	rcall	.-272    	; 0x27c <i2c_send>
+	}
+	else if((TWSR & 0xF8)==0x80){// rep start? 
+		return i2c_recive();
+	}
+	return 0x00;
  38c:	80 e0       	ldi	r24, 0x00	; 0
  38e:	08 c0       	rjmp	.+16     	; 0x3a0 <incomingData+0xbe>
+		
+	}
+	else if((TWSR & 0xF8)==0xA8){ // send data, ack sent
+		i2c_send(reciverAdress,dataToSend[bytesSent++]);
+	}
+	else if((TWSR & 0xF8)==0x80){// rep start? 
  390:	80 91 b9 00 	lds	r24, 0x00B9
  394:	88 7f       	andi	r24, 0xF8	; 248
  396:	80 38       	cpi	r24, 0x80	; 128
  398:	11 f4       	brne	.+4      	; 0x39e <incomingData+0xbc>
+		return i2c_recive();
  39a:	94 df       	rcall	.-216    	; 0x2c4 <i2c_recive>
  39c:	01 c0       	rjmp	.+2      	; 0x3a0 <incomingData+0xbe>
+	}
+	return 0x00;
  39e:	80 e0       	ldi	r24, 0x00	; 0
+}
  3a0:	df 91       	pop	r29
  3a2:	cf 91       	pop	r28
  3a4:	08 95       	ret
 
 000003a6 <__vector_26>:
+byte i2c_data[15];
+bool newdata = false;
+bool i2c_new_data = false;
+
+
+ISR(TWI_vect){
  3a6:	1f 92       	push	r1
  3a8:	0f 92       	push	r0
  3aa:	0f b6       	in	r0, 0x3f	; 63
@@ -573,9 +672,12 @@ ISR ( USART0_RX_vect ){ //recieve complete // USART0_RX_vect
  3c6:	bf 93       	push	r27
  3c8:	ef 93       	push	r30
  3ca:	ff 93       	push	r31
+	incomingData();	
  3cc:	8a df       	rcall	.-236    	; 0x2e2 <incomingData>
+	TWCR = (1 << TWIE) | (1 << TWEN)| (1<<TWEA) | (1<<TWINT);//TWCR |= (1<<TWEA) | (1<<TWINT); 
  3ce:	85 ec       	ldi	r24, 0xC5	; 197
  3d0:	80 93 bc 00 	sts	0x00BC, r24
+}
  3d4:	ff 91       	pop	r31
  3d6:	ef 91       	pop	r30
  3d8:	bf 91       	pop	r27
@@ -597,12 +699,21 @@ ISR ( USART0_RX_vect ){ //recieve complete // USART0_RX_vect
  3f8:	18 95       	reti
 
 000003fa <i2c_handle_data>:
+	TWCR |= (1<<TWEA) | (1<<TWINT);
+	return TWDR;	
+}
+
+void i2c_handle_data(void){
+	if(i2c_new_data==true)
  3fa:	80 91 0b 01 	lds	r24, 0x010B
  3fe:	88 23       	and	r24, r24
  400:	29 f0       	breq	.+10     	; 0x40c <i2c_handle_data+0x12>
+	{
+		bluetooth_add_to_send_queue(i2c_data);
  402:	83 e3       	ldi	r24, 0x33	; 51
  404:	91 e0       	ldi	r25, 0x01	; 1
  406:	86 de       	rcall	.-756    	; 0x114 <bluetooth_add_to_send_queue>
+		i2c_new_data=false;
  408:	10 92 0b 01 	sts	0x010B, r1
  40c:	08 95       	ret
 

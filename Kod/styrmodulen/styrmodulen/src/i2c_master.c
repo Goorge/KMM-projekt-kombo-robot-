@@ -76,7 +76,7 @@ bool i2c_send(byte prossesor,byte data[]){
 };
 	
 byte i2c_recive(byte prossesor){
-	byte* data;
+	byte data;
 	int counter=0;
 	int start =TW_START;
 	int size = 0;
@@ -88,6 +88,7 @@ byte i2c_recive(byte prossesor){
 		TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP
 		return false;
 	}
+	
 	TWDR = prossesor | 0x01;
 	TWCR = (1<<TWINT)|(1<<TWEN);
 	while(!(TWCR & (1<<TWINT))); // wait for SLA+R transmited and ACK/NACK recived
@@ -99,22 +100,30 @@ byte i2c_recive(byte prossesor){
 	
 	TWCR |= (1<<TWINT)|(1<<TWEN);
 	while(!(TWCR & (1<<TWINT)));
-	if((TWSR & 0xF8) != 0x50)
+	/*if((TWSR & 0xF8) != 0x50)
 	{
 		TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP
 		
 		return false;
-	}
-	if(counter == 0){
+	}*/
+	PORTD ^= (1 << PD0);
+	/*if(counter == 0){
 		data = data[(TWDR>>4) & 0x0f];
 		size= (TWDR>>4) & 0x0f;
-	}
-	data[counter]=TWDR;
+	}*/
+	//data[counter]=TWDR;
+	data = TWDR;
+	
+	
+	
 	counter++;	
 	start=TW_REP_START;
-	TWCR = (1<<TWINT);
-	while(!(TWCR & (1<<TWINT)));
+	//TWCR = (1<<TWINT);
+	//while(!(TWCR & (1<<TWINT)));
 	TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP
+	
+	//if(TWDR==0x0a)
+	
 	return data;
 };
 
@@ -165,23 +174,24 @@ byte i2c_recive(byte prossesor){
 
 void i2c_store_data(byte data)
 {
-	static int counter;
-	static int size;
-	if(counter == 0){
+	static int counter2=0;
+	static int size=0;
+	if(counter2 == 0){
 		size = (data>>4) & 0x0f;
-		i2c_data[counter] = data;
-		counter++;
+		i2c_data[counter2] = data;
+		counter2++;
 	}
-	else if(counter < size){
-		i2c_data[counter] = data;
-		counter++;
-	}
+	/*else if(counter2 < size){
+		i2c_data[counter2] = data;
+		counter2++;
+	}*/
 	else{
-		i2c_data[counter] = data;
+		i2c_data[counter2] = data;
+		counter2++;
 	}
-	if(counter>=size){
+	if(counter2 > size){
 		i2c_newdata = true;
-		counter = 0;
+		counter2 = 0;
 		EIMSK &= ~(1<<INT0);
 	}
 
@@ -192,11 +202,11 @@ void i2c_handel_data(void){
 	{
 		i2c_newdata=false;
 		//PORTD ^=(1 << PD0);
-		if((i2c_data[0]>>3)&0x01==0)
+		//if((i2c_data[0]>>3)&0x01==0)
 			i2c_send(0x02,i2c_data);
 		switch (i2c_data[0] & 0x0f){
 			case 0x00 :
-			PORTD ^= (1 << PD0);
+			//PORTD ^= (1 << PD0);
 			
 				break;
 			case 0x01 :
@@ -225,33 +235,33 @@ void i2c_handel_data(void){
 				break;
 			case 0x09 :
 				manual_function=1;
-				counter=0;
+				counter_timer=0;
 				PORTD |= (1 << PD0); // heej
 				break;
 			case 0x0a :
 			PORTD |= (1 << PD0); // heej
 				manual_function=2;
-				counter=0;
+				counter_timer=0;
 				break;
 			case 0x0b :
 			PORTD |= (1 << PD0); // heej
 				manual_function=4;
-				counter=0;
+				counter_timer=0;
 				break;
 			case 0x0c :
 			PORTD |= (1 << PD0); // heej
 				manual_function=3;
-				counter=0;
+				counter_timer=0;
 				break;
 			case 0x0d :
 			PORTD |= (1 << PD0); // heej
 				manual_function=6;
-				counter=0;
+				counter_timer=0;
 				break;
 			case 0x0e :
 			PORTD |= (1 << PD0); // heej
 				manual_function=5;
-				counter=0;
+				counter_timer=0;
 				break;
 			case 0x0f :
 						
