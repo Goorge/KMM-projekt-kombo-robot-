@@ -11,11 +11,12 @@ int Reflex_data;
 //aidshub was here
 ISR(INT0_vect)
 {	
-	if (PORTC|(1<< PC6)>0){	//komunikation vill skicka
+	_delay_us(1);
+	if (PINC&(1<< PC6)){	//komunikation vill skicka
 		i2c_store_data(i2c_recive(0x02)); // processor 1
 		//PORTD ^=(1 << PD0);
 	}
-	else if(PORTC|(1<< PC7)>0){ //sensor vill skicka
+	else if(PINC&(1<< PC7)){ //sensor vill skicka  PINC&(1<< PC7)>0
 		i2c_store_data(i2c_recive(0x06)); // processor 3
 	}
 }

@@ -29,6 +29,7 @@ void i2c_requestToSend(byte adress, byte data[]){
 	reciverAdress = adress;
 	bytesSent = 0;
 	PORTC |= (1 << PC6);
+	_delay_us(11);
 	PORTC &= ~(1 << PC6);
 }
 
@@ -66,6 +67,7 @@ void i2c_send(byte prossesor,byte data){
 		if(bytes_to_send_i2c >= bytesSent){
 			_delay_us(20);
 			PORTC |= (1 << PC6);
+			_delay_us(11);
 			PORTC &= ~(1 << PC6);
 		}
 		return ;
