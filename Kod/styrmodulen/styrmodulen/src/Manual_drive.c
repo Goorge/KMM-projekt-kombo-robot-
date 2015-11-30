@@ -4,7 +4,7 @@
 int manual_function=0;
 
 void manual_drive(){
-	if(counter_timer < 5){
+	
 		if(manual_function == 0){              //stand still
 			PORTB = (0 << motor_dir_left) | (0 << motor_dir_right);
 			motor_left = 0;
@@ -23,11 +23,11 @@ void manual_drive(){
 		else if(manual_function == 3){          //rightforward
 			PORTB &= (0 << motor_dir_left) | (0 << motor_dir_right);
 			motor_left = left;
-			motor_right = right;
+			motor_right = right/2;
 		}
 		else if(manual_function == 4){          //leftforward
 			PORTB |= (0 << motor_dir_left) | (0 << motor_dir_right);
-			motor_left = left;
+			motor_left = left/2;
 			motor_right = right;
 		}
 		else if(manual_function == 5){          //spin right
@@ -45,11 +45,6 @@ void manual_drive(){
 		else{
 			manual_function=0;
 		}
-	}
-	else{
-		PORTB = (0 << motor_dir_left) | (0 << motor_dir_right);
-		motor_left = 0;
-		motor_right = 0;
-	}
+	
 	
 }

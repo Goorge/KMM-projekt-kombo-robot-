@@ -222,37 +222,37 @@ void i2c_handel_data(void){
 			
 				break;
 			case 0x08 :
-			
+				manual_function=0;
 				break;
 			case 0x09 :
 				manual_function=1;
-				counter_timer=0;
+				
 				PORTD |= (1 << PD0); // heej
 				break;
 			case 0x0a :
 			PORTD |= (1 << PD0); // heej
 				manual_function=2;
-				counter_timer=0;
+				
 				break;
 			case 0x0b :
 			PORTD |= (1 << PD0); // heej
 				manual_function=4;
-				counter_timer=0;
+				
 				break;
 			case 0x0c :
 			PORTD |= (1 << PD0); // heej
 				manual_function=3;
-				counter_timer=0;
+				
 				break;
 			case 0x0d :
 			PORTD |= (1 << PD0); // heej
 				manual_function=6;
-				counter_timer=0;
+				
 				break;
 			case 0x0e :
 			PORTD |= (1 << PD0); // heej
 				manual_function=5;
-				counter_timer=0;
+				
 				break;
 			case 0x0f :
 						
