@@ -7,23 +7,27 @@ int current_error=0;
 int derivate=0;
 int output=0;
 int previous_error=0;
-int p_constant=10;  //satte lite random värden för att få större output
-int d_constant=4; // samma som ovan
+int p_constant=70;  //satte lite random värden för att få större output
+int d_constant=10 ; // samma som ovan
 int current_position=0;
 		 
 void linje(void){
 	cli();
 	int current_position_tmp = current_position;
 	sei();
-	
+
 	current_error = setpoint - current_position_tmp;
-	derivate = (current_error -previous_error)/10; //
+	derivate = (current_error -previous_error);///10; //
 	output = p_constant*current_error+d_constant*derivate;
 	previous_error= current_error;
 //***********************************
 //Reglering för vänstersväng  ,sensorer vänster om mitten har tänts (-5 till -1)
 //***********************************	
 	//if(current_position_tmp < 0){
+		if(output>(left*3/4))
+			output=left*3/4;
+		else if((output)<(right*3/4))
+			output=-right*3/4;
 		if(output < 0){							// Utsignalen är negativ, beror på derivatan bl.a
 			motor_left = left + output;
 			motor_right = right;
@@ -49,9 +53,10 @@ void linje(void){
 //***********************************
 //Om vi inte har något fel, åk rakt. Båda motorerna max
 //***********************************
-	if(current_position_tmp == 0){
+	if(output == 0){
 		motor_left = left;
 		motor_right = right;
-	}	
+	}
+		
 }
 
