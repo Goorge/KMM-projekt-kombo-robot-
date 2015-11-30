@@ -14,7 +14,7 @@ void regulator(){
 	{
 		if(waypoint==1)
 			waypoint_lab();
-		if(oneway_turn=1)	
+		if(oneway_turn==1)	
 			oneway_turn_lab();
 		labyreg();//kalla på labyrint funktion
 	}

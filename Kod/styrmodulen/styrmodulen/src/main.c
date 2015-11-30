@@ -60,7 +60,8 @@ int main(void)
 	while(1){
 		i2c_handel_data();  //test av fregulito	
 			if(drive_mode == 1){						// Drivemode is auto    // (drive_mode == 1 && start == 1)
-				PORTB &= (0 << motor_dir_left) | (0 << motor_dir_right);		// Set motor direction to forward
+				PORTB &= ~(1 << motor_dir_left);		// Set motor direction to forward
+				PORTB &= ~(1 << motor_dir_right);		// Set motor direction to forward
 				current_position = arre[count_arre];	// används för att simulera linjeföljning, arrayen ändras i globala
 				if(regler_ready==1 && start == 1){
 					regulator();

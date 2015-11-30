@@ -757,22 +757,22 @@ END GROUP
  .debug_abbrev  0x00000000       0x47 src/ASF/common/boards/user_board/init.o
  .debug_abbrev  0x00000047      0x27f src/main.o
 
-.debug_line     0x00000000     0x1346
+.debug_line     0x00000000     0x1364
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x392 src/ASF/common/boards/user_board/init.o
- .debug_line    0x00000392      0xfb4 src/main.o
+ .debug_line    0x00000392      0xfd2 src/main.o
 
 .debug_frame    0x00000000      0x304
  *(.debug_frame)
  .debug_frame   0x00000000       0x24 src/ASF/common/boards/user_board/init.o
  .debug_frame   0x00000024      0x2e0 src/main.o
 
-.debug_str      0x00000000    0x10606
+.debug_str      0x00000000    0x10664
  *(.debug_str)
  .debug_str     0x00000000     0xfb30 src/ASF/common/boards/user_board/init.o
                                0xfced (size before relaxing)
- .debug_str     0x0000fb30      0xad6 src/main.o
-                              0x107cb (size before relaxing)
+ .debug_str     0x0000fb30      0xb34 src/main.o
+                              0x107d1 (size before relaxing)
 
 .debug_loc      0x00000000      0x696
  *(.debug_loc)

@@ -19,17 +19,17 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   7 .debug_abbrev 000002c6  00000000  00000000  00001686  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00001346  00000000  00000000  0000194c  2**0
+  8 .debug_line   00001364  00000000  00000000  0000194c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000304  00000000  00000000  00002c94  2**2
+  9 .debug_frame  00000304  00000000  00000000  00002cb0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00010606  00000000  00000000  00002f98  2**0
+ 10 .debug_str    00010664  00000000  00000000  00002fb4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000696  00000000  00000000  0001359e  2**0
+ 11 .debug_loc    00000696  00000000  00000000  00013618  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000150  00000000  00000000  00013c34  2**0
+ 12 .debug_ranges 00000150  00000000  00000000  00013cae  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  00003f0e  00000000  00000000  00013d84  2**0
+ 13 .debug_macro  00003f0e  00000000  00000000  00013dfe  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -164,12 +164,6 @@ Disassembly of section .text:
   e4:	8d cf       	rjmp	.-230    	; 0x0 <__vectors>
 
 000000e6 <board_init>:
-#include <asf.h>
-#include <board.h>
-#include <conf_board.h>
-
-void board_init(void)
-{
   e6:	08 95       	ret
 
 000000e8 <manual_drive>:
@@ -182,70 +176,70 @@ void board_init(void)
   e8:	80 91 62 01 	lds	r24, 0x0162
   ec:	90 91 63 01 	lds	r25, 0x0163
   f0:	00 97       	sbiw	r24, 0x00	; 0
-  f2:	21 f4       	brne	.+8      	; 0xfc <manual_drive+0x14>
-  f4:	15 b8       	out	0x05, r1	; 5
-  f6:	17 bc       	out	0x27, r1	; 39
-  f8:	18 bc       	out	0x28, r1	; 40
-  fa:	08 95       	ret
-  fc:	81 30       	cpi	r24, 0x01	; 1
-  fe:	91 05       	cpc	r25, r1
- 100:	49 f4       	brne	.+18     	; 0x114 <manual_drive+0x2c>
- 102:	85 b1       	in	r24, 0x05	; 5
- 104:	15 b8       	out	0x05, r1	; 5
- 106:	80 91 70 01 	lds	r24, 0x0170
- 10a:	87 bd       	out	0x27, r24	; 39
- 10c:	80 91 6e 01 	lds	r24, 0x016E
- 110:	88 bd       	out	0x28, r24	; 40
- 112:	08 95       	ret
- 114:	82 30       	cpi	r24, 0x02	; 2
- 116:	91 05       	cpc	r25, r1
- 118:	59 f4       	brne	.+22     	; 0x130 <manual_drive+0x48>
- 11a:	85 b1       	in	r24, 0x05	; 5
- 11c:	80 66       	ori	r24, 0x60	; 96
- 11e:	85 b9       	out	0x05, r24	; 5
- 120:	80 91 70 01 	lds	r24, 0x0170
- 124:	8d 50       	subi	r24, 0x0D	; 13
- 126:	87 bd       	out	0x27, r24	; 39
- 128:	80 91 6e 01 	lds	r24, 0x016E
- 12c:	88 bd       	out	0x28, r24	; 40
- 12e:	08 95       	ret
- 130:	83 30       	cpi	r24, 0x03	; 3
- 132:	91 05       	cpc	r25, r1
- 134:	81 f4       	brne	.+32     	; 0x156 <manual_drive+0x6e>
- 136:	85 b1       	in	r24, 0x05	; 5
- 138:	15 b8       	out	0x05, r1	; 5
- 13a:	80 91 70 01 	lds	r24, 0x0170
- 13e:	87 bd       	out	0x27, r24	; 39
- 140:	80 91 6e 01 	lds	r24, 0x016E
- 144:	90 91 6f 01 	lds	r25, 0x016F
- 148:	99 23       	and	r25, r25
- 14a:	0c f4       	brge	.+2      	; 0x14e <manual_drive+0x66>
- 14c:	01 96       	adiw	r24, 0x01	; 1
- 14e:	95 95       	asr	r25
- 150:	87 95       	ror	r24
- 152:	88 bd       	out	0x28, r24	; 40
- 154:	08 95       	ret
- 156:	84 30       	cpi	r24, 0x04	; 4
- 158:	91 05       	cpc	r25, r1
- 15a:	81 f4       	brne	.+32     	; 0x17c <manual_drive+0x94>
- 15c:	85 b1       	in	r24, 0x05	; 5
- 15e:	85 b9       	out	0x05, r24	; 5
- 160:	80 91 70 01 	lds	r24, 0x0170
- 164:	90 91 71 01 	lds	r25, 0x0171
- 168:	99 23       	and	r25, r25
- 16a:	0c f4       	brge	.+2      	; 0x16e <manual_drive+0x86>
- 16c:	01 96       	adiw	r24, 0x01	; 1
- 16e:	95 95       	asr	r25
- 170:	87 95       	ror	r24
- 172:	87 bd       	out	0x27, r24	; 39
- 174:	80 91 6e 01 	lds	r24, 0x016E
- 178:	88 bd       	out	0x28, r24	; 40
- 17a:	08 95       	ret
- 17c:	85 30       	cpi	r24, 0x05	; 5
- 17e:	91 05       	cpc	r25, r1
- 180:	51 f4       	brne	.+20     	; 0x196 <manual_drive+0xae>
- 182:	85 b1       	in	r24, 0x05	; 5
- 184:	15 b8       	out	0x05, r1	; 5
+  f2:	29 f4       	brne	.+10     	; 0xfe <manual_drive+0x16>
+  f4:	2d 98       	cbi	0x05, 5	; 5
+  f6:	2e 98       	cbi	0x05, 6	; 5
+  f8:	17 bc       	out	0x27, r1	; 39
+  fa:	18 bc       	out	0x28, r1	; 40
+  fc:	08 95       	ret
+  fe:	81 30       	cpi	r24, 0x01	; 1
+ 100:	91 05       	cpc	r25, r1
+ 102:	49 f4       	brne	.+18     	; 0x116 <manual_drive+0x2e>
+ 104:	2d 98       	cbi	0x05, 5	; 5
+ 106:	2e 98       	cbi	0x05, 6	; 5
+ 108:	80 91 70 01 	lds	r24, 0x0170
+ 10c:	87 bd       	out	0x27, r24	; 39
+ 10e:	80 91 6e 01 	lds	r24, 0x016E
+ 112:	88 bd       	out	0x28, r24	; 40
+ 114:	08 95       	ret
+ 116:	82 30       	cpi	r24, 0x02	; 2
+ 118:	91 05       	cpc	r25, r1
+ 11a:	59 f4       	brne	.+22     	; 0x132 <manual_drive+0x4a>
+ 11c:	85 b1       	in	r24, 0x05	; 5
+ 11e:	80 66       	ori	r24, 0x60	; 96
+ 120:	85 b9       	out	0x05, r24	; 5
+ 122:	80 91 70 01 	lds	r24, 0x0170
+ 126:	8d 50       	subi	r24, 0x0D	; 13
+ 128:	87 bd       	out	0x27, r24	; 39
+ 12a:	80 91 6e 01 	lds	r24, 0x016E
+ 12e:	88 bd       	out	0x28, r24	; 40
+ 130:	08 95       	ret
+ 132:	83 30       	cpi	r24, 0x03	; 3
+ 134:	91 05       	cpc	r25, r1
+ 136:	81 f4       	brne	.+32     	; 0x158 <manual_drive+0x70>
+ 138:	2d 98       	cbi	0x05, 5	; 5
+ 13a:	2e 98       	cbi	0x05, 6	; 5
+ 13c:	80 91 70 01 	lds	r24, 0x0170
+ 140:	87 bd       	out	0x27, r24	; 39
+ 142:	20 91 6e 01 	lds	r18, 0x016E
+ 146:	90 91 6f 01 	lds	r25, 0x016F
+ 14a:	82 2f       	mov	r24, r18
+ 14c:	63 e0       	ldi	r22, 0x03	; 3
+ 14e:	70 e0       	ldi	r23, 0x00	; 0
+ 150:	c0 d3       	rcall	.+1920   	; 0x8d2 <__divmodhi4>
+ 152:	26 1b       	sub	r18, r22
+ 154:	28 bd       	out	0x28, r18	; 40
+ 156:	08 95       	ret
+ 158:	84 30       	cpi	r24, 0x04	; 4
+ 15a:	91 05       	cpc	r25, r1
+ 15c:	81 f4       	brne	.+32     	; 0x17e <manual_drive+0x96>
+ 15e:	2d 98       	cbi	0x05, 5	; 5
+ 160:	2e 98       	cbi	0x05, 6	; 5
+ 162:	20 91 70 01 	lds	r18, 0x0170
+ 166:	90 91 71 01 	lds	r25, 0x0171
+ 16a:	82 2f       	mov	r24, r18
+ 16c:	63 e0       	ldi	r22, 0x03	; 3
+ 16e:	70 e0       	ldi	r23, 0x00	; 0
+ 170:	b0 d3       	rcall	.+1888   	; 0x8d2 <__divmodhi4>
+ 172:	26 1b       	sub	r18, r22
+ 174:	27 bd       	out	0x27, r18	; 39
+ 176:	80 91 6e 01 	lds	r24, 0x016E
+ 17a:	88 bd       	out	0x28, r24	; 40
+ 17c:	08 95       	ret
+ 17e:	85 30       	cpi	r24, 0x05	; 5
+ 180:	91 05       	cpc	r25, r1
+ 182:	49 f4       	brne	.+18     	; 0x196 <manual_drive+0xae>
+ 184:	2d 98       	cbi	0x05, 5	; 5
  186:	2e 9a       	sbi	0x05, 6	; 5
  188:	80 91 70 01 	lds	r24, 0x0170
  18c:	87 bd       	out	0x27, r24	; 39
@@ -532,10 +526,10 @@ void board_init(void)
  474:	01 97       	sbiw	r24, 0x01	; 1
  476:	09 f4       	brne	.+2      	; 0x47a <regulator+0x1e>
  478:	6a df       	rcall	.-300    	; 0x34e <waypoint_lab>
- 47a:	81 e0       	ldi	r24, 0x01	; 1
- 47c:	90 e0       	ldi	r25, 0x00	; 0
- 47e:	90 93 65 01 	sts	0x0165, r25
- 482:	80 93 64 01 	sts	0x0164, r24
+ 47a:	80 91 64 01 	lds	r24, 0x0164
+ 47e:	90 91 65 01 	lds	r25, 0x0165
+ 482:	01 97       	sbiw	r24, 0x01	; 1
+ 484:	09 f4       	brne	.+2      	; 0x488 <regulator+0x2c>
  486:	b9 df       	rcall	.-142    	; 0x3fa <oneway_turn_lab>
  488:	96 ce       	rjmp	.-724    	; 0x1b6 <labyreg>
  48a:	08 95       	ret
@@ -992,9 +986,10 @@ int main(void)
  86e:	81 30       	cpi	r24, 0x01	; 1
  870:	91 05       	cpc	r25, r1
  872:	59 f5       	brne	.+86     	; 0x8ca <main+0x96>
-				PORTB &= (0 << motor_dir_left) | (0 << motor_dir_right);		// Set motor direction to forward
- 874:	85 b1       	in	r24, 0x05	; 5
- 876:	15 b8       	out	0x05, r1	; 5
+				PORTB &= ~(1 << motor_dir_left);		// Set motor direction to forward
+ 874:	2d 98       	cbi	0x05, 5	; 5
+				PORTB &= ~(1 << motor_dir_right);		// Set motor direction to forward
+ 876:	2e 98       	cbi	0x05, 6	; 5
 				current_position = arre[count_arre];	// används för att simulera linjeföljning, arrayen ändras i globala
  878:	e0 91 4c 01 	lds	r30, 0x014C
  87c:	f0 91 4d 01 	lds	r31, 0x014D
