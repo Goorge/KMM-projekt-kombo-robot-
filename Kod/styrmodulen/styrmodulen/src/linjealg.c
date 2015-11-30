@@ -1,6 +1,4 @@
 
-
-void linje_setup();
 signed char linje_RGBsveng();
 signed char linje_get_error();
 bool detect_goal();
@@ -9,16 +7,15 @@ bool sekvens_goal_detekted();
 
 
 
-void linje_setup()
-{
-
-	
-}
-
 
 void linje_main()
 {
-	if(RGB_data==1 | RGB_data==2 | RGB_data==3){ // == röd,grön,blå
+	current_position=linje_get_error();
+	linje();
+	/*if(distans_fram<10){
+		start=0; // kör inte in i väggar
+	}
+	else if((RGB_data==1) | (RGB_data==2) | (RGB_data==3)){ // == röd,grön,blå
 		current_position=linje_RGBsveng();
 		linje();
 	}
@@ -27,12 +24,13 @@ void linje_main()
 		//signalera i mål och stanna
 	}
 	else if(detect_labyrint()==true){
-		//byt till kör i labyrintmode
+		regulator_mode=2; //byt till kör i labyrintmode(är 2 rätt eller ska det vara 0)
 	}
 	else{
 		current_position=linje_get_error();
 		linje();
-	}
+		
+	}*/
 }
 
 signed char linje_RGBsveng()
@@ -67,7 +65,7 @@ signed char linje_RGBsveng()
 		}
 	}
 	else
-	return 0x00;
+		return 0x00;
 	return styr_fel;
 }
 
@@ -78,8 +76,8 @@ signed char linje_get_error()
 	
 	for(int i=0;i<11;i++)
 	{
-		styr_fel=styr_fel+(i-5)*Reflex_data>>(i*2)&0x3;
-		fel_antal += Reflex_data>>(i*2)&0x3;
+		styr_fel=styr_fel+(5-i)*((Reflex_data>>(i*2))&3);
+		fel_antal += (Reflex_data>>(i*2))&0x3;
 	}
 	styr_fel = styr_fel/fel_antal;
 	return styr_fel;

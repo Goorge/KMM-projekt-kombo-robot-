@@ -831,11 +831,11 @@ END GROUP
  .debug_str     0x00011304      0xa6d src/bluetooth.o
                               0x11e91 (size before relaxing)
  .debug_str     0x00011d71       0xe2 src/i2c_slave.o
-                              0x11df5 (size before relaxing)
+                              0x11def (size before relaxing)
  .debug_str     0x00011e53       0x6d src/LCD.o
                               0x11d63 (size before relaxing)
  .debug_str     0x00011ec0       0x1e src/main.o
-                              0x11d77 (size before relaxing)
+                              0x11d71 (size before relaxing)
 
 .debug_loc      0x00000000      0x480
  *(.debug_loc)
