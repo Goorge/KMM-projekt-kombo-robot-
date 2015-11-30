@@ -2,17 +2,7 @@
 #include <avr/interrupt.h>
 #include <asf.h>
 #include <compat/twi.h>
-#include "PDreglering.c"
-#include "Manual_drive.c"
-#include "labyrintreg.c"
-#include "Linje.c"
-#include "Spec_cases_lab.c"
-#include "Init_styr.c"
 typedef unsigned char byte;
-#include "i2c_master.c"
-#include "linjealg.c"
-
-
 // Global variables
 int drive_mode=0;			// Manual or auto mode
 int start=0;				// Start and stop
@@ -22,6 +12,25 @@ int regler_ready=0;			// Ready for new values from sensors if 1
 int gyro_turn=0;			// When 1 the gyro has turned 90 degree
 int count_waypoint=0;		// Time to move away from waypoint
 int counter_timer=0;				// Counter for how long time a manual function going to run
+
+bool gyro_90;				//om gyro har svängt 90 grader
+byte batteri;				//batteri nivå
+byte distans_fram;			// data avstånd fram
+byte distans_right;			// data avstånd höger
+byte distans_left;			// data avstånd vänster
+byte RGB_data;				// vilken färg som är detekterad
+int Reflex_data;			// reflexsensor data
+
+
+
+#include "PDreglering.c"
+#include "Manual_drive.c"
+#include "labyrintreg.c"
+#include "Linje.c"
+#include "Spec_cases_lab.c"
+#include "Init_styr.c"
+#include "i2c_master.c"
+#include "linjealg.c"
 
 //*********************************for test only
 int count_arre=0;
