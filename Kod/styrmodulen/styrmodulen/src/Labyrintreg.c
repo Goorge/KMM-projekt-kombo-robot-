@@ -32,12 +32,12 @@ void labyreg(){
 	int sensor_left_tmp = sensor_left;
 	sei();
 	
-		current_error_lab = sensor_right_tmp-sensor_left_tmp;
+		current_error_lab = sensor_right_tmp - sensor_left_tmp;
 		//------------reglering
 		//current_error_lab=arre_lab[count_arre];
-		derivate = (current_error_lab -previous_error_lab);///10; //
-		output_tmp = p_constant_lab*current_error_lab+d_constant_lab*derivate;
-		previous_error_lab= current_error_lab;
+		derivate = (current_error_lab - previous_error_lab);///10; //
+		output_tmp = p_constant_lab * current_error_lab + d_constant_lab * derivate;
+		previous_error_lab = current_error_lab;
 	
 		if(output_tmp >= motor_left/2)
 			output_tmp=motor_left/2;
