@@ -4,11 +4,12 @@
 
 int waypoint=0;
 int oneway_turn=0;
-int regulator_mode=1;
+
 
 void regulator(){
 	if(regulator_mode==1){
-		linje();
+		//linje();
+		linje_main();
 	}
 	else
 	{

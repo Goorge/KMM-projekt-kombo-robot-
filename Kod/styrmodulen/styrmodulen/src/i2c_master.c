@@ -40,7 +40,7 @@ void i2c_setup(bool master) {
 };
 	
 bool i2c_send(byte prossesor,byte data[]){
-	int number_bytes =( data[0]>>4 ) & 0x0f;
+	int number_bytes =(( data[0]>>4 ) & 0x0f);
 	int counter = 0;
 	int start = TW_START;
 	
@@ -80,7 +80,7 @@ byte i2c_recive(byte prossesor){
 	byte* data;
 	int counter=0;
 	int start =TW_START;
-	int size = 0;
+	//int size = 0;
 
 	TWCR |= (1<<TWINT)|(1<<TWSTA)|(1<<TWEN);//START
 	while(!(TWCR & (1<<TWINT))); //Wait for TWINT, START is now sent
@@ -117,7 +117,7 @@ byte i2c_recive(byte prossesor){
 	//while(!(TWCR & (1<<TWINT)));
 	TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP
 	return data;
-};
+}
 
 
 
@@ -173,14 +173,14 @@ void i2c_store_data(byte data)
 		i2c_data[counter] = data;
 		counter++;
 	}
-	else if(counter < size){
+	else if(counter < size+1){
 		i2c_data[counter] = data;
 		counter++;
 	}
 	else{
 		i2c_data[counter] = data;
 	}
-	if(counter>=size){
+	if(counter>=size+1){
 		i2c_newdata = true;
 		counter = 0;
 		EIMSK &= ~(1<<INT0);
@@ -192,9 +192,10 @@ void i2c_handel_data(void){
 	if(i2c_newdata==true)
 	{
 		i2c_newdata=false;
-		//PORTD ^=(1 << PD0);
-		if((i2c_data[0]>>3)&0x01==0)
-			i2c_send(0x02,i2c_data);
+		if(!((i2c_data[0]>>3)&0x01)){
+			_delay_us(300);
+			i2c_send(0x02,i2c_data);// send to komunikation
+		}
 		switch (i2c_data[0] & 0x0f){
 			case 0x00 :
 				batteri=i2c_data[1],i2c_data[2];
