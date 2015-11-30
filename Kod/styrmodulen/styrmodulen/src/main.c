@@ -11,8 +11,8 @@ int right=0;				// Set speed for right motor
 int regler_ready=0;			// Ready for new values from sensors if 1
 int gyro_turn=0;			// When 1 the gyro has turned 90 degree
 int count_waypoint=0;		// Time to move away from waypoint
-int counter_timer=0;				// Counter for how long time a manual function going to run
-int regulator_mode=1;
+int counter_timer=0;		// Counter for how long time a manual function going to run
+//int regulator_mode=1;		//redan definerad i PDreglering
 
 bool gyro_90;				//om gyro har svängt 90 grader
 byte batteri;				//batteri nivå
@@ -62,7 +62,7 @@ int main(void)
 			if(drive_mode == 1){						// Drivemode is auto    // (drive_mode == 1 && start == 1)
 				PORTB &= ~(1 << motor_dir_left);		// Set motor direction to forward
 				PORTB &= ~(1 << motor_dir_right);		// Set motor direction to forward
-				current_position = arre[count_arre];	// används för att simulera linjeföljning, arrayen ändras i globala
+				//current_position = arre[count_arre];	// används för att simulera linjeföljning, arrayen ändras i globala
 				if(regler_ready==1 && start == 1){
 					regulator();
 					regler_ready=0;	
