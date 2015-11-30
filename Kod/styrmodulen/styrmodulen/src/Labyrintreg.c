@@ -39,7 +39,10 @@ void labyreg(){
 		output_tmp = p_constant_lab*current_error_lab+d_constant_lab*derivate;
 		previous_error_lab= current_error_lab;
 	
-	
+		if(output_tmp >= motor_left/2)
+			output_tmp=motor_left/2;
+		if(output_tmp <= (-motor_right)/2)
+			output_tmp = (-motor_right)/2;	
 		if(output_tmp > 0){
 			motor_left = left-output_tmp;
 			motor_right = right;	

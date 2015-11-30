@@ -200,9 +200,11 @@ void i2c_handel_data(void){
 				batteri=i2c_data[1],i2c_data[2];
 				break;
 			case 0x01 :
-				distans_right=i2c_data[3];
+				sensor_right=i2c_data[3];
+				//distans_right=i2c_data[3];
 				distans_fram=i2c_data[2];
-				distans_left=i2c_data[1];
+				sensor_left=i2c_data[1];
+				//distans_left=i2c_data[1];
 				break;
 			case 0x02 :
 				Reflex_data=i2c_data[2]*0x10000+i2c_data[1]*0x100+i2c_data[0];

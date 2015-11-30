@@ -87,6 +87,8 @@ extern int count_waypoint;
 extern int gyro_turn;
 extern int waypoint;
 extern int oneway_turn;
+extern int sensor_left;
+extern int sensor_right;
 //global init
 void initengine(void);
 void timerinit(void);
