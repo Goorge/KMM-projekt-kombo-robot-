@@ -7,6 +7,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.util.concurrent.TimeUnit;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
@@ -18,8 +19,12 @@ import javax.swing.JList;
 import java.awt.Button;
 import javax.swing.JLabel;
 
+import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 enum listEnum{leftDistance, rightDistance, frontDistance, gyro, leftWheel, rightWheel, line, rgb, garbage};
-enum directions{goForwards, goBackwards, goLeft, goRight, turnLeft, turnRight}; 
+enum directions{goForwards, goBackwards, goLeft, goRight, turnLeft, turnRight, StandStill}; 
 
 public class Grafik {
 	// The frame that everything gets drawn into.
@@ -59,15 +64,19 @@ public class Grafik {
 	private static DefaultListModel comPorts;
 	
 	// Labels
-	private JLabel line_labels[]; // Used to show a grafical version of the different line sensors 
+	private static JLabel line_labels[]; // Used to show a grafical version of the different line sensors 
 	private JLabel image_label;	  // Used for the background image
 	private static JLabel rgb_label;	  // Use to show if the RGB is getting any data  
-	
+	private JLabel battery_label;
+	private JLabel battery_text_label;
 	//SPPPEEEEDDD of the bluetooth
 	private static int baudRate = 115200;
 	
 	//Bluetooth thingy
 	private static COMunication com = new COMunication();
+	
+	//bool for buttonspress
+	private boolean is_button_pressed = false;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -98,12 +107,27 @@ public class Grafik {
 	
 	// Tar hand om data som kommer ifrån bt, Behöver göras mer. 
 	private static void handleData(byte[] data){
-		switch (data[0]){
-		case (byte)0x01: //Avståndssensorer
-			
+		switch (data[0] & 0x0f){
+		case (byte)0x00: // Batteri
+			// Värdet / 51.2
+			break;
+		case (byte)0x01: // Avståndssensorer
+			// vänster, rakt fram, höger
 			break;
 		case (byte)0x02: //Linjesensorer
-			
+			String text = getCurrentTime() + ": "; 
+			Color color_to_line[] = new Color[11];
+			for(int i = 3; i >= 1; i--)
+				for(int j = 0; j < 4; j++){
+					byte current_data = (byte) ((data[i] >>> (j*2)) & 0x03);
+					if(!(i == 3 && j == 0)){
+						text += current_data + " ";
+						Color color[] = { Color.black, Color.darkGray, Color.lightGray, Color.white };
+						color_to_line[j + (i-1) * 3] = color[current_data];
+					}
+				}
+			addToList(listEnum.line, text);
+			setLineBackground(color_to_line);
 			break;
 		case (byte)0x03: // RGB BLÅ 
 			addToList(listEnum.rgb, getCurrentTime() + "RÖD");
@@ -111,7 +135,7 @@ public class Grafik {
 			break;
 		case (byte)0x04: // RGB GRÖN 
 			addToList(listEnum.rgb, getCurrentTime() + "GRÖN");
-			changeRGBColor(Color.GREEN);
+			changeRGBColor(Color.GREEN);	
 			break;
 		case (byte)0x05: // RGB BLÅ 
 			addToList(listEnum.rgb, getCurrentTime() + "BLÅ");
@@ -124,12 +148,12 @@ public class Grafik {
 			addToList(listEnum.gyro, getCurrentTime() + "GyroStart");
 			break;		
 		default: // If we dont get any real data, we still have a list where we write it so we know if it got wrong
-			String text = ""; 
+			String text2 = ""; 
 			for(int i = 0; i < data.length; i++){
-				text += data[i];
+				text2 += data[i];
 				System.out.println(" " + data[i]);
 			}
-			addToList(listEnum.garbage, getCurrentTime() + " " + text);
+			addToList(listEnum.garbage, getCurrentTime() + " " + text2);
 			break; 
 		}
 		com.clearDataAvailable();
@@ -186,8 +210,12 @@ public class Grafik {
 		case turnRight:
 			toSend[0] = (byte)0x0E; //00001110
 			break;
+		case StandStill:
+			toSend[0] = (byte)0x08; //00001000
+			break;
+		default:
+			break;
 		} 
-
 		if(com.GetIsSetup())
 			com.sendData(toSend);
 	}
@@ -203,7 +231,7 @@ public class Grafik {
 	}
 	
 	// Set color for all labels in line_label, color needs to be 11 long.  
-	public void setLineBackground(Color[] color){
+	public static void setLineBackground(Color[] color){
 		for(int i = 0; i < 11; i++)
 			line_labels[i].setBackground(color[i]);
 	}
@@ -240,6 +268,11 @@ public class Grafik {
 	// Initialize the contents of the frame.
 	private void initialize() {
 		frame = new JFrame();
+		frame.addWindowListener(new WindowAdapter(){
+			  public void windowClosing(WindowEvent e) {
+				    	com.disconnect();
+				    }
+			  });
 		frame.setBounds(100, 100, 867, 721);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
@@ -291,45 +324,165 @@ public class Grafik {
 		
 		turn_left_btn = new JButton("<");
 		turn_left_btn.setBounds(35, 522, 64, 55);
-		turn_left_btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		turn_left_btn.addMouseListener(new MouseListener() {
+			@Override 
+			public void mousePressed(MouseEvent e) {
 				sendDirection(directions.turnLeft);
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				sendDirection(directions.StandStill);
 			}
 		});
 		frame.getContentPane().add(turn_left_btn);
 		
 		go_back_btn = new JButton("v");
 		go_back_btn.setBounds(104, 522, 64, 55);
-		go_back_btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		go_back_btn.addMouseListener(new MouseListener() {
+			@Override 
+			public void mousePressed(MouseEvent e) {
 				sendDirection(directions.goBackwards);
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				sendDirection(directions.StandStill);
 			}
 		});
 		frame.getContentPane().add(go_back_btn);
 		
 		turn_right_btn = new JButton(">");
 		turn_right_btn.setBounds(173, 522, 64, 55);
-		turn_right_btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		turn_right_btn.addMouseListener(new MouseListener() {
+			@Override 
+			public void mousePressed(MouseEvent e) {
 				sendDirection(directions.turnRight);
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				sendDirection(directions.StandStill);
 			}
 		});
 		frame.getContentPane().add(turn_right_btn);
 		
 		go_forward_btn = new JButton("^");
 		go_forward_btn.setBounds(104, 462, 64, 55);
-		go_forward_btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		go_forward_btn.addMouseListener(new MouseListener() {
+			@Override 
+			public void mousePressed(MouseEvent e) {
 				sendDirection(directions.goForwards);
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				sendDirection(directions.StandStill);
 			}
 		});
 		frame.getContentPane().add(go_forward_btn);
 		
 		go_left_btn = new JButton("<^");
 		go_left_btn.setBounds(35, 462, 64, 55);
-		go_left_btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		go_left_btn.addMouseListener(new MouseListener() {
+			@Override 
+			public void mousePressed(MouseEvent e) {
 				sendDirection(directions.goLeft);
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				sendDirection(directions.StandStill);
 			}
 		});
 		frame.getContentPane().add(go_left_btn);
@@ -337,16 +490,40 @@ public class Grafik {
 		
 		go_right_btn = new JButton("^>");
 		go_right_btn.setBounds(173, 462, 64, 55);
-		go_right_btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		go_right_btn.addMouseListener(new MouseListener() {
+			@Override 
+			public void mousePressed(MouseEvent e) {
 				sendDirection(directions.goRight);
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				sendDirection(directions.StandStill);
 			}
 		});
 		frame.getContentPane().add(go_right_btn);
 		
 		graficList = new JList();
 		listScroll = new JScrollPane(graficList);
-		listScroll.setBounds(35, 10, 199, 441);
+		listScroll.setBounds(20, 10, 214, 441);
 		listScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		frame.add(listScroll);
 		
@@ -385,6 +562,16 @@ public class Grafik {
 			line_labels[i].setOpaque(true);
 			frame.getContentPane().add(line_labels[i]);	
 		}
+		
+		battery_label = new JLabel("");
+		battery_label.setBounds(780, 5, 36, 25);
+		battery_label.setBackground(Color.green);
+		battery_label.setOpaque(true);
+		frame.getContentPane().add(battery_label);
+		
+		battery_text_label = new JLabel("Batteri");
+		battery_text_label.setBounds(780, 30, 50, 25);
+		frame.getContentPane().add(battery_text_label);
 		
 		rgb_label = new JLabel();
 		rgb_label.setBounds(350, 126, 70, 22);
@@ -432,5 +619,42 @@ public class Grafik {
 		image_label.setIcon(new ImageIcon("img/robot.png"));
 		image_label.setBounds(300, 10, 456, 567);
 		frame.getContentPane().add(image_label);
+		
+		frame.addMouseListener(new CustomMouseListener());	
 	}
+	class CustomMouseListener implements MouseListener{
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			if(is_button_pressed){
+				sendDirection(directions.StandStill);
+				is_button_pressed = false;
+			}
+		}
+   }
 }
+

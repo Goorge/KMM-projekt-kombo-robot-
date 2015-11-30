@@ -4,7 +4,7 @@ public class COMunication {
 	
 	private static SerialPort serialPort;
 	private static int baudRate;
-	private static byte[] data;
+	private static byte[] data_from_bt;
 	private boolean newData = false;
 	private boolean isSetup = false;
 	
@@ -12,7 +12,8 @@ public class COMunication {
 	public void setup(String port, int baudRate_){
 		try {
 			if(isSetup)
-				serialPort.closePort();
+				if(serialPort.isOpened())
+					serialPort.closePort();
 			serialPort = new SerialPort(port);
 			baudRate = baudRate_;
 			isSetup = true;
@@ -38,7 +39,7 @@ public class COMunication {
 	//Delivers the data to the gui and sets new data to false
 	public byte[] deliverData(){
 		newData = false;
-		return data;
+		return data_from_bt;
 	}
 	
 	// sends data over comport
@@ -55,10 +56,23 @@ public class COMunication {
         }
 	}
 	
+	public void disconnect(){
+		if(isSetup){
+			if(serialPort.isOpened()){
+				try {
+					serialPort.closePort();
+				} catch (SerialPortException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	//Recieve data over comport.
 	private byte[] receiveData(){
 		byte[] data1, data2, dataOut;
-		data1 = new byte[0];
+		data1 = new byte[16];
 		data2 = new byte[0];
 		dataOut = new byte[0];
 		try {
@@ -66,10 +80,11 @@ public class COMunication {
                     			SerialPort.DATABITS_8,
                     			SerialPort.STOPBITS_1,
                     			SerialPort.PARITY_NONE);//Set parameters. 
-            data1 = serialPort.readBytes(1);//Read 1 byte from serial port
             
-            if((data1[0] >>> 4) != 0)// shift to get the number of incoming bytes. If we need to recive more bytes we get to know it here. 
-            	data2 = serialPort.readBytes(data1[0] >>> 4); //Read the rest of the bytes.
+            data1 = serialPort.readBytes(1);//Read 1 byte from serial port
+            System.out.println(((data1[0] >>> 4)&0x0f));
+            //for(int i = 1; i < ((data1[0] >>> 4)&0x0f); i++)// shift to get the number of incoming bytes. If we need to recive more bytes we get to know it here.
+            data2 = serialPort.readBytes(((data1[0] >>> 4)&0x0f)); //Read the rest of the bytes.
         }
         catch (SerialPortException ex) {
             System.out.println(ex);
@@ -91,7 +106,7 @@ public class COMunication {
 	//EventListener that waits for incoming data.
 		public void serialEvent(SerialPortEvent event) {
         	if(event.isRXCHAR()){//If data is available
-            	data = receiveData();
+            	data_from_bt = receiveData();
             	newData = true;//set variable that new data is available for GUI
         	}
     	}
