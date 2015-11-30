@@ -117,7 +117,7 @@ byte i2c_recive(byte prossesor){
 	//while(!(TWCR & (1<<TWINT)));
 	TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);	// Transmition STOP
 	return data;
-};
+}
 
 
 
