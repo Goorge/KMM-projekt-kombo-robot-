@@ -52,11 +52,16 @@ int main(void)
 	i2c_setup(1);
 	sei();
 	//***********Set motors speed value here *****************
-	left=50;//100;				// kanske räcker med en variable för båda om båda kör exakt lika fort
-	right=45;//93;
+	left=100/2;//100;				// kanske räcker med en variable för båda om båda kör exakt lika fort
+	right=93/2;//93;
 	//********************************************************
 	motor_left=left;      
 	motor_right=right;
+	byte data1[2];
+	byte data2[1];
+	data1[0]=0x12;
+	data1[1]=0x0f;
+	data2[0]=0x04;
 	while(1){
 		i2c_handel_data();  //test av fregulito	
 			if(drive_mode == 1){						// Drivemode is auto    // (drive_mode == 1 && start == 1)
