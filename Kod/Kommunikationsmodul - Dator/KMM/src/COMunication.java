@@ -72,7 +72,7 @@ public class COMunication {
 	//Recieve data over comport.
 	private byte[] receiveData(){
 		byte[] data1, data2, dataOut;
-		data1 = new byte[16];
+		data1 = new byte[1];
 		data2 = new byte[0];
 		dataOut = new byte[0];
 		try {
@@ -82,7 +82,6 @@ public class COMunication {
                     			SerialPort.PARITY_NONE);//Set parameters. 
             
             data1 = serialPort.readBytes(1);//Read 1 byte from serial port
-            System.out.println(((data1[0] >>> 4)&0x0f));
             //for(int i = 1; i < ((data1[0] >>> 4)&0x0f); i++)// shift to get the number of incoming bytes. If we need to recive more bytes we get to know it here.
             data2 = serialPort.readBytes(((data1[0] >>> 4)&0x0f)); //Read the rest of the bytes.
         }
@@ -91,10 +90,11 @@ public class COMunication {
         }
 		
 		//merge first byte with the possible rest of data to get it all in one array
-		dataOut = new byte[data1.length + data2.length];
+		dataOut = new byte[data1.length + data2.length];//data1.length + data2.length];
         dataOut[0] = data1[0];
-        for (int i = 0; i < data2.length; i++)
+        for (int i = 0; i < data2.length; i++){
         	dataOut[i+1] = data2[i];
+        }
         return dataOut;
 	}
 	

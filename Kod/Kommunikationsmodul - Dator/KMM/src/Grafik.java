@@ -31,22 +31,22 @@ public class Grafik {
 	private JFrame frame;
 	
 	// buttons 4 distance sensors
-	private Button sensor_front_btn;
-	private Button sensor_left_btn;
-	private Button sensor_right_btn;
+	private static Button sensor_front_btn;
+	private static Button sensor_left_btn;
+	private static Button sensor_right_btn;
 	
 	// button 4 gyro
-	private Button gyro_btn;
+	private static Button gyro_btn;
 	
 	// buttons 4 wheels
-	private Button wheel_right_btn;
-	private Button wheel_left_btn;
+	private static Button wheel_right_btn;
+	private static Button wheel_left_btn;
 	
 	// button 4 line
-	private Button line_btn;
+	private static Button line_btn;
 	
 	// button 4 rgb
-	private Button rgb_btn;
+	private static Button rgb_btn;
 	
 	//buttons stearing
 	private JButton go_right_btn;
@@ -113,17 +113,23 @@ public class Grafik {
 			break;
 		case (byte)0x01: // Avståndssensorer
 			// vänster, rakt fram, höger
+			addToList(listEnum.leftDistance, getCurrentTime() + data[1]);
+			setButtonLabel(listEnum.leftDistance, Byte.toString(data[1]) );
+			addToList(listEnum.rightDistance, getCurrentTime() + data[2]);
+			setButtonLabel(listEnum.rightDistance, Byte.toString(data[2]));
+			addToList(listEnum.frontDistance, getCurrentTime() + data[3]);
+			setButtonLabel(listEnum.frontDistance, Byte.toString(data[3]));
 			break;
 		case (byte)0x02: //Linjesensorer
-			String text = getCurrentTime() + ": "; 
+			String text = getCurrentTime() + ": "; //
 			Color color_to_line[] = new Color[11];
 			for(int i = 3; i >= 1; i--)
-				for(int j = 0; j < 4; j++){
+				for(int j = 3; j >= 0; j--){
 					byte current_data = (byte) ((data[i] >>> (j*2)) & 0x03);
-					if(!(i == 3 && j == 0)){
+					if(!(i == 3 && j == 3)){
 						text += current_data + " ";
 						Color color[] = { Color.black, Color.darkGray, Color.lightGray, Color.white };
-						color_to_line[j + (i-1) * 3] = color[current_data];
+						color_to_line[(3-j) + (3-i) * 4 -1] = color[current_data];
 					}
 				}
 			addToList(listEnum.line, text);
@@ -160,7 +166,7 @@ public class Grafik {
 	}
 	
 	// label buttons
-	public void setButtonLabel(listEnum button, String value){
+	public static void setButtonLabel(listEnum button, String value){
 		switch (button){
 		case leftDistance:  
 			sensor_left_btn.setLabel(value);
