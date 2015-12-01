@@ -115,10 +115,10 @@ public class Grafik {
 			// vänster, rakt fram, höger
 			addToList(listEnum.leftDistance, getCurrentTime() + data[1]);
 			setButtonLabel(listEnum.leftDistance, Byte.toString(data[1]) );
-			addToList(listEnum.rightDistance, getCurrentTime() + data[2]);
-			setButtonLabel(listEnum.rightDistance, Byte.toString(data[2]));
-			addToList(listEnum.frontDistance, getCurrentTime() + data[3]);
-			setButtonLabel(listEnum.frontDistance, Byte.toString(data[3]));
+			addToList(listEnum.frontDistance, getCurrentTime() + data[2]);
+			setButtonLabel(listEnum.frontDistance, Byte.toString(data[2]));
+			addToList(listEnum.rightDistance, getCurrentTime() + data[3]);
+			setButtonLabel(listEnum.rightDistance, Byte.toString(data[3]));
 			break;
 		case (byte)0x02: //Linjesensorer
 			String text = getCurrentTime() + ": "; //
