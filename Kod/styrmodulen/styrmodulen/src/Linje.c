@@ -7,10 +7,10 @@ int current_error=0;
 int derivate=0;
 int output=0;
 int previous_error=0;
-int p_constant=50;  //satte lite random värden för att få större output
-int d_constant=100 ; // samma som ovan
+int p_constant=54;  //satte lite random värden för att få större output
+int d_constant=20 ; // samma som ovan
 int current_position=0;
-int scaler=20;
+int scaler=0;
 int output_old=0;
 
 	 
@@ -29,35 +29,32 @@ void linje(void){
 //***********************************
 //Reglering
 //***********************************	
-
-		if(output > 0){							// Utsignalen är negativ, beror på derivatan bl.a
-			motor_left = left - output;
+		/*if(output>(left*3/4))					//fixade denna delen med scaler istället, man får dock kolla på matlab för att hitta max outputen och skala efter den
+			output=left*3/4;
+		else if((output)<(right*3/4))
+			output=-right*3/4;*/
+		if(output < 0){							// Utsignalen är negativ, beror på derivatan bl.a
+			motor_left = left + output;
 			motor_right = right;
 		}
-		else if(output < 0){							// Utsignalen är posetiv, beror på derivatan bl.a
-			motor_right = right + output;
+		if(output > 0){							// Utsignalen är posetiv, beror på derivatan bl.a
+			motor_right = right - output;
 			motor_left = left;
 		}
-		else if(output!=0){
-			motor_right = right;
-			motor_left = left;
-		}
-
-	
+		
 // test kanske kan funka :D	, testa imon 
 		/*if(output < 0){							// Utsignalen är negativ, beror på derivatan bl.a
-			if((output > output_old) || (output_old == 0)){
-				motor_right = right - output;
-				motor_left = left;
-			}
-			else if(output < output_old){
-				
+			if((output > output_old) || (output_old == 0){
 				motor_left = left + output;
 				motor_right = right;
 			}
+			else if(output < output_old){
+				motor_right = right - output;
+				motor_left = left;
+			}
 		}
-		else if(output > 0){							// Utsignalen är posetiv, beror på derivatan bl.a
-			if((output > output_old) || (output_old == 0)){
+		if(output > 0){							// Utsignalen är posetiv, beror på derivatan bl.a
+			if((output > output_old) || (output_old == 0){
 				motor_right = right - output;
 				motor_left = left;
 			}
@@ -72,10 +69,10 @@ void linje(void){
 //***********************************
 int max=13;
 int min=4;
-	/*if((abs(output) < min && abs(output_old) < max)&&(abs(output_old) < min || abs(output) < max)){  //output==0 kommer typ aldrig ske, eftersom man kommer hoppa mellan +/- 1 och 0 och kommer då aldrig nå output==0
+	if((abs(output) < min && abs(output_old) < max)&&(abs(output_old) < min || abs(output) < max)){  //output==0 kommer typ aldrig ske, eftersom man kommer hoppa mellan +/- 1 och 0 och kommer då aldrig nå output==0
 		motor_left = left;																			 //Om nu detta funkar så när den hoppar mellan 0 och +/-1 kommer den köra rakt, kan nog bli lite / \ på linjen men typish rakt :D
 		motor_right = right;
-	}*/
+	}
 		output_old = output;
 }
 

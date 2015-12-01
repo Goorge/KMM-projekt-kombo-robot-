@@ -4,7 +4,7 @@
 
 int waypoint=0;
 int oneway_turn=0;
-int regulator_mode=1;
+//int regulator_mode=0;
 
 
 void regulator(){

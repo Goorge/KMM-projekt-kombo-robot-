@@ -10,9 +10,8 @@ bool sekvens_goal_detekted();
 
 void linje_main()
 {
-		Reflex_data=Reflex_data & 0x0ffffc;
-		current_position=linje_get_error();
-		linje();
+	current_position=linje_get_error();
+	linje();
 	/*if(distans_fram<10){
 		start=0; // kör inte in i väggar
 	}
@@ -49,8 +48,7 @@ signed char linje_RGBsveng()
 		for(int i=0;i<11;i++)
 		{
 			if (styr_fel==0)
-			if (Reflex_data>>(i*2)&0x3==0x3)
-				styr_fel=(i-5)*Reflex_data>>(i*2)&0x3;
+			styr_fel=(i-5)*Reflex_data>>(i*2)&0x2;
 		}
 	}
 	else if(RGB_data==2) //raktfram
@@ -78,8 +76,8 @@ signed char linje_get_error()
 	
 	for(int i=0;i<11;i++)
 	{
-		styr_fel=styr_fel+((5-i)*((Reflex_data>>(i*2))&2));
-		fel_antal += ((Reflex_data>>(i*2))&0x2);
+		styr_fel=styr_fel+(5-i)*((Reflex_data>>(i*2))&3);
+		fel_antal += (Reflex_data>>(i*2))&0x3;
 	}
 	styr_fel = styr_fel/fel_antal;
 	return styr_fel;
