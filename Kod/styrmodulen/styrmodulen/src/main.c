@@ -26,11 +26,13 @@ int Reflex_data;			// reflexsensor data
 #include "linjealg.c"
 #include "PDreglering.c"
 #include "Manual_drive.c"
+#include "NormalPD_lab.c"
+#include "Spec_cases_lab.c"
 #include "labyrintreg.c"
 #include "Linje.c"
-#include "Spec_cases_lab.c"
 #include "Init_styr.c"
 #include "i2c_master.c"
+
 
 
 int main(void)

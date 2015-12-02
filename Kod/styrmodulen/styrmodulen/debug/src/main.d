@@ -25,8 +25,8 @@ src/main.d src/main.o: ../src/main.c \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\compat\twi.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\twi.h \
  ../src/linjealg.c ../src/PDreglering.c ../src/asf.h \
- ../src/Manual_drive.c ../src/labyrintreg.c ../src/Linje.c \
- ../src/Spec_cases_lab.c ../src/Init_styr.c \
+ ../src/Manual_drive.c ../src/NormalPD_lab.c ../src/Spec_cases_lab.c \
+ ../src/labyrintreg.c ../src/Linje.c ../src/Init_styr.c \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
@@ -96,11 +96,13 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 ../src/Manual_drive.c:
 
+../src/NormalPD_lab.c:
+
+../src/Spec_cases_lab.c:
+
 ../src/labyrintreg.c:
 
 ../src/Linje.c:
-
-../src/Spec_cases_lab.c:
 
 ../src/Init_styr.c:
 
