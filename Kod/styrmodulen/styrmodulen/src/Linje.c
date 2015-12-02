@@ -22,7 +22,10 @@ void linje(void){
 	cli();
 	int current_position_tmp = current_position;
 	sei();
-
+	if(current_position < 0)
+	PORTD ^= (1 << PD0);
+	if(current_position > 0)
+	PORTD ^= (1 << PD1);
 	current_error = setpoint - current_position_tmp;
 	derivate = (current_error -previous_error)*dt;					// Tror det var dt som saknades för derivatan
 	output = (p_constant*current_error+d_constant*derivate)/scaler;
@@ -32,7 +35,7 @@ void linje(void){
 //***********************************		
 		if(output < 0){									// Utsignalen är negativ, beror på derivatan bl.a
 				if(abs(output) >= right){				// För att unvika mättnad i regleringen
-					output=0;					// Sätta något lågt värde men så att den inte stänger av motorn helt...
+					motor_right=0;					// Sätta något lågt värde men så att den inte stänger av motorn helt...
 					motor_left = left;
 				}
 				else {
@@ -42,7 +45,7 @@ void linje(void){
 		}
 		else if(output > 0){							// Utsignalen är posetiv, beror på derivatan bl.a
 				if(abs(output) >= left){				// För att unvika mättnad i regleringen
-					output=0;
+					motor_left=0;
 					motor_left = right;
 				}
 				else {
@@ -55,6 +58,6 @@ void linje(void){
 			motor_left = left;																			 //Om nu detta funkar så när den hoppar mellan 0 och +/-1 kommer den köra rakt, kan nog bli lite / \ på linjen men typish rakt :D
 			motor_right = right;
 		}
-		PORTD ^= (1 << PD1); // heej
+		//PORTD ^= (1 << PD1); // heej
 }
 

@@ -9,22 +9,8 @@ bool twoway_turn_right=false;
 int sensor_front;
 int sensor_left;
 int sensor_right;
-int arre_lab[] = {  15, 12, 9, 6, 3,
-                 10, 10,  15,  15, 15,
-                 0,  0,  0,  0, 0,
-                -15,  -12,  -9, -6, -3, 
-                 -10,  -10, -15,  -15, -15,
-                 0,  0,  0,  0, 0 };
-                 /*
-                 {  -5, -3, -2, -1, 0,
-                     2, -1,  1,  0, 0,
-                     0,  3,  2,  1, 0,
-                     -1,  0,  5,  3, 2,
-                     1,  0, -1,  0, 2,
-                 1,  0,  2,  1, 0 };
-                 */
-                  
 
+                 
 void labyreg(){
 	cli();
 	int sensor_front_tmp = sensor_front;

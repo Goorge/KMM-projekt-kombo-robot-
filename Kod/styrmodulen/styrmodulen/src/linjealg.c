@@ -75,12 +75,13 @@ int linje_get_error()
 {
 	int styr_fel=0;
 	int fel_antal=0;
-	
+	cli();
 	for(int i=0;i<11;i++)
 	{
 		styr_fel=styr_fel+((5-i)*((Reflex_data>>(i*2))&3));
 		fel_antal += ((Reflex_data>>(i*2))&0x3);
 	}
+	sei();
 	styr_fel = styr_fel/fel_antal;
 	return styr_fel;
 }
