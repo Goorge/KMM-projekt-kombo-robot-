@@ -2,9 +2,8 @@
 #include <avr/io.h>
 #include "asf.h"
 
-int waypoint=0;
-int oneway_turn=0;
-int regulator_mode=1;
+
+int regulator_mode=0;
 
 
 void regulator(){
@@ -13,12 +12,7 @@ void regulator(){
 		linje_main();
 	}
 	else
-	{
-		/*if(waypoint==1)
-			waypoint_lab();
-		if(oneway_turn=1)	
-			oneway_turn_lab();*/
-		
+	{	
 		labyreg();//kalla på labyrint funktion
 	}
 }
