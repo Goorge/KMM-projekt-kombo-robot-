@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 import java.awt.Color;
 
@@ -24,7 +25,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 enum listEnum{leftDistance, rightDistance, frontDistance, gyro, leftWheel, rightWheel, line, rgb, garbage};
-enum directions{goForwards, goBackwards, goLeft, goRight, turnLeft, turnRight, StandStill}; 
+enum directions{goForwards, goBackwards, goLeft, goRight, turnLeft, turnRight, StandStill, start, manuell, update_pd_linje, update_pd_labyrint, update_speed}; 
 
 public class Grafik {
 	// The frame that everything gets drawn into.
@@ -48,6 +49,15 @@ public class Grafik {
 	// button 4 rgb
 	private static Button rgb_btn;
 	
+	// Button man/start
+	private static Button start_btn;
+	private static Button manuell_btn;
+	
+	// Button pd-value && speed change
+	private static Button update_lin_btn;
+	private static Button update_lab_btn;
+	private static Button update_speed_btn;
+	
 	//buttons stearing
 	private JButton go_right_btn;
 	private JButton go_left_btn;
@@ -63,12 +73,32 @@ public class Grafik {
 	private static DefaultListModel[] lists;
 	private static DefaultListModel comPorts;
 	
+	// label for pd
+	private JTextField p_lab_label = new JTextField("");
+	private JTextField d_lab_label = new JTextField("");
+	private JTextField d_lin_label = new JTextField("");
+	private JTextField p_lin_label = new JTextField("");
+	private JLabel d_label = new JLabel("D");
+	private JLabel p_label = new JLabel("P");
+	private JLabel left_label = new JLabel("L");
+	private JLabel right_label = new JLabel("R");
+
+	
+	// label for speed
+	private JTextField speed_right_label = new JTextField("");
+	private JTextField speed_left_label = new JTextField("");
+		
+	
 	// Labels
 	private static JLabel line_labels[]; // Used to show a grafical version of the different line sensors 
 	private JLabel image_label;	  // Used for the background image
 	private static JLabel rgb_label;	  // Use to show if the RGB is getting any data  
-	private JLabel battery_label;
 	private JLabel battery_text_label;
+	private static JLabel battery1_label;
+	private static JLabel battery1_text_label;
+	private static JLabel battery2_label;
+	private static JLabel battery2_text_label;
+	
 	//SPPPEEEEDDD of the bluetooth
 	private static int baudRate = 115200;
 	
@@ -110,15 +140,29 @@ public class Grafik {
 		switch (data[0] & 0x0f){
 		case (byte)0x00: // Batteri
 			// Värdet / 51.2
+			double b1 = data[1] / 51.2;
+			double b2 = data[2] / 51.2;
+			
+			battery1_text_label.setText(Double.toString(b1));
+			battery2_text_label.setText(Double.toString(b2));
+			
+			if(b1 <= 3.7)
+				battery1_label.setBackground(Color.red);
+			else 
+				battery1_label.setBackground(Color.green);
+			if(b2 <= 3.7)
+				battery2_label.setBackground(Color.red);
+			else
+				battery1_label.setBackground(Color.green);
 			break;
 		case (byte)0x01: // Avståndssensorer
 			// vänster, rakt fram, höger
-			addToList(listEnum.leftDistance, getCurrentTime() + data[1]);
-			setButtonLabel(listEnum.leftDistance, Byte.toString(data[1]) );
-			addToList(listEnum.frontDistance, getCurrentTime() + data[2]);
-			setButtonLabel(listEnum.frontDistance, Byte.toString(data[2]));
-			addToList(listEnum.rightDistance, getCurrentTime() + data[3]);
-			setButtonLabel(listEnum.rightDistance, Byte.toString(data[3]));
+			addToList(listEnum.leftDistance, getCurrentTime() + (data[1] & 0xff));
+			setButtonLabel(listEnum.leftDistance, Integer.toString((data[1] & 0xff) ));
+			addToList(listEnum.frontDistance, getCurrentTime() + (data[2] & 0xff));
+			setButtonLabel(listEnum.frontDistance, Integer.toString((data[2] & 0xff)));
+			addToList(listEnum.rightDistance, getCurrentTime() + (data[3] & 0xff));
+			setButtonLabel(listEnum.rightDistance,Integer.toString((data[3] & 0xff)));
 			break;
 		case (byte)0x02: //Linjesensorer
 			String text = getCurrentTime() + ": "; //
@@ -128,7 +172,7 @@ public class Grafik {
 					byte current_data = (byte) ((data[i] >>> (j*2)) & 0x03);
 					if(!(i == 3 && j == 3)){
 						text += current_data + " ";
-						Color color[] = { Color.black, Color.darkGray, Color.lightGray, Color.white };
+						Color color[] = { Color.black, Color.red, Color.orange, Color.yellow };
 						color_to_line[(3-j) + (3-i) * 4 -1] = color[current_data];
 					}
 				}
@@ -219,6 +263,37 @@ public class Grafik {
 		case StandStill:
 			toSend[0] = (byte)0x08; //00001000
 			break;
+		case start:
+			toSend = new byte[2];
+			toSend[0] = 0x1F;
+			toSend[1] = (byte) 0xF0;
+			break;
+		case manuell:
+			toSend = new byte[2];
+			toSend[0] = 0x1F;
+			toSend[1] = 0x0F;
+			break;
+		case update_pd_linje://0x00
+			toSend = new byte[4];
+			toSend[0] = 0x3F;
+			toSend[1] = 0x00;
+			toSend[2] = (byte)Integer.parseInt(p_lin_label.getText());
+			toSend[3] = (byte)Integer.parseInt(d_lin_label.getText());
+			break;
+		case update_pd_labyrint://0x01
+			toSend = new byte[4];
+			toSend[0] = 0x3F;
+			toSend[1] = 0x01;
+			toSend[2] = (byte)Integer.parseInt(p_lab_label.getText());
+			toSend[3] = (byte)Integer.parseInt(d_lab_label.getText());
+			break;
+		case update_speed:
+			toSend = new byte[4];
+			toSend[0] = 0x3F;
+			toSend[1] = 0x02;
+			toSend[2] = (byte)Integer.parseInt(speed_left_label.getText());
+			toSend[3] = (byte)Integer.parseInt(speed_right_label.getText());
+			break;
 		default:
 			break;
 		} 
@@ -292,15 +367,6 @@ public class Grafik {
 		sensor_front_btn.setBounds(489, 57, 70, 22);
 		frame.getContentPane().add(sensor_front_btn);
 		
-		wheel_right_btn = new Button("");
-		wheel_right_btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setJListVisible(listEnum.rightWheel);
-			}
-		});
-		wheel_right_btn.setBounds(706, 239, 70, 22);
-		frame.getContentPane().add(wheel_right_btn);
-		
 		sensor_left_btn = new Button("");
 		sensor_left_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -310,6 +376,90 @@ public class Grafik {
 		sensor_left_btn.setBounds(240, 158, 70, 22);
 		frame.getContentPane().add(sensor_left_btn);
 		
+		
+		start_btn = new Button("Start/Stop");
+		start_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sendDirection(directions.start);
+			}
+		});
+		start_btn.setBounds(50, 600, 70, 22);
+		frame.getContentPane().add(start_btn);
+		
+		manuell_btn = new Button("Man/Auto");
+		manuell_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sendDirection(directions.manuell);
+			}
+		});
+		manuell_btn.setBounds(150, 600, 70, 22);
+		frame.getContentPane().add(manuell_btn);		
+				
+		update_lin_btn = new Button("Updatera linje");
+		update_lin_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sendDirection(directions.update_pd_linje);
+			}
+		});
+		update_lin_btn.setBounds(725, 625, 120, 22);
+		frame.getContentPane().add(update_lin_btn);		
+		
+		update_lab_btn = new Button("Updatera labyrint");
+		update_lab_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sendDirection(directions.update_pd_labyrint);
+			}
+		});
+		update_lab_btn.setBounds(600, 625, 120, 22);
+		frame.getContentPane().add(update_lab_btn);	
+		
+		update_speed_btn = new Button("Updatera Hastighet");
+		update_speed_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sendDirection(directions.update_speed);
+			}
+		});
+		update_speed_btn.setBounds(630, 550, 120, 22);
+		frame.getContentPane().add(update_speed_btn);	
+		
+		// hastighet
+		speed_right_label.setBounds(630, 500, 120, 22);
+		frame.getContentPane().add(speed_right_label);
+		speed_left_label.setBounds(630, 525, 120, 22);
+		frame.getContentPane().add(speed_left_label);
+
+		//linje pd
+		p_lin_label.setBounds(725, 575, 120, 22);
+		frame.getContentPane().add(p_lin_label);
+		d_lin_label.setBounds(725, 600, 120, 22);
+		frame.getContentPane().add(d_lin_label);
+
+		//labyrint pd
+		p_lab_label.setBounds(600, 575, 120, 22);
+		frame.getContentPane().add(p_lab_label);
+		d_lab_label.setBounds(600, 600, 120, 22);
+		frame.getContentPane().add(d_lab_label);
+	
+		// textrutor
+		d_label.setBounds(580, 600, 20, 22);
+		frame.getContentPane().add(d_label);
+		p_label.setBounds(580, 575, 20, 22);
+		frame.getContentPane().add(p_label);
+		left_label.setBounds(760, 525, 20, 22);
+		frame.getContentPane().add(left_label);
+		right_label.setBounds(760, 500, 20, 22);
+		frame.getContentPane().add(right_label);
+		
+		/*
+		wheel_right_btn = new Button("");
+		wheel_right_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				setJListVisible(listEnum.rightWheel);
+			}
+		});
+		wheel_right_btn.setBounds(706, 239, 70, 22);
+		frame.getContentPane().add(wheel_right_btn);
+		
 		wheel_left_btn = new Button("");
 		wheel_left_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -318,6 +468,7 @@ public class Grafik {
 		});
 		wheel_left_btn.setBounds(280, 239, 70, 22);
 		frame.getContentPane().add(wheel_left_btn);
+		*/
 		
 		sensor_right_btn = new Button("");
 		sensor_right_btn.addActionListener(new ActionListener() {
@@ -569,14 +720,28 @@ public class Grafik {
 			frame.getContentPane().add(line_labels[i]);	
 		}
 		
-		battery_label = new JLabel("");
-		battery_label.setBounds(780, 5, 36, 25);
-		battery_label.setBackground(Color.green);
-		battery_label.setOpaque(true);
-		frame.getContentPane().add(battery_label);
+		battery1_label = new JLabel("");
+		battery1_label.setBounds(750, 15, 36, 25);
+		battery1_label.setBackground(Color.green);
+		battery1_label.setOpaque(true);
+		frame.getContentPane().add(battery1_label);
+		
+		battery1_text_label = new JLabel("");
+		battery1_text_label.setBounds(750, 40, 50, 25);
+		frame.getContentPane().add(battery1_text_label);
+		
+		battery2_label = new JLabel("");
+		battery2_label.setBounds(790, 15, 36, 25);
+		battery2_label.setBackground(Color.green);
+		battery2_label.setOpaque(true);
+		frame.getContentPane().add(battery2_label);
+		
+		battery2_text_label = new JLabel("");
+		battery2_text_label.setBounds(790, 40, 50, 25);
+		frame.getContentPane().add(battery2_text_label);
 		
 		battery_text_label = new JLabel("Batteri");
-		battery_text_label.setBounds(780, 30, 50, 25);
+		battery_text_label.setBounds(765, 0, 50, 15);
 		frame.getContentPane().add(battery_text_label);
 		
 		rgb_label = new JLabel();
@@ -595,7 +760,7 @@ public class Grafik {
 				}
 			}
 		});
-		com_btn.setBounds(484, 600, 80, 22);
+		com_btn.setBounds(300, 600, 80, 22);
 		frame.getContentPane().add(com_btn);
 		
 		Button garbage_btn = new Button("GarbageData");
@@ -604,7 +769,7 @@ public class Grafik {
 				setJListVisible(listEnum.garbage);
 			}
 		});
-		garbage_btn.setBounds(750, 600, 80, 22);
+		garbage_btn.setBounds(750, 650, 80, 22);
 		frame.getContentPane().add(garbage_btn);
 		
 		Button refresh_com_btn = new Button("refresh list of COMport");
@@ -618,49 +783,13 @@ public class Grafik {
 				graficList.setModel(comPorts);
 			}
 		});
-		refresh_com_btn.setBounds(430, 575, 200, 22);
+		refresh_com_btn.setBounds(300, 575, 200, 22);
 		frame.getContentPane().add(refresh_com_btn);
 		
 		image_label = new JLabel("");
 		image_label.setIcon(new ImageIcon("img/robot.png"));
 		image_label.setBounds(300, 10, 456, 567);
-		frame.getContentPane().add(image_label);
-		
-		frame.addMouseListener(new CustomMouseListener());	
+		frame.getContentPane().add(image_label);	
 	}
-	class CustomMouseListener implements MouseListener{
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			if(is_button_pressed){
-				sendDirection(directions.StandStill);
-				is_button_pressed = false;
-			}
-		}
-   }
 }
 
