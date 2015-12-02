@@ -30,11 +30,7 @@ ISR(TIMER1_COMPA_vect){
 	regler_ready=1;
 	//if(counter_timer<10)
 	//counter_timer++;
-	count_arre++;				//array räknare
 	count_waypoint++;			//räknare för att köra ur svängar i labyrinter
-	if(count_arre >= 29){
-		count_arre = 0;
-	}
 }
 // ------------------------------------------------------------------------------------------------------
 // -- External interrupt for INT1 and INT2

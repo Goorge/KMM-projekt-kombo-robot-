@@ -82,11 +82,12 @@ extern int start;
 extern int current_position;
 extern int left;
 extern int right;
-extern int count_arre;
 extern int count_waypoint;
 extern int gyro_turn;
-extern int waypoint;
-extern int oneway_turn;
+extern bool waypoint;
+extern bool oneway_turn;
+extern bool twoway_turn_left;
+extern bool twoway_turn_right;
 extern int sensor_left;
 extern int sensor_right;
 //global init
@@ -99,7 +100,5 @@ void manual_drive(void);
 void regulator(void);
 void labyreg(void);
 void linje(void);
-void waypoint_lab(void);
-void oneway_turn_lab(void);
 void i2c_handel_data(void);
 #endif // ASF_H

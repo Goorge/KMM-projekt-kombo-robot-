@@ -206,16 +206,17 @@ void i2c_handel_data(void){
 				//distans_right=i2c_data[3];
 				distans_fram = i2c_data[2];
 				sensor_left = i2c_data[1];
-				if(sensor_right > 20)
-					PORTD |= (1 << PD0);
-				else if(sensor_right > 30)
-					PORTD &= ~(1 << PD0);
-				else
-				PORTD &= ~(1 << PD0);
+				//if(sensor_right > 20)
+					//PORTD |= (1 << PD0);
+				//else if(sensor_right > 30)
+					//PORTD &= ~(1 << PD0);
+				//else
+				//PORTD &= ~(1 << PD0);
 				//distans_left=i2c_data[1];
 				break;
 			case 0x02 :
-				Reflex_data=i2c_data[2]*0x10000+i2c_data[1]*0x100+i2c_data[0];
+				Reflex_data=(i2c_data[3]<<16)+(i2c_data[2]<<8)+i2c_data[1];
+				//PORTD ^= (1 << PD0); // heej
 				break;
 			case 0x03 :
 				RGB_data=1;//"röd";"
@@ -238,35 +239,68 @@ void i2c_handel_data(void){
 			case 0x09 :
 				manual_function=1;
 				
-				PORTD |= (1 << PD0); // heej
+				//PORTD |= (1 << PD0); // heej
 				break;
 			case 0x0a :
-			PORTD |= (1 << PD0); // heej
+			//PORTD |= (1 << PD0); // heej
 				manual_function=2;
 				
 				break;
 			case 0x0b :
-			PORTD |= (1 << PD0); // heej
+			//PORTD |= (1 << PD0); // heej
 				manual_function=4;
 				
 				break;
 			case 0x0c :
-			PORTD |= (1 << PD0); // heej
+			//PORTD |= (1 << PD0); // heej
 				manual_function=3;
 				
 				break;
 			case 0x0d :
-			PORTD |= (1 << PD0); // heej
+			//PORTD |= (1 << PD0); // heej
 				manual_function=6;
 				
 				break;
 			case 0x0e :
-			PORTD |= (1 << PD0); // heej
+			//PORTD |= (1 << PD0); // heej
 				manual_function=5;
 				
 				break;
-			case 0x0f :
-						
+			case 0x0f :							// GUI skickar en extra byte där vi behandlar knapparna "man/auto" samt "start" (av/på)
+				if(i2c_data[1]==0xf0){
+					if(start==1){
+						start=0;
+					}
+					else{
+						start=1;
+					}
+				}
+				else if(i2c_data[1]==0x0f){
+					if(drive_mode==1){
+						drive_mode=0;
+						start=0;
+					}
+					else{
+						drive_mode=1;
+					}
+				}
+				else if(i2c_data[1]==0x00){			// Ändra P och D konstant för linje
+					d_constant = i2c_data[2];
+					p_constant = i2c_data[3];
+				}
+				else if(i2c_data[1]==0x01){			// Ändra P och D konstant för labyrint
+					d_constant_lab = i2c_data[2];
+					p_constant_lab = i2c_data[3];
+				}
+				else if(i2c_data[1]==0x02){
+					left = i2c_data[2];
+					right = i2c_data[3];
+					/*if((left < 0) || (right < 0)){		// safe för att inte användaren kan mata in negativa värden
+						left = abs(left);
+						right = abs(right);
+					}*/
+				}
+				
 				break;		
 			default :
 				break;
