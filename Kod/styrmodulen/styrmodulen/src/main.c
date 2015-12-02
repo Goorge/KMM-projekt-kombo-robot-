@@ -55,7 +55,7 @@ int main(void)
 	sei();
 	//***********Set motors speed value here *****************
 	left=50;//100;				// kanske räcker med en variable för båda om båda kör exakt lika fort
-	right=45;//93;
+	right=47;//93;
 	//********************************************************
 	motor_left=left;      
 	motor_right=right;
