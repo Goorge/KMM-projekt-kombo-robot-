@@ -33,16 +33,6 @@ int Reflex_data;			// reflexsensor data
 #include "i2c_master.c"
 
 
-//*********************************for test only
-int count_arre=0;
-int arre[] = {	-5,	-5, -5, -5, -3,
-				-3, -5,  -3,  -5, -3,
-				-2,  -1,  0,  0, 0,
-				0,  0,  0,  0, 0,
-				0,  0, 0,  0, 0,
-				5,  4,  3,  2, 0 };
-//*********************************for test only
-
 int main(void)
 {
 	interrupt_init();
@@ -55,10 +45,11 @@ int main(void)
 	left=50;//100;				// kanske räcker med en variable för båda om båda kör exakt lika fort
 	right=47;//93;
 	//********************************************************
-	motor_left=left;      
+	motor_left=left;
 	motor_right=right;
 	while(1){
-		i2c_handel_data();  //test av fregulito	
+		i2c_handel_data();  //test av fregulito
+			
 			if(drive_mode == 1){						// Drivemode is auto    // (drive_mode == 1 && start == 1)
 				PORTB &= ~(1 << motor_dir_left);		// Set motor direction to forward
 				PORTB &= ~(1 << motor_dir_right);		// Set motor direction to forward

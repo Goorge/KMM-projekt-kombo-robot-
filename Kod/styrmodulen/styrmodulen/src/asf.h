@@ -82,7 +82,6 @@ extern int start;
 extern int current_position;
 extern int left;
 extern int right;
-extern int count_arre;
 extern int count_waypoint;
 extern int gyro_turn;
 extern int waypoint;

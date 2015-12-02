@@ -7,8 +7,8 @@ int current_error=0;
 int derivate=0;
 int output=0;
 int previous_error=0;
-int p_constant=200;  
-int d_constant=-13 ; 
+int p_constant=1;  
+int d_constant=1 ; 
 int current_position=0;
 int scaler=0;
 int dt = 10;			// 100ms loop time
@@ -17,7 +17,7 @@ int dt = 10;			// 100ms loop time
 	 
 void linje(void){
 	//**********Scaler, depends on P and D, check with matlab to get output to be : (output = speedvalue - 20)****
-	scaler = 20; //testa i matlab, nya derivatan med dt ger mycket högre värden
+	scaler = 1; //testa i matlab, nya derivatan med dt ger mycket högre värden
 	//************************************************************************************************************
 	cli();
 	int current_position_tmp = current_position;
@@ -32,7 +32,7 @@ void linje(void){
 //***********************************		
 		if(output < 0){									// Utsignalen är negativ, beror på derivatan bl.a
 				if(abs(output) >= right){				// För att unvika mättnad i regleringen
-					output=right*(1/8);					// Sätta något lågt värde men så att den inte stänger av motorn helt...
+					output=0;					// Sätta något lågt värde men så att den inte stänger av motorn helt...
 					motor_left = left;
 				}
 				else {
@@ -42,7 +42,7 @@ void linje(void){
 		}
 		else if(output > 0){							// Utsignalen är posetiv, beror på derivatan bl.a
 				if(abs(output) >= left){				// För att unvika mättnad i regleringen
-					output=left*(1/8);
+					output=0;
 					motor_left = right;
 				}
 				else {

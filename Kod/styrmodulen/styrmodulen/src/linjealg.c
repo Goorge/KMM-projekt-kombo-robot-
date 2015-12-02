@@ -1,6 +1,6 @@
 
 signed char linje_RGBsveng();
-signed char linje_get_error();
+int linje_get_error();
 bool detect_goal();
 bool detect_labyrint();
 bool sekvens_goal_detekted();
@@ -71,9 +71,9 @@ signed char linje_RGBsveng()
 	return styr_fel;
 }
 
-signed char linje_get_error()
+int linje_get_error()
 {
-	signed char styr_fel=0;
+	int styr_fel=0;
 	int fel_antal=0;
 	
 	for(int i=0;i<11;i++)

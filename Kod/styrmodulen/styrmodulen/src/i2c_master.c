@@ -278,6 +278,7 @@ void i2c_handel_data(void){
 				else if(i2c_data[1]==0x0f){
 					if(drive_mode==1){
 						drive_mode=0;
+						start=0;
 					}
 					else{
 						drive_mode=1;
@@ -288,9 +289,18 @@ void i2c_handel_data(void){
 					p_constant = i2c_data[3];
 				}
 				else if(i2c_data[1]==0x01){			// Ändra P och D konstant för labyrint
-					//d_constant = i2c_data[2];
-					//p_constant = i2c_data[3];
+					d_constant_lab = i2c_data[2];
+					p_constant_lab = i2c_data[3];
 				}
+				else if(i2c_data[1]==0x02){
+					left = i2c_data[2];
+					right = i2c_data[3];
+					/*if((left < 0) || (right < 0)){		// safe för att inte användaren kan mata in negativa värden
+						left = abs(left);
+						right = abs(right);
+					}*/
+				}
+				
 				break;		
 			default :
 				break;
