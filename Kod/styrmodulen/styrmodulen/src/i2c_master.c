@@ -215,7 +215,7 @@ void i2c_handel_data(void){
 				//distans_left=i2c_data[1];
 				break;
 			case 0x02 :
-				Reflex_data=(i2c_data[3]<<16)+(i2c_data[2]<<8)+i2c_data[1];
+				Reflex_data = (i2c_data[3]<<16) + (i2c_data[2]<<8) + i2c_data[1];
 				//PORTD ^= (1 << PD0); // heej
 				break;
 			case 0x03 :

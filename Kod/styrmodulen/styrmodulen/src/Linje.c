@@ -27,37 +27,42 @@ void linje(void){
 	if(current_position > 0)
 	PORTD ^= (1 << PD1);
 	current_error = setpoint - current_position_tmp;
-	derivate = (current_error -previous_error)*dt;					// Tror det var dt som saknades för derivatan
-	output = (p_constant*current_error+d_constant*derivate)/scaler;
-	previous_error= current_error;
+	derivate = (current_error -previous_error) * dt;					// Tror det var dt som saknades för derivatan
+	output = (p_constant * current_error + d_constant * derivate) / scaler;
+	previous_error = current_error;
 //***********************************
 //Reglering
 //***********************************		
-		if(output < 0){									// Utsignalen är negativ, beror på derivatan bl.a
-				if(abs(output) >= right){				// För att unvika mättnad i regleringen
-					motor_right=0;					// Sätta något lågt värde men så att den inte stänger av motorn helt...
-					motor_left = left;
-				}
-				else {
-					motor_left = left;
-					motor_right = right + output;
-				}		
+	if(output < 0){									// Utsignalen är negativ, beror på derivatan bl.a
+		if(abs(output) >= right){				// För att unvika mättnad i regleringen
+			motor_right = 0;					// Sätta något lågt värde men så att den inte stänger av motorn helt...
+			motor_left = left;
 		}
-		else if(output > 0){							// Utsignalen är posetiv, beror på derivatan bl.a
-				if(abs(output) >= left){				// För att unvika mättnad i regleringen
-					motor_left=0;
-					motor_left = right;
-				}
-				else {
-					motor_right = right;
-					motor_left = left - output;
-				}
-				
+		else {
+			motor_left = left;
+			motor_right = right + output;
 		}
-		else if(output==0){
-			motor_left = left;																			 //Om nu detta funkar så när den hoppar mellan 0 och +/-1 kommer den köra rakt, kan nog bli lite / \ på linjen men typish rakt :D
+		/*if(-output > right)
+			output = -right;
+		motor_left = left;
+		motor_right = right + output; */
+
+	}
+	else if(output > 0){							// Utsignalen är posetiv, beror på derivatan bl.a
+		if(abs(output) >= left){				// För att unvika mättnad i regleringen
+			motor_left = 0;
+			motor_left = right;
+		}
+		else {
 			motor_right = right;
+			motor_left = left - output;
 		}
-		//PORTD ^= (1 << PD1); // heej
+			
+	}
+	else if(output==0){
+		motor_left = left;																			 //Om nu detta funkar så när den hoppar mellan 0 och +/-1 kommer den köra rakt, kan nog bli lite / \ på linjen men typish rakt :D
+		motor_right = right;
+	}
+	//PORTD ^= (1 << PD1); // heej
 }
 
