@@ -2,7 +2,7 @@
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.ScrollPaneConstants;
-
+import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -23,6 +23,9 @@ import javax.swing.JLabel;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 
 enum listEnum{leftDistance, rightDistance, frontDistance, gyro, leftWheel, rightWheel, line, rgb, garbage};
 enum directions{goForwards, goBackwards, goLeft, goRight, turnLeft, turnRight, StandStill, start, manuell, update_pd_linje, update_pd_labyrint, update_speed}; 
@@ -787,7 +790,10 @@ public class Grafik {
 		frame.getContentPane().add(refresh_com_btn);
 		
 		image_label = new JLabel("");
-		image_label.setIcon(new ImageIcon("img/robot.png"));
+		URL url = Grafik.class.getResource("/images/robot.png");
+		ImageIcon img = new ImageIcon(url);
+
+		image_label.setIcon(img);
 		image_label.setBounds(300, 10, 456, 567);
 		frame.getContentPane().add(image_label);	
 	}
