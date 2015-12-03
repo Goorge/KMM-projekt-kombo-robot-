@@ -7,3 +7,33 @@ Return:[namn,typ]
 Fil:[Kod/Styrmodul/exempel.txt]
 Funktion:[Beskrivning av vad den gör]
 ------
+Funktion:i2c_setup
+Argument:bool master
+Return:void
+Fil:styrmodulen/i2c_master.c
+Funktion:initierar avbrot för request to send från slavar, sätter dataöverföringshastighet och sättet i2c modulen som master
+------
+Funktion:i2c_send
+Argument:byte prossesor,byte data[]
+Return: lyckad? bool 
+Fil:styrmodulen/i2c_master.c
+Funktion: Skickar data till prosessor med input adress retunerar true om den lyckas
+------
+Funktion:i2c_recive
+Argument:byte prossesor
+Return: data byte 
+Fil:styrmodulen/i2c_master.c
+Funktion: tar emot data från prssesor och retunerar en byte med data motagen
+------
+Funktion:i2c_store_data
+Argument:byte data
+Return: void
+Fil:styrmodulen/i2c_master.c
+Funktion: sätter ihop motagen data till char aray som sparas i i2c_data och stter i2c_newdata när en aray är motagen
+------
+Funktion:i2c_handel_data
+Argument:void
+Return: void
+Fil:styrmodulen/i2c_master.c
+Funktion: kollar om i2c_newdata är satt om den är det så sparar den undan i2c_data i rätt global variabel och skickar vidare data vid behov
+------
