@@ -2,9 +2,9 @@
 #include <avr/io.h>
 #include "asf.h"
 
-int previous_error_lab= 0;
-int p_constant_lab =20;
-int d_constant_lab =6;
+int previous_error_lab = 0;
+int p_constant_lab = 20;
+int d_constant_lab = 6;
 int current_error_lab;
 int output_tmp;
 int derivate;
@@ -18,11 +18,11 @@ void PD_for_lab(int distance_left,int distance_right){
 	output_tmp = p_constant_lab * current_error_lab + d_constant_lab * derivate;
 	previous_error_lab = current_error_lab;
 
-	if(output_tmp >= motor_left*3/4)
-		output_tmp=motor_left*3/4;
+	if(output_tmp >= motor_left)
+		output_tmp = motor_left;
 
-	if(output_tmp <= (-motor_right)*3/4)
-		output_tmp = (-motor_right)*3/4;
+	if(output_tmp <= (-motor_right))
+		output_tmp = (-motor_right);
 
 	if(output_tmp > 0){
 		motor_left = left - output_tmp;
@@ -34,9 +34,9 @@ void PD_for_lab(int distance_left,int distance_right){
 		motor_right = right + output_tmp;
 	}
 
-	else if(output_tmp ==0)
+	else if(output_tmp == 0)
 	{
-		motor_left=left;
-		motor_right=right;
+		motor_left = left;
+		motor_right = right;
 	}
 }

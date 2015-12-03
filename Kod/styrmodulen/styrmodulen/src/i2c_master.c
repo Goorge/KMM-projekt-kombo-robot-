@@ -201,22 +201,14 @@ void i2c_handel_data(void){
 				batteri=i2c_data[1],i2c_data[2];
 				break;
 			case 0x01 :
-				//PORTD ^= (1 << PD0);
-				sensor_right = i2c_data[3];
-				//distans_right=i2c_data[3];
+				//sensor_right = i2c_data[3];
+				distans_right=i2c_data[3];
 				distans_fram = i2c_data[2];
-				sensor_left = i2c_data[1];
-				//if(sensor_right > 20)
-					//PORTD |= (1 << PD0);
-				//else if(sensor_right > 30)
-					//PORTD &= ~(1 << PD0);
-				//else
-				//PORTD &= ~(1 << PD0);
-				//distans_left=i2c_data[1];
+				//sensor_left = i2c_data[1];
+				distans_left=i2c_data[1];
 				break;
 			case 0x02 :
 				Reflex_data = (i2c_data[3]<<16) + (i2c_data[2]<<8) + i2c_data[1];
-				//PORTD ^= (1 << PD0); // heej
 				break;
 			case 0x03 :
 				RGB_data=1;//"röd";"

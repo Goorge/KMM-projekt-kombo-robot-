@@ -13,9 +13,9 @@ int sensor_right;
                  
 void labyreg(){
 	cli();
-	int sensor_front_tmp = sensor_front;
-	int sensor_right_tmp = sensor_right;
-	int sensor_left_tmp = sensor_left;
+	int sensor_front_tmp = distans_fram;
+	int sensor_right_tmp = distans_right;
+	int sensor_left_tmp = distans_left;
 	sei();
 	
 	int st_value = 40;
