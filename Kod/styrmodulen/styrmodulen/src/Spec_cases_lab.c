@@ -36,7 +36,6 @@ void drive_forward(void){
 	PORTB &= ~(1 << motor_dir_right);
 	motor_left = left;
 	motor_right = right;
-	
 }
 
 void stand_still(void){
@@ -44,8 +43,8 @@ void stand_still(void){
 	PORTB &= ~(1 << motor_dir_right);
 	motor_left = 0;
 	motor_right = 0;
-	
 }
+
 // Snabb dator LOL!
 //-------------------------------------
 //Funktioner som kommer styra roboten vid specialfall som tillexempel t-korsning eller en vanlig sväng

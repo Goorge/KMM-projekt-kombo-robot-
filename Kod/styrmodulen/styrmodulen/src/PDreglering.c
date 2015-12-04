@@ -3,7 +3,7 @@
 #include "asf.h"
 
 
-int regulator_mode=0;
+int regulator_mode = 1;
 
 
 void regulator(){

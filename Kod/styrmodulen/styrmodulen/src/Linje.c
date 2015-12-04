@@ -35,10 +35,12 @@ void linje(void){
 //***********************************		
 	if(output < 0){									// Utsignalen är negativ, beror på derivatan bl.a
 		if(abs(output) >= right){				// För att unvika mättnad i regleringen
-			motor_right = 0;					// Sätta något lågt värde men så att den inte stänger av motorn helt...
+			PORTB |= (1 << motor_dir_right);		// Set motor direction to backward
+			motor_right = -output - right;					// Sätta något lågt värde men så att den inte stänger av motorn helt...
 			motor_left = left;
 		}
 		else {
+			PORTB &= ~(1 << motor_dir_right);
 			motor_left = left;
 			motor_right = right + output;
 		}
@@ -50,14 +52,15 @@ void linje(void){
 	}
 	else if(output > 0){							// Utsignalen är posetiv, beror på derivatan bl.a
 		if(abs(output) >= left){				// För att unvika mättnad i regleringen
-			motor_left = 0;
+			PORTB |= (1 << motor_dir_left);		// Set motor direction to backward
+			motor_right = output - left;					// Sätta något lågt värde men så att den inte stänger av motorn helt...
 			motor_left = right;
 		}
 		else {
+			PORTB &= ~(1 << motor_dir_left); //framåt?
 			motor_right = right;
 			motor_left = left - output;
 		}
-			
 	}
 	else if(output==0){
 		motor_left = left;																			 //Om nu detta funkar så när den hoppar mellan 0 och +/-1 kommer den köra rakt, kan nog bli lite / \ på linjen men typish rakt :D
