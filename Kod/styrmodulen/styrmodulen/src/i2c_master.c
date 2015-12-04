@@ -275,6 +275,7 @@ void i2c_handel_data(void){
 					}
 					else{
 						drive_mode=1;
+						start=0;
 					}
 				}
 				else if(i2c_data[1]==0x00){			// Ändra P och D konstant för linje
