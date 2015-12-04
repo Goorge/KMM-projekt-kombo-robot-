@@ -143,8 +143,8 @@ public class Grafik {
 		switch (data[0] & 0x0f){
 		case (byte)0x00: // Batteri
 			// Värdet / 51.2
-			double b1 = data[1] / 51.2;
-			double b2 = data[2] / 51.2;
+			double b1 = (data[1] & 0xff) / 51.0;
+			double b2 = (data[2] & 0xff) / 51.0;
 			
 			battery1_text_label.setText(Double.toString(b1));
 			battery2_text_label.setText(Double.toString(b2));
@@ -156,7 +156,7 @@ public class Grafik {
 			if(b2 <= 3.7)
 				battery2_label.setBackground(Color.red);
 			else
-				battery1_label.setBackground(Color.green);
+				battery2_label.setBackground(Color.green);
 			break;
 		case (byte)0x01: // Avståndssensorer
 			// vänster, rakt fram, höger
@@ -789,13 +789,13 @@ public class Grafik {
 		refresh_com_btn.setBounds(300, 575, 200, 22);
 		frame.getContentPane().add(refresh_com_btn);
 		
-		image_label = new JLabel("");
-		URL url = Grafik.class.getResource("/images/robot.png");
-		ImageIcon img = new ImageIcon(url);
+		//image_label = new JLabel("");
+		//URL url = Grafik.class.getResource("/images/robot.png");
+		//ImageIcon img = new ImageIcon(url);
 
-		image_label.setIcon(img);
-		image_label.setBounds(300, 10, 456, 567);
-		frame.getContentPane().add(image_label);	
+		//image_label.setIcon(img);
+		//image_label.setBounds(300, 10, 456, 567);
+		//frame.getContentPane().add(image_label);	
 	}
 }
 

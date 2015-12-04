@@ -79,7 +79,7 @@ extern int counter_timer;
 extern int manual_function;
 extern int drive_mode;
 extern int start;
-extern int current_position;
+extern float current_position;
 extern int left;
 extern int right;
 extern int count_waypoint;

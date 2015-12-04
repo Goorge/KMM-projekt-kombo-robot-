@@ -70,20 +70,27 @@ signed char linje_RGBsveng()
 }
 
 int linje_get_error(){
-	int styr_fel=0;
+	float styr_fel=0;
 	int fel_antal=0;
 	cli();
 	int Reflex_data_tmp = Reflex_data;
+	int Reflex_data2_tmp = Reflex_data2;
 	sei();
 	for(int i=0;i<11;i++)
 	{
-		styr_fel += ((5-i) * ((Reflex_data_tmp>>(i*2))&3));
-		fel_antal += ((Reflex_data_tmp>>(i*2))&0x3);
+		if(i < 8){
+			styr_fel += ((5-i) * ((Reflex_data_tmp>>(i*2))&3));
+			fel_antal += ((Reflex_data_tmp>>(i*2))&0x3);
+		}
+		else{
+			styr_fel += ((5-i) * ((Reflex_data2_tmp>>((i-8)*2))&3));
+			fel_antal += ((Reflex_data2_tmp>>((i-8)*2))&0x3);
+		}
 	}
 	if (fel_antal == 0)
 		styr_fel = 0;
 	else
-		styr_fel = styr_fel / fel_antal;
+		styr_fel /= fel_antal;
 	return styr_fel;
 }
 

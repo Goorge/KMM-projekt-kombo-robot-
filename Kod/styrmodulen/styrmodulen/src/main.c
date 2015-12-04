@@ -21,7 +21,7 @@ byte distans_right;			// data avstånd höger
 byte distans_left;			// data avstånd vänster
 byte RGB_data;				// vilken färg som är detekterad
 int Reflex_data;			// reflexsensor data
-
+int Reflex_data2;
 
 #include "linjealg.c"
 #include "PDreglering.c"

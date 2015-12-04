@@ -3,13 +3,13 @@
 #include "asf.h"
 
 int setpoint=0; // refpunkten i mitten
-int current_error=0;
-int derivate=0;
+float current_error=0;
+float derivate=0;
 int output=0;
-int previous_error=0;
+float previous_error = 0;
 int p_constant=1;  
 int d_constant=1 ; 
-int current_position=0;
+float current_position = 0;
 int scaler=0;
 int dt = 10;			// 100ms loop time
 
@@ -23,9 +23,9 @@ void linje(void){
 	int current_position_tmp = current_position;
 	sei();
 	if(current_position < 0)
-	PORTD ^= (1 << PD0);
+		PORTD ^= (1 << PD0);
 	if(current_position > 0)
-	PORTD ^= (1 << PD1);
+		PORTD ^= (1 << PD1);
 	current_error = setpoint - current_position_tmp;
 	derivate = (current_error -previous_error) * dt;					// Tror det var dt som saknades för derivatan
 	output = (p_constant * current_error + d_constant * derivate) / scaler;
@@ -35,12 +35,12 @@ void linje(void){
 //***********************************		
 	if(output < 0){									// Utsignalen är negativ, beror på derivatan bl.a
 		if(abs(output) >= right){				// För att unvika mättnad i regleringen
-			PORTB |= (1 << motor_dir_right);		// Set motor direction to backward
-			motor_right = -output - right;					// Sätta något lågt värde men så att den inte stänger av motorn helt...
+			//PORTB |= (1 << motor_dir_right);		// Set motor direction to backward
+			motor_right = 0;//abs(output) - right;					// Sätta något lågt värde men så att den inte stänger av motorn helt...
 			motor_left = left;
 		}
 		else {
-			PORTB &= ~(1 << motor_dir_right);
+			//PORTB &= ~(1 << motor_dir_right);
 			motor_left = left;
 			motor_right = right + output;
 		}
@@ -51,13 +51,13 @@ void linje(void){
 
 	}
 	else if(output > 0){							// Utsignalen är posetiv, beror på derivatan bl.a
-		if(abs(output) >= left){				// För att unvika mättnad i regleringen
-			PORTB |= (1 << motor_dir_left);		// Set motor direction to backward
-			motor_right = output - left;					// Sätta något lågt värde men så att den inte stänger av motorn helt...
-			motor_left = right;
+		if(output >= left){				// För att unvika mättnad i regleringen
+			//PORTB |= (1 << motor_dir_left);		// Set motor direction to backward
+			motor_left = 0;//output - left;					// Sätta något lågt värde men så att den inte stänger av motorn helt...
+			motor_right = right;
 		}
 		else {
-			PORTB &= ~(1 << motor_dir_left); //framåt?
+			//PORTB &= ~(1 << motor_dir_left); //framåt?
 			motor_right = right;
 			motor_left = left - output;
 		}
