@@ -71,8 +71,8 @@
 // Define , rename 
 #define motor_left (OCR0A)
 #define motor_right (OCR0B)
-#define motor_dir_left (PB5)
-#define motor_dir_right (PB6)
+#define motor_dir_left (PB6)
+#define motor_dir_right (PB5)
 // Global variables
 extern int regler_ready;
 extern int counter_timer;

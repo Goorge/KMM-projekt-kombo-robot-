@@ -116,6 +116,27 @@ bool detect_goal(){// brettar om robotten är i mål eller inte
 			static int time;
 			static int count;
 		#endif
+	// ***************************************Ny mål algorithm, kan funka mabe***********************************************'	
+	if(sekvens_goal_detekted() == true && (count == 0)){			// Kollar om counter är 0, alltså första indikeringen
+		counter_goal_line = 0;										// Nollar timern som sitter i timerintrerruptet, ISR för timern sker 10ggr per sekund
+		count++;						
+		return false;
+	}	
+	else if(sekvens_goal_detekted() == true && (count == 1)&& (counter_goal_line < 20)){	// Kontroll görs att timer countern inte passerat tiden X (just nu inom 2sekunder) innan nästa indikering
+		count++;
+		return false;
+	}
+	else if(sekvens_goal_detekted() == true && (count == 2)&& (counter_goal_line < 20)){	// Kontroll görs att timer countern inte passerat tiden X (just nu inom 2sekunder) innan nästa indikering
+		count = 0;
+		return true;																		// Om tre korsningar har passerats inom tiden av X kommer mål indikeras
+	}
+	else if(counter_goal_line >= 20){								// Timeout, tiden har passerat. Alltså inget mål utan bara en T korsning
+		count = 0;
+		return false;
+	}
+	// ************************************************************************************************************************'
+		
+	/*	
 	if(sekvens_goal_detekted() == true && ((count == 0) | (count == 2))){ //linje 1(count=0) eller 2(count=2) upptäkt procid
 			count++;
 			time++;
@@ -138,7 +159,7 @@ bool detect_goal(){// brettar om robotten är i mål eller inte
 		time=0;
 		count=0;
 		return false;
-	}
+	}*/
 }
 
 bool sekvens_goal_detekted(){

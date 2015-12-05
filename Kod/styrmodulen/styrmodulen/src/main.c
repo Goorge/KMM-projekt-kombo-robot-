@@ -12,6 +12,7 @@ int regler_ready = 0;			// Ready for new values from sensors if 1
 int gyro_turn = 0;			// When 1 the gyro has turned 90 degree
 int count_waypoint = 0;		// Time to move away from waypoint
 int counter_timer = 0;		// Counter for how long time a manual function going to run
+int counter_goal_line=0;
 
 bool gyro_90;				//om gyro har svängt 90 grader
 byte batteri;				//batteri nivå
