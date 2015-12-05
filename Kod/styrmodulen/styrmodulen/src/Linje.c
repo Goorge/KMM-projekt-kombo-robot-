@@ -5,13 +5,13 @@
 int setpoint=0; // refpunkten i mitten
 float current_error=0;
 float derivate=0;
-int output=0;
+int output=0; //vad motorenrna ska regleras med
 float previous_error = 0;
 int p_constant=1;  
 int d_constant=1 ; 
 float current_position = 0;
-int scaler=0;
-int dt = 1;			// 100ms loop time
+int scaler=1;
+int dt = 1;			// 100ms loop time (kanske)
 
 
 	 
@@ -33,7 +33,13 @@ void linje(void){
 //***********************************
 //Reglering
 //***********************************		
-	if(output < 0){									// Utsignalen är negativ, beror på derivatan bl.a
+	if (fel_antal==0){ //om utanför linje behöver kanske en tidsbegränsning 
+		PORTB |= (1 << motor_dir_left); //baka tillbaka till linjen för hoppnngsvis
+		PORTB |= (1 << motor_dir_right);
+		motor_left = left/2;
+		motor_right = right/2;
+	}
+	else if(output < 0){									// Utsignalen är negativ, beror på derivatan bl.a
 		if(abs(output) >= right){				// För att unvika mättnad i regleringen
 			PORTB |= (1 << motor_dir_left);		// Set motor direction to backward
 			PORTB &= ~(1 << motor_dir_right);		// Set motor direction to forward
