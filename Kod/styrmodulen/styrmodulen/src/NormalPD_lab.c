@@ -2,28 +2,51 @@
 #include <avr/io.h>
 #include "asf.h"
 
-int previous_error_lab = 0;
-int p_constant_lab = 20;
-int d_constant_lab = 6;
+int previous_error_lab_right = 0;
+int previous_error_lab_left = 0;
+int p_constant_lab = 80;
+int d_constant_lab = 30;
 int current_error_lab;
-int output_tmp;
+int output_right;
+int output_left;
 float derivate;
-int distance_wall_right = 20;
-
+int distance_wall_desired = 20;
+int previous_errors_left[5];
+int previous_errors_right[5];
+int error_count=0;
 
 void PD_for_lab(int distance_left,int distance_right){
-	current_error_lab = distance_left - distance_right; //-sensor_left_tmp
-	derivate = (current_error_lab - previous_error_lab);///10; //
-	output_tmp = p_constant_lab * current_error_lab + d_constant_lab * derivate;
-	previous_error_lab = current_error_lab;
+	//räkna ut fel höger
+	current_error_lab = distance_wall_desired - distance_right; //-sensor_left_tmp
+	derivate = current_error_lab - previous_errors_right[error_count];///10; //
+	output_right = (p_constant_lab * current_error_lab + d_constant_lab * derivate)/10;
+	previous_errors_right[error_count] = current_error_lab;
 
-	if(output_tmp >= motor_left)
-		output_tmp = motor_left;
+	//räkna ut fel vänster
+	current_error_lab = distance_wall_desired - distance_left; //-sensor_left_tmp
+	derivate = (current_error_lab - previous_errors_left[error_count]);///10; //
+	output_left = (p_constant_lab * current_error_lab + d_constant_lab * derivate)/10.0;
+	previous_errors_left[error_count] = current_error_lab;
+	
+	
+	if(++error_count ==5)
+		error_count=0;
+	if(output_left >= 0)
+		output_left = 0;
+	
+	else if(output_left <= (-motor_left))
+		output_left = -motor_left;
+	
+	if(output_right >= 0)
+		output_right = 0;
+	
+	else if(output_right <= (-motor_right))
+		output_right = -motor_right;
 
-	if(output_tmp <= (-motor_right))
-		output_tmp = (-motor_right);
 
-	if(output_tmp > 0){
+	motor_left = left + output_left;
+	motor_right = right + output_right;
+	/*if(output_tmp > 0){
 		motor_left = left - output_tmp;
 		motor_right = right;
 	}
@@ -37,5 +60,5 @@ void PD_for_lab(int distance_left,int distance_right){
 	{
 		motor_left = left;
 		motor_right = right;
-	}
+	}*/
 }
