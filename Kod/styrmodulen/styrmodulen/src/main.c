@@ -4,15 +4,14 @@
 #include <compat/twi.h>
 typedef unsigned char byte;
 // Global variables
-int drive_mode=0;			// Manual or auto mode
-int start=0;				// Start and stop
-int left=0;					// Set speed for left motor
-int right=0;				// Set speed for right motor
-int regler_ready=0;			// Ready for new values from sensors if 1
-int gyro_turn=0;			// When 1 the gyro has turned 90 degree
-int count_waypoint=0;		// Time to move away from waypoint
-int counter_timer=0;		// Counter for how long time a manual function going to run
-//int regulator_mode=1;		//redan definerad i PDreglering
+int drive_mode = 0;			// Manual or auto mode
+int start = 0;				// Start and stop
+int left = 0;					// Set speed for left motor
+int right = 0;				// Set speed for right motor
+int regler_ready = 0;			// Ready for new values from sensors if 1
+int gyro_turn = 0;			// When 1 the gyro has turned 90 degree
+int count_waypoint = 0;		// Time to move away from waypoint
+int counter_timer = 0;		// Counter for how long time a manual function going to run
 
 bool gyro_90;				//om gyro har svängt 90 grader
 byte batteri;				//batteri nivå
@@ -22,7 +21,7 @@ byte distans_left;			// data avstånd vänster
 byte RGB_data;				// vilken färg som är detekterad
 int Reflex_data;			// reflexsensor data
 int Reflex_data2;
-int regulator_mode = 1;   //1=linje, 0=labyrint
+int regulator_mode = 0;		//1=linje, 0=labyrint
 
 #include "linjealg.c"
 #include "PDreglering.c"
@@ -53,20 +52,19 @@ int main(void)
 	while(1){
 		i2c_handel_data();  //test av fregulito
 		RGB_data=3;	
-			if(drive_mode == 1){						// Drivemode is auto    // (drive_mode == 1 && start == 1)
-				
-				//current_position = arre[count_arre];	// används för att simulera linjeföljning, arrayen ändras i globala
-				if(regler_ready==1 && start == 1){
-					regulator();
-					regler_ready=0;	
-				}
-				else if(start == 0){					// if start is zero then turn off the auto, stops motors
-					motor_left=0;
-					motor_right=0;
+		if(drive_mode == 1){						// Drivemode is auto    // (drive_mode == 1 && start == 1)
+			//current_position = arre[count_arre];	// används för att simulera linjeföljning, arrayen ändras i globala
+			if(regler_ready == 1 && start == 1){
+				regulator();
+				regler_ready = 1;	
+			}
+			else if(start == 0){					// if start is zero then turn off the auto, stops motors
+				motor_left=0;
+				motor_right=0;
 				}
 			}
-			else if(drive_mode==0){										// Drivemode is manual
-				manual_drive();
-			}
+		else if(drive_mode==0){										// Drivemode is manual
+			manual_drive();
+		}
 	}
 }

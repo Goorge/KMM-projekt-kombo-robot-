@@ -54,7 +54,7 @@ int main(void){
 	  do_kalibrering = FALSE;
 	}
 	
-	if(counter++ == 10){
+	if(counter++ >= 1){
 		//_delay_ms(1);
 		//read_rgb();
 		//_delay_ms(1);
@@ -63,7 +63,7 @@ int main(void){
 		avstand = true;
 	}
 	if(reflex)
-		read_reflex_sensors();	
+		//read_reflex_sensors();	
 	if(avstand) 
 		read_avstand_sensor();
       //_delay_ms(40);
