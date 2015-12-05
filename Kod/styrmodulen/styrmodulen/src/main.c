@@ -45,14 +45,14 @@ int main(void)
 	i2c_setup(1);
 	sei();
 	//***********Set motors speed value here *****************
-	left=50;//100;				// kanske räcker med en variable för båda om båda kör exakt lika fort
-	right=47;//93;
+	left=130;				// kanske räcker med en variable för båda om båda kör exakt lika fort
+	right=120;
 	//********************************************************
 	motor_left=left;
 	motor_right=right;
 	while(1){
 		i2c_handel_data();  //test av fregulito
-			
+		RGB_data=3;	
 			if(drive_mode == 1){						// Drivemode is auto    // (drive_mode == 1 && start == 1)
 				
 				//current_position = arre[count_arre];	// används för att simulera linjeföljning, arrayen ändras i globala

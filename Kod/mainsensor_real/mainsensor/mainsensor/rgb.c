@@ -22,21 +22,21 @@ void read_rgb()
 	color_value = read_adc(1); //röd
 	if(color_value > 40)
 	{	
-		data_to_send[1] = 0x03;
+		data_to_send[0] = 0x03;
 		i2c_requestToSend(0x04, data_to_send);	//skickar röd med I2C
 	}
 	
 	color_value = read_adc(2); //grön
 	if(color_value > 20)
 	{
-		data_to_send[1] = 0x04;
+		data_to_send[0] = 0x04;
 		i2c_requestToSend(0x04, data_to_send);	//skickar grön med I2C
 	}
 	
 	color_value = read_adc(3); //blå
 	if(color_value > 40)
 	{
-		data_to_send[1] = 0x04;
+		data_to_send[0] = 0x05;
 		i2c_requestToSend(0x04, data_to_send);	//skickar blå med I2C
 	}
 }

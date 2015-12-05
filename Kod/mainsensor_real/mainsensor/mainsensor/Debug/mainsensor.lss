@@ -3,31 +3,31 @@ mainsensor.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000002  00800100  000008b2  00000946  2**0
+  0 .data         00000002  00800100  00000846  000008da  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000008b2  00000000  00000000  00000094  2**1
+  1 .text         00000846  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          0000004d  00800102  00800102  00000948  2**0
+  2 .bss          0000004d  00800102  00800102  000008dc  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000948  2**0
+  3 .comment      00000030  00000000  00000000  000008dc  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000978  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  0000090c  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000100  00000000  00000000  000009b8  2**0
+  5 .debug_aranges 00000100  00000000  00000000  0000094c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000f76  00000000  00000000  00000ab8  2**0
+  6 .debug_info   00000f2f  00000000  00000000  00000a4c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000002d5  00000000  00000000  00001a2e  2**0
+  7 .debug_abbrev 000002e4  00000000  00000000  0000197b  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000c01  00000000  00000000  00001d03  2**0
+  8 .debug_line   00000bcb  00000000  00000000  00001c5f  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000300  00000000  00000000  00002904  2**2
+  9 .debug_frame  00000300  00000000  00000000  0000282c  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000004d4  00000000  00000000  00002c04  2**0
+ 10 .debug_str    000004f6  00000000  00000000  00002b2c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000d02  00000000  00000000  000030d8  2**0
+ 11 .debug_loc    00000cb8  00000000  00000000  00003022  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000f0  00000000  00000000  00003dda  2**0
+ 12 .debug_ranges 000000f0  00000000  00000000  00003cda  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -35,7 +35,7 @@ Disassembly of section .text:
 00000000 <__vectors>:
    0:	45 c0       	rjmp	.+138    	; 0x8c <__ctors_end>
    2:	00 00       	nop
-   4:	c5 c3       	rjmp	.+1930   	; 0x790 <__vector_1>
+   4:	9a c3       	rjmp	.+1844   	; 0x73a <__vector_1>
    6:	00 00       	nop
    8:	5e c0       	rjmp	.+188    	; 0xc6 <__bad_interrupt>
    a:	00 00       	nop
@@ -116,7 +116,7 @@ Disassembly of section .text:
   98:	11 e0       	ldi	r17, 0x01	; 1
   9a:	a0 e0       	ldi	r26, 0x00	; 0
   9c:	b1 e0       	ldi	r27, 0x01	; 1
-  9e:	e2 eb       	ldi	r30, 0xB2	; 178
+  9e:	e6 e4       	ldi	r30, 0x46	; 70
   a0:	f8 e0       	ldi	r31, 0x08	; 8
   a2:	00 e0       	ldi	r16, 0x00	; 0
   a4:	0b bf       	out	0x3b, r16	; 59
@@ -140,19 +140,18 @@ Disassembly of section .text:
   bc:	af 34       	cpi	r26, 0x4F	; 79
   be:	b2 07       	cpc	r27, r18
   c0:	e1 f7       	brne	.-8      	; 0xba <.do_clear_bss_loop>
-  c2:	bb d3       	rcall	.+1910   	; 0x83a <main>
-  c4:	f4 c3       	rjmp	.+2024   	; 0x8ae <_exit>
+  c2:	90 d3       	rcall	.+1824   	; 0x7e4 <main>
+  c4:	be c3       	rjmp	.+1916   	; 0x842 <_exit>
 
 000000c6 <__bad_interrupt>:
-  c6:	87 c3       	rjmp	.+1806   	; 0x7d6 <__vector_default>
+  c6:	5c c3       	rjmp	.+1720   	; 0x780 <__vector_default>
 
 000000c8 <mux_init>:
-	}
-	uint8_t data_to_send[1];
-	data_to_send[1] = 0x06;	
+	data_to_send[1] = battery_cell_1;
+	data_to_send[2] = battery_cell_2;
+		
 	i2c_requestToSend(0x04, data_to_send);
-	degrees_rotated_34 = 0;
-}
+	//skicka helvetet
   c8:	84 b1       	in	r24, 0x04	; 4
   ca:	8f 60       	ori	r24, 0x0F	; 15
   cc:	84 b9       	out	0x04, r24	; 4
@@ -378,24 +377,13 @@ Disassembly of section .text:
  2ac:	08 95       	ret
 
 000002ae <init_timer0>:
-
-void init_timer0()
-{
-	PRESCALE_1024;	//Prescale 1024
  2ae:	85 b5       	in	r24, 0x25	; 37
  2b0:	85 60       	ori	r24, 0x05	; 5
  2b2:	85 bd       	out	0x25, r24	; 37
-	INIT_COUNTER;							//Init counter
  2b4:	16 bc       	out	0x26, r1	; 38
  2b6:	08 95       	ret
 
 000002b8 <kalibrering>:
-
-#define F_CPU 14.7456E6
-#include <util/delay.h>
-
-void kalibrering()
-{
  2b8:	ff 92       	push	r15
  2ba:	0f 93       	push	r16
  2bc:	1f 93       	push	r17
@@ -403,27 +391,11 @@ void kalibrering()
  2c0:	df 93       	push	r29
  2c2:	0f e2       	ldi	r16, 0x2F	; 47
  2c4:	11 e0       	ldi	r17, 0x01	; 1
-  uint8_t lowest_value;
-  //uint8_t reflex_values[11];
-  uint8_t diff;
-  uint8_t i;
-	
-  for(i=0; i<11; ++i)
  2c6:	f1 2c       	mov	r15, r1
-    {
-      lowest_value = mux_sensors(i);
-	  diff = (highest_value - lowest_value)/4;
  2c8:	cd ec       	ldi	r28, 0xCD	; 205
  2ca:	d0 e0       	ldi	r29, 0x00	; 0
-  uint8_t diff;
-  uint8_t i;
-	
-  for(i=0; i<11; ++i)
-    {
-      lowest_value = mux_sensors(i);
  2cc:	8f 2d       	mov	r24, r15
  2ce:	1e df       	rcall	.-452    	; 0x10c <mux_sensors>
-	  diff = (highest_value - lowest_value)/4;
  2d0:	ae 01       	movw	r20, r28
  2d2:	48 1b       	sub	r20, r24
  2d4:	51 09       	sbc	r21, r1
@@ -435,48 +407,26 @@ void kalibrering()
  2e0:	27 95       	ror	r18
  2e2:	35 95       	asr	r19
  2e4:	27 95       	ror	r18
-	  
-	  reflex_kal[i].low = lowest_value + diff;
  2e6:	98 2f       	mov	r25, r24
  2e8:	92 0f       	add	r25, r18
  2ea:	f8 01       	movw	r30, r16
  2ec:	32 97       	sbiw	r30, 0x02	; 2
  2ee:	90 83       	st	Z, r25
-      reflex_kal[i].middle = reflex_kal[i].low + diff;
  2f0:	92 0f       	add	r25, r18
  2f2:	31 96       	adiw	r30, 0x01	; 1
  2f4:	90 83       	st	Z, r25
-      reflex_kal[i].high = reflex_kal[i].middle + diff;
  2f6:	29 0f       	add	r18, r25
  2f8:	f8 01       	movw	r30, r16
  2fa:	20 83       	st	Z, r18
-  uint8_t lowest_value;
-  //uint8_t reflex_values[11];
-  uint8_t diff;
-  uint8_t i;
-	
-  for(i=0; i<11; ++i)
  2fc:	f3 94       	inc	r15
  2fe:	0d 5f       	subi	r16, 0xFD	; 253
  300:	1f 4f       	sbci	r17, 0xFF	; 255
  302:	fb e0       	ldi	r31, 0x0B	; 11
  304:	ff 12       	cpse	r15, r31
  306:	e2 cf       	rjmp	.-60     	; 0x2cc <kalibrering+0x14>
-	  reflex_kal[i].low = lowest_value + diff;
-      reflex_kal[i].middle = reflex_kal[i].low + diff;
-      reflex_kal[i].high = reflex_kal[i].middle + diff;
-    }
-	
-	PORTD &= ~(0x60);
  308:	8b b1       	in	r24, 0x0b	; 11
  30a:	8f 79       	andi	r24, 0x9F	; 159
  30c:	8b b9       	out	0x0b, r24	; 11
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
  30e:	2f ef       	ldi	r18, 0xFF	; 255
  310:	8f ef       	ldi	r24, 0xFF	; 255
  312:	98 e0       	ldi	r25, 0x08	; 8
@@ -486,8 +436,6 @@ void kalibrering()
  31a:	e1 f7       	brne	.-8      	; 0x314 <kalibrering+0x5c>
  31c:	00 c0       	rjmp	.+0      	; 0x31e <kalibrering+0x66>
  31e:	00 00       	nop
-	_delay_ms(200);
-	PORTD |= 0x60;
  320:	8b b1       	in	r24, 0x0b	; 11
  322:	80 66       	ori	r24, 0x60	; 96
  324:	8b b9       	out	0x0b, r24	; 11
@@ -500,8 +448,6 @@ void kalibrering()
  332:	e1 f7       	brne	.-8      	; 0x32c <kalibrering+0x74>
  334:	00 c0       	rjmp	.+0      	; 0x336 <kalibrering+0x7e>
  336:	00 00       	nop
-	_delay_ms(500);
-	PORTD &= ~(0x60);
  338:	8b b1       	in	r24, 0x0b	; 11
  33a:	8f 79       	andi	r24, 0x9F	; 159
  33c:	8b b9       	out	0x0b, r24	; 11
@@ -514,8 +460,6 @@ void kalibrering()
  34a:	e1 f7       	brne	.-8      	; 0x344 <kalibrering+0x8c>
  34c:	00 c0       	rjmp	.+0      	; 0x34e <kalibrering+0x96>
  34e:	00 00       	nop
-	_delay_ms(200);
-	PORTD |= 0x60;
  350:	8b b1       	in	r24, 0x0b	; 11
  352:	80 66       	ori	r24, 0x60	; 96
  354:	8b b9       	out	0x0b, r24	; 11
@@ -528,8 +472,6 @@ void kalibrering()
  362:	e1 f7       	brne	.-8      	; 0x35c <kalibrering+0xa4>
  364:	00 c0       	rjmp	.+0      	; 0x366 <kalibrering+0xae>
  366:	00 00       	nop
-	_delay_ms(200);
-	PORTD &= ~(0x60);
  368:	8b b1       	in	r24, 0x0b	; 11
  36a:	8f 79       	andi	r24, 0x9F	; 159
  36c:	8b b9       	out	0x0b, r24	; 11
@@ -542,8 +484,6 @@ void kalibrering()
  37a:	e1 f7       	brne	.-8      	; 0x374 <kalibrering+0xbc>
  37c:	00 c0       	rjmp	.+0      	; 0x37e <kalibrering+0xc6>
  37e:	00 00       	nop
-	_delay_ms(200);
-	PORTD |= 0x60;
  380:	8b b1       	in	r24, 0x0b	; 11
  382:	80 66       	ori	r24, 0x60	; 96
  384:	8b b9       	out	0x0b, r24	; 11
@@ -556,17 +496,9 @@ void kalibrering()
  392:	e1 f7       	brne	.-8      	; 0x38c <kalibrering+0xd4>
  394:	00 c0       	rjmp	.+0      	; 0x396 <kalibrering+0xde>
  396:	00 00       	nop
-	_delay_ms(200);
-	PORTD &= ~(0x60);
  398:	8b b1       	in	r24, 0x0b	; 11
  39a:	8f 79       	andi	r24, 0x9F	; 159
  39c:	8b b9       	out	0x0b, r24	; 11
-    Om vi tar högsta värdet (dvs, där den står på linjen) och tar det 
-    minus det minsta värdet (där den reflekterar som mest, golvet)
-    och delar på 4 så delar vi in i 4 stycken olika intervall, 00, 01, 10 och 11.
-    För att få lite marginal så tar vi halva avståndet uppåt också. 
-  */
-};
  39e:	df 91       	pop	r29
  3a0:	cf 91       	pop	r28
  3a2:	1f 91       	pop	r17
@@ -575,12 +507,6 @@ void kalibrering()
  3a8:	08 95       	ret
 
 000003aa <look_up_value>:
-	}
-}
-
-uint8_t look_up_value(const uint8_t sensor_value, const uint8_t i)
-{
-	if(sensor_value < reflex_kal[i].low)	//00
  3aa:	26 2f       	mov	r18, r22
  3ac:	30 e0       	ldi	r19, 0x00	; 0
  3ae:	f9 01       	movw	r30, r18
@@ -593,23 +519,14 @@ uint8_t look_up_value(const uint8_t sensor_value, const uint8_t i)
  3bc:	90 81       	ld	r25, Z
  3be:	89 17       	cp	r24, r25
  3c0:	40 f4       	brcc	.+16     	; 0x3d2 <look_up_value+0x28>
-	{
-		if(i == 6)
  3c2:	66 30       	cpi	r22, 0x06	; 6
  3c4:	b9 f5       	brne	.+110    	; 0x434 <look_up_value+0x8a>
-		{
-			PORTD &= ~(0x60);
  3c6:	8b b1       	in	r24, 0x0b	; 11
  3c8:	8f 79       	andi	r24, 0x9F	; 159
  3ca:	8b b9       	out	0x0b, r24	; 11
-			PORTD |= 0x20;	
  3cc:	5d 9a       	sbi	0x0b, 5	; 11
-		}
-		return 0x00; //00
  3ce:	80 e0       	ldi	r24, 0x00	; 0
  3d0:	08 95       	ret
-	}
-	else if (sensor_value < reflex_kal[i].middle)	//01
  3d2:	f9 01       	movw	r30, r18
  3d4:	ee 0f       	add	r30, r30
  3d6:	ff 1f       	adc	r31, r31
@@ -620,23 +537,14 @@ uint8_t look_up_value(const uint8_t sensor_value, const uint8_t i)
  3e0:	91 81       	ldd	r25, Z+1	; 0x01
  3e2:	89 17       	cp	r24, r25
  3e4:	40 f4       	brcc	.+16     	; 0x3f6 <look_up_value+0x4c>
-	{	
-		if(i == 6)
  3e6:	66 30       	cpi	r22, 0x06	; 6
  3e8:	39 f5       	brne	.+78     	; 0x438 <look_up_value+0x8e>
-		{
-			PORTD &= ~(0x60);
  3ea:	8b b1       	in	r24, 0x0b	; 11
  3ec:	8f 79       	andi	r24, 0x9F	; 159
  3ee:	8b b9       	out	0x0b, r24	; 11
-			PORTD |= 0x40;
  3f0:	5e 9a       	sbi	0x0b, 6	; 11
-		}
-		return 0x01; //01
  3f2:	81 e0       	ldi	r24, 0x01	; 1
  3f4:	08 95       	ret
-	}
-	else if (sensor_value < reflex_kal[i].high)	//10
  3f6:	f9 01       	movw	r30, r18
  3f8:	ee 0f       	add	r30, r30
  3fa:	ff 1f       	adc	r31, r31
@@ -648,118 +556,58 @@ uint8_t look_up_value(const uint8_t sensor_value, const uint8_t i)
  406:	92 81       	ldd	r25, Z+2	; 0x02
  408:	89 17       	cp	r24, r25
  40a:	50 f4       	brcc	.+20     	; 0x420 <look_up_value+0x76>
-	{
-		if(i == 6)
  40c:	66 30       	cpi	r22, 0x06	; 6
  40e:	b1 f4       	brne	.+44     	; 0x43c <look_up_value+0x92>
-		{
-			PORTD &= ~(0x60);
  410:	8b b1       	in	r24, 0x0b	; 11
  412:	8f 79       	andi	r24, 0x9F	; 159
  414:	8b b9       	out	0x0b, r24	; 11
-			PORTD |= 0x60;
  416:	8b b1       	in	r24, 0x0b	; 11
  418:	80 66       	ori	r24, 0x60	; 96
  41a:	8b b9       	out	0x0b, r24	; 11
-		}
-		return 0x02; //10
  41c:	82 e0       	ldi	r24, 0x02	; 2
  41e:	08 95       	ret
-	}
-	else	//11
-	{
-		if(i == 6)
  420:	66 30       	cpi	r22, 0x06	; 6
  422:	71 f4       	brne	.+28     	; 0x440 <look_up_value+0x96>
-		{
-			PORTD &= ~(0x60);
  424:	8b b1       	in	r24, 0x0b	; 11
  426:	8f 79       	andi	r24, 0x9F	; 159
  428:	8b b9       	out	0x0b, r24	; 11
-			PORTD |= 0x60;
  42a:	8b b1       	in	r24, 0x0b	; 11
  42c:	80 66       	ori	r24, 0x60	; 96
  42e:	8b b9       	out	0x0b, r24	; 11
-		}
-		return 0x03;//11
  430:	83 e0       	ldi	r24, 0x03	; 3
  432:	08 95       	ret
-		if(i == 6)
-		{
-			PORTD &= ~(0x60);
-			PORTD |= 0x20;	
-		}
-		return 0x00; //00
  434:	80 e0       	ldi	r24, 0x00	; 0
  436:	08 95       	ret
-		if(i == 6)
-		{
-			PORTD &= ~(0x60);
-			PORTD |= 0x40;
-		}
-		return 0x01; //01
  438:	81 e0       	ldi	r24, 0x01	; 1
  43a:	08 95       	ret
-		if(i == 6)
-		{
-			PORTD &= ~(0x60);
-			PORTD |= 0x60;
-		}
-		return 0x02; //10
  43c:	82 e0       	ldi	r24, 0x02	; 2
  43e:	08 95       	ret
-		if(i == 6)
-		{
-			PORTD &= ~(0x60);
-			PORTD |= 0x60;
-		}
-		return 0x03;//11
  440:	83 e0       	ldi	r24, 0x03	; 3
-	}
-}
  442:	08 95       	ret
 
 00000444 <package_sensor_data>:
-
-void package_sensor_data(const uint8_t sensor_data, const uint8_t pin)
-{
  444:	cf 93       	push	r28
  446:	df 93       	push	r29
  448:	00 d0       	rcall	.+0      	; 0x44a <package_sensor_data+0x6>
  44a:	00 d0       	rcall	.+0      	; 0x44c <package_sensor_data+0x8>
  44c:	cd b7       	in	r28, 0x3d	; 61
  44e:	de b7       	in	r29, 0x3e	; 62
-	static uint8_t byte_1;
-	static uint8_t byte_2;
-	static uint8_t byte_3;
-	
-	if(pin == 0)
  450:	61 11       	cpse	r22, r1
  452:	06 c0       	rjmp	.+12     	; 0x460 <package_sensor_data+0x1c>
-	{
-		byte_1 |= sensor_data;
  454:	90 91 04 01 	lds	r25, 0x0104
  458:	89 2b       	or	r24, r25
  45a:	80 93 04 01 	sts	0x0104, r24
  45e:	89 c0       	rjmp	.+274    	; 0x572 <package_sensor_data+0x12e>
-	}
-	else if(pin == 1)
  460:	61 30       	cpi	r22, 0x01	; 1
  462:	41 f4       	brne	.+16     	; 0x474 <package_sensor_data+0x30>
-	{
-		byte_1 |= (sensor_data << 2);
  464:	88 0f       	add	r24, r24
  466:	88 0f       	add	r24, r24
  468:	90 91 04 01 	lds	r25, 0x0104
  46c:	89 2b       	or	r24, r25
  46e:	80 93 04 01 	sts	0x0104, r24
  472:	7f c0       	rjmp	.+254    	; 0x572 <package_sensor_data+0x12e>
-	}
-	else if(pin == 2)
  474:	62 30       	cpi	r22, 0x02	; 2
  476:	51 f4       	brne	.+20     	; 0x48c <package_sensor_data+0x48>
-	{
-		byte_1 |= (sensor_data << 4);
  478:	20 e1       	ldi	r18, 0x10	; 16
  47a:	82 9f       	mul	r24, r18
  47c:	c0 01       	movw	r24, r0
@@ -768,12 +616,8 @@ void package_sensor_data(const uint8_t sensor_data, const uint8_t pin)
  484:	89 2b       	or	r24, r25
  486:	80 93 04 01 	sts	0x0104, r24
  48a:	73 c0       	rjmp	.+230    	; 0x572 <package_sensor_data+0x12e>
-	}
-	else if(pin == 3)
  48c:	63 30       	cpi	r22, 0x03	; 3
  48e:	51 f4       	brne	.+20     	; 0x4a4 <package_sensor_data+0x60>
-	{
-		byte_1 |= (sensor_data << 6);
  490:	20 e4       	ldi	r18, 0x40	; 64
  492:	82 9f       	mul	r24, r18
  494:	c0 01       	movw	r24, r0
@@ -782,34 +626,22 @@ void package_sensor_data(const uint8_t sensor_data, const uint8_t pin)
  49c:	89 2b       	or	r24, r25
  49e:	80 93 04 01 	sts	0x0104, r24
  4a2:	67 c0       	rjmp	.+206    	; 0x572 <package_sensor_data+0x12e>
-	}
-	else if(pin == 4)
  4a4:	64 30       	cpi	r22, 0x04	; 4
  4a6:	31 f4       	brne	.+12     	; 0x4b4 <package_sensor_data+0x70>
-	{
-		byte_2 |= sensor_data;
  4a8:	90 91 03 01 	lds	r25, 0x0103
  4ac:	89 2b       	or	r24, r25
  4ae:	80 93 03 01 	sts	0x0103, r24
  4b2:	5f c0       	rjmp	.+190    	; 0x572 <package_sensor_data+0x12e>
-	}
-	else if(pin == 5)
  4b4:	65 30       	cpi	r22, 0x05	; 5
  4b6:	41 f4       	brne	.+16     	; 0x4c8 <package_sensor_data+0x84>
-	{
-		byte_2 |= (sensor_data << 2);
  4b8:	88 0f       	add	r24, r24
  4ba:	88 0f       	add	r24, r24
  4bc:	90 91 03 01 	lds	r25, 0x0103
  4c0:	89 2b       	or	r24, r25
  4c2:	80 93 03 01 	sts	0x0103, r24
  4c6:	55 c0       	rjmp	.+170    	; 0x572 <package_sensor_data+0x12e>
-	}
-	else if(pin == 6)
  4c8:	66 30       	cpi	r22, 0x06	; 6
  4ca:	51 f4       	brne	.+20     	; 0x4e0 <package_sensor_data+0x9c>
-	{
-		byte_2 |= (sensor_data << 4);
  4cc:	20 e1       	ldi	r18, 0x10	; 16
  4ce:	82 9f       	mul	r24, r18
  4d0:	c0 01       	movw	r24, r0
@@ -818,12 +650,8 @@ void package_sensor_data(const uint8_t sensor_data, const uint8_t pin)
  4d8:	89 2b       	or	r24, r25
  4da:	80 93 03 01 	sts	0x0103, r24
  4de:	49 c0       	rjmp	.+146    	; 0x572 <package_sensor_data+0x12e>
-	}
-	else if(pin == 7)
  4e0:	67 30       	cpi	r22, 0x07	; 7
  4e2:	51 f4       	brne	.+20     	; 0x4f8 <package_sensor_data+0xb4>
-	{
-		byte_2 |= (sensor_data << 6);
  4e4:	20 e4       	ldi	r18, 0x40	; 64
  4e6:	82 9f       	mul	r24, r18
  4e8:	c0 01       	movw	r24, r0
@@ -832,34 +660,22 @@ void package_sensor_data(const uint8_t sensor_data, const uint8_t pin)
  4f0:	89 2b       	or	r24, r25
  4f2:	80 93 03 01 	sts	0x0103, r24
  4f6:	3d c0       	rjmp	.+122    	; 0x572 <package_sensor_data+0x12e>
-	}
-	else if(pin == 8)
  4f8:	68 30       	cpi	r22, 0x08	; 8
  4fa:	31 f4       	brne	.+12     	; 0x508 <package_sensor_data+0xc4>
-	{
-		byte_3 |= sensor_data;
  4fc:	90 91 02 01 	lds	r25, 0x0102
  500:	89 2b       	or	r24, r25
  502:	80 93 02 01 	sts	0x0102, r24
  506:	35 c0       	rjmp	.+106    	; 0x572 <package_sensor_data+0x12e>
-	}
-	else if(pin == 9)
  508:	69 30       	cpi	r22, 0x09	; 9
  50a:	41 f4       	brne	.+16     	; 0x51c <package_sensor_data+0xd8>
-	{
-		byte_3 |= (sensor_data << 2);
  50c:	88 0f       	add	r24, r24
  50e:	88 0f       	add	r24, r24
  510:	90 91 02 01 	lds	r25, 0x0102
  514:	89 2b       	or	r24, r25
  516:	80 93 02 01 	sts	0x0102, r24
  51a:	2b c0       	rjmp	.+86     	; 0x572 <package_sensor_data+0x12e>
-	}
-	else if(pin == 10)
  51c:	6a 30       	cpi	r22, 0x0A	; 10
  51e:	49 f5       	brne	.+82     	; 0x572 <package_sensor_data+0x12e>
-	{
-		byte_3 |= (sensor_data << 4);
  520:	20 e1       	ldi	r18, 0x10	; 16
  522:	82 9f       	mul	r24, r18
  524:	c0 01       	movw	r24, r0
@@ -867,51 +683,31 @@ void package_sensor_data(const uint8_t sensor_data, const uint8_t pin)
  528:	90 91 02 01 	lds	r25, 0x0102
  52c:	89 2b       	or	r24, r25
  52e:	80 93 02 01 	sts	0x0102, r24
-		
-		uint8_t data_to_send [4];
-		data_to_send[0] = 0x32;
  532:	92 e3       	ldi	r25, 0x32	; 50
  534:	99 83       	std	Y+1, r25	; 0x01
-		data_to_send[1] = byte_1;
  536:	90 91 04 01 	lds	r25, 0x0104
  53a:	9a 83       	std	Y+2, r25	; 0x02
-		data_to_send[2] = byte_2;
  53c:	20 91 03 01 	lds	r18, 0x0103
  540:	2b 83       	std	Y+3, r18	; 0x03
-		data_to_send[3] = byte_3;
  542:	8c 83       	std	Y+4, r24	; 0x04
-		
-		if(data_to_send[1] != 0 || data_to_send[2] != 0 ||data_to_send[3] != 0){
  544:	91 11       	cpse	r25, r1
  546:	04 c0       	rjmp	.+8      	; 0x550 <package_sensor_data+0x10c>
  548:	21 11       	cpse	r18, r1
  54a:	02 c0       	rjmp	.+4      	; 0x550 <package_sensor_data+0x10c>
  54c:	88 23       	and	r24, r24
  54e:	21 f0       	breq	.+8      	; 0x558 <package_sensor_data+0x114>
-			reflex = true;	
  550:	81 e0       	ldi	r24, 0x01	; 1
  552:	80 93 0d 01 	sts	0x010D, r24
  556:	02 c0       	rjmp	.+4      	; 0x55c <package_sensor_data+0x118>
-		}
-		else reflex = false;
  558:	10 92 0d 01 	sts	0x010D, r1
-		
-		i2c_requestToSend(0x04, data_to_send); 
  55c:	be 01       	movw	r22, r28
  55e:	6f 5f       	subi	r22, 0xFF	; 255
  560:	7f 4f       	sbci	r23, 0xFF	; 255
  562:	84 e0       	ldi	r24, 0x04	; 4
  564:	e9 dd       	rcall	.-1070   	; 0x138 <i2c_requestToSend>
-		//skicka data_to_send med I2C
-		
-		byte_1 = 0x00;
  566:	10 92 04 01 	sts	0x0104, r1
-		byte_2 = 0x00;
  56a:	10 92 03 01 	sts	0x0103, r1
-		byte_3 = 0x00;
  56e:	10 92 02 01 	sts	0x0102, r1
-	}
-}
  572:	0f 90       	pop	r0
  574:	0f 90       	pop	r0
  576:	0f 90       	pop	r0
@@ -921,877 +717,756 @@ void package_sensor_data(const uint8_t sensor_data, const uint8_t pin)
  57e:	08 95       	ret
 
 00000580 <read_reflex_sensors>:
-#define F_CPU 14.7456E6
-#include <util/delay.h>
-#include <stdint-gcc.h>
-
-void read_reflex_sensors()
-{
  580:	cf 93       	push	r28
-	uint8_t i;
-	uint8_t looked_up_value;
-	uint8_t sensor_value;
-	
-	for(i=0; i<11; ++i)
  582:	c0 e0       	ldi	r28, 0x00	; 0
-	{
-		sensor_value = mux_sensors(i);
  584:	8c 2f       	mov	r24, r28
  586:	c2 dd       	rcall	.-1148   	; 0x10c <mux_sensors>
-		looked_up_value = look_up_value(sensor_value, i);
  588:	6c 2f       	mov	r22, r28
  58a:	0f df       	rcall	.-482    	; 0x3aa <look_up_value>
-		package_sensor_data(looked_up_value, i);
  58c:	6c 2f       	mov	r22, r28
  58e:	5a df       	rcall	.-332    	; 0x444 <package_sensor_data>
-{
-	uint8_t i;
-	uint8_t looked_up_value;
-	uint8_t sensor_value;
-	
-	for(i=0; i<11; ++i)
  590:	cf 5f       	subi	r28, 0xFF	; 255
  592:	cb 30       	cpi	r28, 0x0B	; 11
  594:	b9 f7       	brne	.-18     	; 0x584 <read_reflex_sensors+0x4>
-	{
-		sensor_value = mux_sensors(i);
-		looked_up_value = look_up_value(sensor_value, i);
-		package_sensor_data(looked_up_value, i);
-	}
-}
  596:	cf 91       	pop	r28
  598:	08 95       	ret
 
-0000059a <read_battery_voltage>:
- */ 
-
-#include "battery.h"
-
-void read_battery_voltage()
-{
- 59a:	1f 93       	push	r17
- 59c:	cf 93       	push	r28
- 59e:	df 93       	push	r29
- 5a0:	00 d0       	rcall	.+0      	; 0x5a2 <read_battery_voltage+0x8>
- 5a2:	1f 92       	push	r1
- 5a4:	cd b7       	in	r28, 0x3d	; 61
- 5a6:	de b7       	in	r29, 0x3e	; 62
-
-uint8_t battery_cell_1;
-uint8_t battery_cell_2;
-
-	DDRD |= 0x60;
- 5a8:	8a b1       	in	r24, 0x0a	; 10
- 5aa:	80 66       	ori	r24, 0x60	; 96
- 5ac:	8a b9       	out	0x0a, r24	; 10
-	
-	battery_cell_1 = read_adc(4); 
- 5ae:	84 e0       	ldi	r24, 0x04	; 4
- 5b0:	9a dd       	rcall	.-1228   	; 0xe6 <read_adc>
- 5b2:	18 2f       	mov	r17, r24
-	//if(battery_cell_1 < 180)
-		PORTD = 0x60;
- 5b4:	80 e6       	ldi	r24, 0x60	; 96
- 5b6:	8b b9       	out	0x0b, r24	; 11
- 5b8:	2f ef       	ldi	r18, 0xFF	; 255
- 5ba:	8f ef       	ldi	r24, 0xFF	; 255
- 5bc:	9c e2       	ldi	r25, 0x2C	; 44
- 5be:	21 50       	subi	r18, 0x01	; 1
- 5c0:	80 40       	sbci	r24, 0x00	; 0
- 5c2:	90 40       	sbci	r25, 0x00	; 0
- 5c4:	e1 f7       	brne	.-8      	; 0x5be <read_battery_voltage+0x24>
- 5c6:	00 c0       	rjmp	.+0      	; 0x5c8 <read_battery_voltage+0x2e>
- 5c8:	00 00       	nop
-		_delay_ms(1000);
-		PORTD = 0x00;
- 5ca:	1b b8       	out	0x0b, r1	; 11
-	
-	battery_cell_2 = read_adc(7); 
- 5cc:	87 e0       	ldi	r24, 0x07	; 7
- 5ce:	8b dd       	rcall	.-1258   	; 0xe6 <read_adc>
-	//if(battery_cell_2 < 180)
-		//PORTD = 0x60;
-	
-	uint8_t data_to_send [3];
-	data_to_send[0] = 0x20;
- 5d0:	90 e2       	ldi	r25, 0x20	; 32
- 5d2:	99 83       	std	Y+1, r25	; 0x01
-	data_to_send[1] = battery_cell_1;
- 5d4:	1a 83       	std	Y+2, r17	; 0x02
-	data_to_send[2] = battery_cell_2;
- 5d6:	8b 83       	std	Y+3, r24	; 0x03
-		
-	i2c_requestToSend(0x04, data_to_send);
- 5d8:	be 01       	movw	r22, r28
- 5da:	6f 5f       	subi	r22, 0xFF	; 255
- 5dc:	7f 4f       	sbci	r23, 0xFF	; 255
- 5de:	84 e0       	ldi	r24, 0x04	; 4
- 5e0:	ab dd       	rcall	.-1194   	; 0x138 <i2c_requestToSend>
-	//skicka helvetet
- 5e2:	0f 90       	pop	r0
- 5e4:	0f 90       	pop	r0
- 5e6:	0f 90       	pop	r0
- 5e8:	df 91       	pop	r29
- 5ea:	cf 91       	pop	r28
- 5ec:	1f 91       	pop	r17
- 5ee:	08 95       	ret
-
-000005f0 <avstand_init>:
+0000059a <avstand_init>:
 
 #include "mainsensor.h"
 
 void avstand_init()
 {
 	DDRD |= 0x03;
- 5f0:	8a b1       	in	r24, 0x0a	; 10
- 5f2:	83 60       	ori	r24, 0x03	; 3
- 5f4:	8a b9       	out	0x0a, r24	; 10
+ 59a:	8a b1       	in	r24, 0x0a	; 10
+ 59c:	83 60       	ori	r24, 0x03	; 3
+ 59e:	8a b9       	out	0x0a, r24	; 10
 	PORTD |= 0x01;
- 5f6:	58 9a       	sbi	0x0b, 0	; 11
- 5f8:	8f ef       	ldi	r24, 0xFF	; 255
- 5fa:	97 e4       	ldi	r25, 0x47	; 71
- 5fc:	01 97       	sbiw	r24, 0x01	; 1
- 5fe:	f1 f7       	brne	.-4      	; 0x5fc <avstand_init+0xc>
- 600:	00 c0       	rjmp	.+0      	; 0x602 <avstand_init+0x12>
- 602:	00 00       	nop
- 604:	08 95       	ret
+ 5a0:	58 9a       	sbi	0x0b, 0	; 11
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
 
-00000606 <look_up_mellan>:
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 5a2:	8f ef       	ldi	r24, 0xFF	; 255
+ 5a4:	97 e4       	ldi	r25, 0x47	; 71
+ 5a6:	01 97       	sbiw	r24, 0x01	; 1
+ 5a8:	f1 f7       	brne	.-4      	; 0x5a6 <avstand_init+0xc>
+ 5aa:	00 c0       	rjmp	.+0      	; 0x5ac <avstand_init+0x12>
+ 5ac:	00 00       	nop
+ 5ae:	08 95       	ret
+
+000005b0 <look_up_mellan>:
 	i2c_requestToSend(0x04, data_to_send);
 }
 
 uint8_t look_up_mellan (uint8_t value)
 {
 	if(value>83)
- 606:	84 35       	cpi	r24, 0x54	; 84
- 608:	d0 f4       	brcc	.+52     	; 0x63e <look_up_mellan+0x38>
+ 5b0:	84 35       	cpi	r24, 0x54	; 84
+ 5b2:	d0 f4       	brcc	.+52     	; 0x5e8 <look_up_mellan+0x38>
 	{
 		return 13;
 	}
 	else if(value>70)
- 60a:	87 34       	cpi	r24, 0x47	; 71
- 60c:	d0 f4       	brcc	.+52     	; 0x642 <look_up_mellan+0x3c>
+ 5b4:	87 34       	cpi	r24, 0x47	; 71
+ 5b6:	d0 f4       	brcc	.+52     	; 0x5ec <look_up_mellan+0x3c>
 	{
 		return 14;
 	}
 	else if(value>64)
- 60e:	81 34       	cpi	r24, 0x41	; 65
- 610:	d0 f4       	brcc	.+52     	; 0x646 <look_up_mellan+0x40>
+ 5b8:	81 34       	cpi	r24, 0x41	; 65
+ 5ba:	d0 f4       	brcc	.+52     	; 0x5f0 <look_up_mellan+0x40>
 	{
 		return 15;
 	}
 	else if(value>57)
- 612:	8a 33       	cpi	r24, 0x3A	; 58
- 614:	d0 f4       	brcc	.+52     	; 0x64a <look_up_mellan+0x44>
+ 5bc:	8a 33       	cpi	r24, 0x3A	; 58
+ 5be:	d0 f4       	brcc	.+52     	; 0x5f4 <look_up_mellan+0x44>
 	{
 		return 17;	
 	}
 	else if(value>51)
- 616:	84 33       	cpi	r24, 0x34	; 52
- 618:	d0 f4       	brcc	.+52     	; 0x64e <look_up_mellan+0x48>
+ 5c0:	84 33       	cpi	r24, 0x34	; 52
+ 5c2:	d0 f4       	brcc	.+52     	; 0x5f8 <look_up_mellan+0x48>
 	{
 		return 20;
 	}
 	else if(value>47)
- 61a:	80 33       	cpi	r24, 0x30	; 48
- 61c:	d0 f4       	brcc	.+52     	; 0x652 <look_up_mellan+0x4c>
+ 5c4:	80 33       	cpi	r24, 0x30	; 48
+ 5c6:	d0 f4       	brcc	.+52     	; 0x5fc <look_up_mellan+0x4c>
 	{
 		return 22;
 	}
 	else if(value>44)
- 61e:	8d 32       	cpi	r24, 0x2D	; 45
- 620:	d0 f4       	brcc	.+52     	; 0x656 <look_up_mellan+0x50>
+ 5c8:	8d 32       	cpi	r24, 0x2D	; 45
+ 5ca:	d0 f4       	brcc	.+52     	; 0x600 <look_up_mellan+0x50>
 	{
 		return 25;
 	}
 	else if(value>40)
- 622:	89 32       	cpi	r24, 0x29	; 41
- 624:	d0 f4       	brcc	.+52     	; 0x65a <look_up_mellan+0x54>
+ 5cc:	89 32       	cpi	r24, 0x29	; 41
+ 5ce:	d0 f4       	brcc	.+52     	; 0x604 <look_up_mellan+0x54>
 	{
 		return 28 ;
 	}
 	else if(value>37)
- 626:	86 32       	cpi	r24, 0x26	; 38
- 628:	d0 f4       	brcc	.+52     	; 0x65e <look_up_mellan+0x58>
+ 5d0:	86 32       	cpi	r24, 0x26	; 38
+ 5d2:	d0 f4       	brcc	.+52     	; 0x608 <look_up_mellan+0x58>
 	{
 		return 30;
 	}	
 	else if(value>32)
- 62a:	81 32       	cpi	r24, 0x21	; 33
- 62c:	d0 f4       	brcc	.+52     	; 0x662 <look_up_mellan+0x5c>
+ 5d4:	81 32       	cpi	r24, 0x21	; 33
+ 5d6:	d0 f4       	brcc	.+52     	; 0x60c <look_up_mellan+0x5c>
 	{
 		return 35;
 	}
 	else if(value>25)
- 62e:	8a 31       	cpi	r24, 0x1A	; 26
- 630:	d0 f4       	brcc	.+52     	; 0x666 <look_up_mellan+0x60>
+ 5d8:	8a 31       	cpi	r24, 0x1A	; 26
+ 5da:	d0 f4       	brcc	.+52     	; 0x610 <look_up_mellan+0x60>
 	{
 		return 40;
 	}
 	else if(value>21)
- 632:	86 31       	cpi	r24, 0x16	; 22
- 634:	d0 f4       	brcc	.+52     	; 0x66a <look_up_mellan+0x64>
+ 5dc:	86 31       	cpi	r24, 0x16	; 22
+ 5de:	d0 f4       	brcc	.+52     	; 0x614 <look_up_mellan+0x64>
 	{
 		return 50;
 	}
 	else if(value>17)
- 636:	82 31       	cpi	r24, 0x12	; 18
- 638:	d0 f4       	brcc	.+52     	; 0x66e <look_up_mellan+0x68>
+ 5e0:	82 31       	cpi	r24, 0x12	; 18
+ 5e2:	d0 f4       	brcc	.+52     	; 0x618 <look_up_mellan+0x68>
 	{
 		return 60;
 	}
 	else
 	{
 		return 70;
- 63a:	86 e4       	ldi	r24, 0x46	; 70
- 63c:	08 95       	ret
+ 5e4:	86 e4       	ldi	r24, 0x46	; 70
+ 5e6:	08 95       	ret
 
 uint8_t look_up_mellan (uint8_t value)
 {
 	if(value>83)
 	{
 		return 13;
- 63e:	8d e0       	ldi	r24, 0x0D	; 13
- 640:	08 95       	ret
+ 5e8:	8d e0       	ldi	r24, 0x0D	; 13
+ 5ea:	08 95       	ret
 	}
 	else if(value>70)
 	{
 		return 14;
- 642:	8e e0       	ldi	r24, 0x0E	; 14
- 644:	08 95       	ret
+ 5ec:	8e e0       	ldi	r24, 0x0E	; 14
+ 5ee:	08 95       	ret
 	}
 	else if(value>64)
 	{
 		return 15;
- 646:	8f e0       	ldi	r24, 0x0F	; 15
- 648:	08 95       	ret
+ 5f0:	8f e0       	ldi	r24, 0x0F	; 15
+ 5f2:	08 95       	ret
 	}
 	else if(value>57)
 	{
 		return 17;	
- 64a:	81 e1       	ldi	r24, 0x11	; 17
- 64c:	08 95       	ret
+ 5f4:	81 e1       	ldi	r24, 0x11	; 17
+ 5f6:	08 95       	ret
 	}
 	else if(value>51)
 	{
 		return 20;
- 64e:	84 e1       	ldi	r24, 0x14	; 20
- 650:	08 95       	ret
+ 5f8:	84 e1       	ldi	r24, 0x14	; 20
+ 5fa:	08 95       	ret
 	}
 	else if(value>47)
 	{
 		return 22;
- 652:	86 e1       	ldi	r24, 0x16	; 22
- 654:	08 95       	ret
+ 5fc:	86 e1       	ldi	r24, 0x16	; 22
+ 5fe:	08 95       	ret
 	}
 	else if(value>44)
 	{
 		return 25;
- 656:	89 e1       	ldi	r24, 0x19	; 25
- 658:	08 95       	ret
+ 600:	89 e1       	ldi	r24, 0x19	; 25
+ 602:	08 95       	ret
 	}
 	else if(value>40)
 	{
 		return 28 ;
- 65a:	8c e1       	ldi	r24, 0x1C	; 28
- 65c:	08 95       	ret
+ 604:	8c e1       	ldi	r24, 0x1C	; 28
+ 606:	08 95       	ret
 	}
 	else if(value>37)
 	{
 		return 30;
- 65e:	8e e1       	ldi	r24, 0x1E	; 30
- 660:	08 95       	ret
+ 608:	8e e1       	ldi	r24, 0x1E	; 30
+ 60a:	08 95       	ret
 	}	
 	else if(value>32)
 	{
 		return 35;
- 662:	83 e2       	ldi	r24, 0x23	; 35
- 664:	08 95       	ret
+ 60c:	83 e2       	ldi	r24, 0x23	; 35
+ 60e:	08 95       	ret
 	}
 	else if(value>25)
 	{
 		return 40;
- 666:	88 e2       	ldi	r24, 0x28	; 40
- 668:	08 95       	ret
+ 610:	88 e2       	ldi	r24, 0x28	; 40
+ 612:	08 95       	ret
 	}
 	else if(value>21)
 	{
 		return 50;
- 66a:	82 e3       	ldi	r24, 0x32	; 50
- 66c:	08 95       	ret
+ 614:	82 e3       	ldi	r24, 0x32	; 50
+ 616:	08 95       	ret
 	}
 	else if(value>17)
 	{
 		return 60;
- 66e:	8c e3       	ldi	r24, 0x3C	; 60
+ 618:	8c e3       	ldi	r24, 0x3C	; 60
 	}
 	else
 	{
 		return 70;
 	}
 }
- 670:	08 95       	ret
+ 61a:	08 95       	ret
 
-00000672 <look_up_long>:
+0000061c <look_up_long>:
 
 uint8_t look_up_long(uint8_t value)
 {
 	if(value>81)
- 672:	82 35       	cpi	r24, 0x52	; 82
- 674:	b0 f4       	brcc	.+44     	; 0x6a2 <look_up_long+0x30>
+ 61c:	82 35       	cpi	r24, 0x52	; 82
+ 61e:	b0 f4       	brcc	.+44     	; 0x64c <look_up_long+0x30>
 	{
-		return 30;
+		return 31;
 	}
 	else if(value>71)
- 676:	88 34       	cpi	r24, 0x48	; 72
- 678:	b0 f4       	brcc	.+44     	; 0x6a6 <look_up_long+0x34>
+ 620:	88 34       	cpi	r24, 0x48	; 72
+ 622:	b0 f4       	brcc	.+44     	; 0x650 <look_up_long+0x34>
 	{
 		return 35;
 	}
 	else if(value>58)
- 67a:	8b 33       	cpi	r24, 0x3B	; 59
- 67c:	b0 f4       	brcc	.+44     	; 0x6aa <look_up_long+0x38>
+ 624:	8b 33       	cpi	r24, 0x3B	; 59
+ 626:	b0 f4       	brcc	.+44     	; 0x654 <look_up_long+0x38>
 	{
 		return 40;
 	}
 	else if(value>49)
- 67e:	82 33       	cpi	r24, 0x32	; 50
- 680:	b0 f4       	brcc	.+44     	; 0x6ae <look_up_long+0x3c>
+ 628:	82 33       	cpi	r24, 0x32	; 50
+ 62a:	b0 f4       	brcc	.+44     	; 0x658 <look_up_long+0x3c>
 	{
 		return 50;
 	}
 	else if(value>42)
- 682:	8b 32       	cpi	r24, 0x2B	; 43
- 684:	b0 f4       	brcc	.+44     	; 0x6b2 <look_up_long+0x40>
+ 62c:	8b 32       	cpi	r24, 0x2B	; 43
+ 62e:	b0 f4       	brcc	.+44     	; 0x65c <look_up_long+0x40>
 	{
 		return 60;
 	}
 	else if(value>35)
- 686:	84 32       	cpi	r24, 0x24	; 36
- 688:	b0 f4       	brcc	.+44     	; 0x6b6 <look_up_long+0x44>
+ 630:	84 32       	cpi	r24, 0x24	; 36
+ 632:	b0 f4       	brcc	.+44     	; 0x660 <look_up_long+0x44>
 	{
 		return 70;
 	}
 	else if(value>30)
- 68a:	8f 31       	cpi	r24, 0x1F	; 31
- 68c:	b0 f4       	brcc	.+44     	; 0x6ba <look_up_long+0x48>
+ 634:	8f 31       	cpi	r24, 0x1F	; 31
+ 636:	b0 f4       	brcc	.+44     	; 0x664 <look_up_long+0x48>
 	{
 		return 80;
 	}
 	else if(value>27)
- 68e:	8c 31       	cpi	r24, 0x1C	; 28
- 690:	b0 f4       	brcc	.+44     	; 0x6be <look_up_long+0x4c>
+ 638:	8c 31       	cpi	r24, 0x1C	; 28
+ 63a:	b0 f4       	brcc	.+44     	; 0x668 <look_up_long+0x4c>
 	{
 		return 90;
 	}
 	else if(value>17)
- 692:	82 31       	cpi	r24, 0x12	; 18
- 694:	b0 f4       	brcc	.+44     	; 0x6c2 <look_up_long+0x50>
+ 63c:	82 31       	cpi	r24, 0x12	; 18
+ 63e:	b0 f4       	brcc	.+44     	; 0x66c <look_up_long+0x50>
 	{
 		return 100;
 	}
 	else if(value>14)
- 696:	8f 30       	cpi	r24, 0x0F	; 15
- 698:	b0 f4       	brcc	.+44     	; 0x6c6 <look_up_long+0x54>
+ 640:	8f 30       	cpi	r24, 0x0F	; 15
+ 642:	b0 f4       	brcc	.+44     	; 0x670 <look_up_long+0x54>
 	{
 		return 120;
 	}
 	else if(value>10)
- 69a:	8b 30       	cpi	r24, 0x0B	; 11
- 69c:	b0 f4       	brcc	.+44     	; 0x6ca <look_up_long+0x58>
+ 644:	8b 30       	cpi	r24, 0x0B	; 11
+ 646:	b0 f4       	brcc	.+44     	; 0x674 <look_up_long+0x58>
 	{
 		return 140;
 	}
 	else
 	{
 		return 150;
- 69e:	86 e9       	ldi	r24, 0x96	; 150
- 6a0:	08 95       	ret
+ 648:	86 e9       	ldi	r24, 0x96	; 150
+ 64a:	08 95       	ret
 
 uint8_t look_up_long(uint8_t value)
 {
 	if(value>81)
 	{
-		return 30;
- 6a2:	8e e1       	ldi	r24, 0x1E	; 30
- 6a4:	08 95       	ret
+		return 31;
+ 64c:	8f e1       	ldi	r24, 0x1F	; 31
+ 64e:	08 95       	ret
 	}
 	else if(value>71)
 	{
 		return 35;
- 6a6:	83 e2       	ldi	r24, 0x23	; 35
- 6a8:	08 95       	ret
+ 650:	83 e2       	ldi	r24, 0x23	; 35
+ 652:	08 95       	ret
 	}
 	else if(value>58)
 	{
 		return 40;
- 6aa:	88 e2       	ldi	r24, 0x28	; 40
- 6ac:	08 95       	ret
+ 654:	88 e2       	ldi	r24, 0x28	; 40
+ 656:	08 95       	ret
 	}
 	else if(value>49)
 	{
 		return 50;
- 6ae:	82 e3       	ldi	r24, 0x32	; 50
- 6b0:	08 95       	ret
+ 658:	82 e3       	ldi	r24, 0x32	; 50
+ 65a:	08 95       	ret
 	}
 	else if(value>42)
 	{
 		return 60;
- 6b2:	8c e3       	ldi	r24, 0x3C	; 60
- 6b4:	08 95       	ret
+ 65c:	8c e3       	ldi	r24, 0x3C	; 60
+ 65e:	08 95       	ret
 	}
 	else if(value>35)
 	{
 		return 70;
- 6b6:	86 e4       	ldi	r24, 0x46	; 70
- 6b8:	08 95       	ret
+ 660:	86 e4       	ldi	r24, 0x46	; 70
+ 662:	08 95       	ret
 	}
 	else if(value>30)
 	{
 		return 80;
- 6ba:	80 e5       	ldi	r24, 0x50	; 80
- 6bc:	08 95       	ret
+ 664:	80 e5       	ldi	r24, 0x50	; 80
+ 666:	08 95       	ret
 	}
 	else if(value>27)
 	{
 		return 90;
- 6be:	8a e5       	ldi	r24, 0x5A	; 90
- 6c0:	08 95       	ret
+ 668:	8a e5       	ldi	r24, 0x5A	; 90
+ 66a:	08 95       	ret
 	}
 	else if(value>17)
 	{
 		return 100;
- 6c2:	84 e6       	ldi	r24, 0x64	; 100
- 6c4:	08 95       	ret
+ 66c:	84 e6       	ldi	r24, 0x64	; 100
+ 66e:	08 95       	ret
 	}
 	else if(value>14)
 	{
 		return 120;
- 6c6:	88 e7       	ldi	r24, 0x78	; 120
- 6c8:	08 95       	ret
+ 670:	88 e7       	ldi	r24, 0x78	; 120
+ 672:	08 95       	ret
 	}
 	else if(value>10)
 	{
 		return 140;
- 6ca:	8c e8       	ldi	r24, 0x8C	; 140
+ 674:	8c e8       	ldi	r24, 0x8C	; 140
 	}
 	else
 	{
 		return 150;
 	}
 }
- 6cc:	08 95       	ret
+ 676:	08 95       	ret
 
-000006ce <long_init>:
+00000678 <long_init>:
 
 void long_init()
 {
 	PORTD &= ~(0x01);
- 6ce:	58 98       	cbi	0x0b, 0	; 11
+ 678:	58 98       	cbi	0x0b, 0	; 11
 	PORTD |= 0x02;
- 6d0:	59 9a       	sbi	0x0b, 1	; 11
- 6d2:	26 e6       	ldi	r18, 0x66	; 102
- 6d4:	86 e0       	ldi	r24, 0x06	; 6
- 6d6:	92 e0       	ldi	r25, 0x02	; 2
- 6d8:	21 50       	subi	r18, 0x01	; 1
- 6da:	80 40       	sbci	r24, 0x00	; 0
- 6dc:	90 40       	sbci	r25, 0x00	; 0
- 6de:	e1 f7       	brne	.-8      	; 0x6d8 <long_init+0xa>
- 6e0:	08 95       	ret
+ 67a:	59 9a       	sbi	0x0b, 1	; 11
+ 67c:	26 e6       	ldi	r18, 0x66	; 102
+ 67e:	86 e0       	ldi	r24, 0x06	; 6
+ 680:	92 e0       	ldi	r25, 0x02	; 2
+ 682:	21 50       	subi	r18, 0x01	; 1
+ 684:	80 40       	sbci	r24, 0x00	; 0
+ 686:	90 40       	sbci	r25, 0x00	; 0
+ 688:	e1 f7       	brne	.-8      	; 0x682 <long_init+0xa>
+ 68a:	08 95       	ret
 
-000006e2 <clear_long>:
+0000068c <clear_long>:
 	_delay_ms(45);
 }
 
 void clear_long()
 {
 	PORTD &= ~(0x02);
- 6e2:	59 98       	cbi	0x0b, 1	; 11
+ 68c:	59 98       	cbi	0x0b, 1	; 11
 	PORTD |= 0x01;
- 6e4:	58 9a       	sbi	0x0b, 0	; 11
- 6e6:	29 e9       	ldi	r18, 0x99	; 153
- 6e8:	89 e5       	ldi	r24, 0x59	; 89
- 6ea:	91 e0       	ldi	r25, 0x01	; 1
- 6ec:	21 50       	subi	r18, 0x01	; 1
- 6ee:	80 40       	sbci	r24, 0x00	; 0
- 6f0:	90 40       	sbci	r25, 0x00	; 0
- 6f2:	e1 f7       	brne	.-8      	; 0x6ec <clear_long+0xa>
- 6f4:	00 00       	nop
- 6f6:	08 95       	ret
+ 68e:	58 9a       	sbi	0x0b, 0	; 11
+ 690:	29 e9       	ldi	r18, 0x99	; 153
+ 692:	89 e5       	ldi	r24, 0x59	; 89
+ 694:	91 e0       	ldi	r25, 0x01	; 1
+ 696:	21 50       	subi	r18, 0x01	; 1
+ 698:	80 40       	sbci	r24, 0x00	; 0
+ 69a:	90 40       	sbci	r25, 0x00	; 0
+ 69c:	e1 f7       	brne	.-8      	; 0x696 <clear_long+0xa>
+ 69e:	00 00       	nop
+ 6a0:	08 95       	ret
 
-000006f8 <read_avstand_sensor>:
+000006a2 <read_avstand_sensor>:
 	PORTD |= 0x01;
 	_delay_ms(5);
 }
 
 void read_avstand_sensor()
 {
- 6f8:	ff 92       	push	r15
- 6fa:	0f 93       	push	r16
- 6fc:	1f 93       	push	r17
- 6fe:	cf 93       	push	r28
- 700:	df 93       	push	r29
- 702:	00 d0       	rcall	.+0      	; 0x704 <read_avstand_sensor+0xc>
- 704:	00 d0       	rcall	.+0      	; 0x706 <read_avstand_sensor+0xe>
- 706:	cd b7       	in	r28, 0x3d	; 61
- 708:	de b7       	in	r29, 0x3e	; 62
+ 6a2:	ff 92       	push	r15
+ 6a4:	0f 93       	push	r16
+ 6a6:	1f 93       	push	r17
+ 6a8:	cf 93       	push	r28
+ 6aa:	df 93       	push	r29
+ 6ac:	00 d0       	rcall	.+0      	; 0x6ae <read_avstand_sensor+0xc>
+ 6ae:	00 d0       	rcall	.+0      	; 0x6b0 <read_avstand_sensor+0xe>
+ 6b0:	cd b7       	in	r28, 0x3d	; 61
+ 6b2:	de b7       	in	r29, 0x3e	; 62
 	uint8_t vanster = avstand(13); //avstånd vänster
 	uint8_t rakt = avstand(15);	//avstånd fram*/
 	//DDRD |= 0x60;
 	//skicka hoger, vanster och rakt via I2C 
 	
 	uint8_t rakt = mux_sensors(11);		//rakt fram, lång sensor
- 70a:	8b e0       	ldi	r24, 0x0B	; 11
- 70c:	ff dc       	rcall	.-1538   	; 0x10c <mux_sensors>
- 70e:	f8 2e       	mov	r15, r24
+ 6b4:	8b e0       	ldi	r24, 0x0B	; 11
+ 6b6:	2a dd       	rcall	.-1452   	; 0x10c <mux_sensors>
+ 6b8:	f8 2e       	mov	r15, r24
 	uint8_t vanster = mux_sensors(14);	//vänster, mellansensor
- 710:	8e e0       	ldi	r24, 0x0E	; 14
- 712:	fc dc       	rcall	.-1544   	; 0x10c <mux_sensors>
- 714:	18 2f       	mov	r17, r24
+ 6ba:	8e e0       	ldi	r24, 0x0E	; 14
+ 6bc:	27 dd       	rcall	.-1458   	; 0x10c <mux_sensors>
+ 6be:	18 2f       	mov	r17, r24
 	uint8_t hoger = mux_sensors(15);	//höger, mellansensor
- 716:	8f e0       	ldi	r24, 0x0F	; 15
- 718:	f9 dc       	rcall	.-1550   	; 0x10c <mux_sensors>
- 71a:	08 2f       	mov	r16, r24
+ 6c0:	8f e0       	ldi	r24, 0x0F	; 15
+ 6c2:	24 dd       	rcall	.-1464   	; 0x10c <mux_sensors>
+ 6c4:	08 2f       	mov	r16, r24
 	
 	rakt = look_up_long(rakt);
- 71c:	8f 2d       	mov	r24, r15
- 71e:	a9 df       	rcall	.-174    	; 0x672 <look_up_long>
- 720:	f8 2e       	mov	r15, r24
+ 6c6:	8f 2d       	mov	r24, r15
+ 6c8:	a9 df       	rcall	.-174    	; 0x61c <look_up_long>
+ 6ca:	f8 2e       	mov	r15, r24
 	vanster = look_up_mellan(vanster);
- 722:	81 2f       	mov	r24, r17
- 724:	70 df       	rcall	.-288    	; 0x606 <look_up_mellan>
- 726:	18 2f       	mov	r17, r24
+ 6cc:	81 2f       	mov	r24, r17
+ 6ce:	70 df       	rcall	.-288    	; 0x5b0 <look_up_mellan>
+ 6d0:	18 2f       	mov	r17, r24
 	hoger = look_up_mellan(hoger);
- 728:	80 2f       	mov	r24, r16
- 72a:	6d df       	rcall	.-294    	; 0x606 <look_up_mellan>
- 72c:	08 2f       	mov	r16, r24
+ 6d2:	80 2f       	mov	r24, r16
+ 6d4:	6d df       	rcall	.-294    	; 0x5b0 <look_up_mellan>
+ 6d6:	08 2f       	mov	r16, r24
 	if(vanster > 34)					//Över 34 cm får vi högre precision med långa sensorn
- 72e:	13 32       	cpi	r17, 0x23	; 35
- 730:	30 f0       	brcs	.+12     	; 0x73e <read_avstand_sensor+0x46>
+ 6d8:	13 32       	cpi	r17, 0x23	; 35
+ 6da:	30 f0       	brcs	.+12     	; 0x6e8 <read_avstand_sensor+0x46>
 	{
 		long_init();
- 732:	cd df       	rcall	.-102    	; 0x6ce <long_init>
+ 6dc:	cd df       	rcall	.-102    	; 0x678 <long_init>
 		vanster = mux_sensors(12);		//Hämtar nytt värde från långa sensorn till vänster
- 734:	8c e0       	ldi	r24, 0x0C	; 12
- 736:	ea dc       	rcall	.-1580   	; 0x10c <mux_sensors>
+ 6de:	8c e0       	ldi	r24, 0x0C	; 12
+ 6e0:	15 dd       	rcall	.-1494   	; 0x10c <mux_sensors>
 		vanster = look_up_long(vanster);
- 738:	9c df       	rcall	.-200    	; 0x672 <look_up_long>
- 73a:	18 2f       	mov	r17, r24
+ 6e2:	9c df       	rcall	.-200    	; 0x61c <look_up_long>
+ 6e4:	18 2f       	mov	r17, r24
 		clear_long();
- 73c:	d2 df       	rcall	.-92     	; 0x6e2 <clear_long>
+ 6e6:	d2 df       	rcall	.-92     	; 0x68c <clear_long>
 	}
 	if(hoger > 34)						//Över 34 cm får vi högre precision med långa sensorn
- 73e:	03 32       	cpi	r16, 0x23	; 35
- 740:	30 f0       	brcs	.+12     	; 0x74e <read_avstand_sensor+0x56>
+ 6e8:	03 32       	cpi	r16, 0x23	; 35
+ 6ea:	30 f0       	brcs	.+12     	; 0x6f8 <read_avstand_sensor+0x56>
 	{
 		long_init();
- 742:	c5 df       	rcall	.-118    	; 0x6ce <long_init>
+ 6ec:	c5 df       	rcall	.-118    	; 0x678 <long_init>
 		hoger = mux_sensors(13);		//Hämtar nytt värde från långa sensorn till höger
- 744:	8d e0       	ldi	r24, 0x0D	; 13
- 746:	e2 dc       	rcall	.-1596   	; 0x10c <mux_sensors>
+ 6ee:	8d e0       	ldi	r24, 0x0D	; 13
+ 6f0:	0d dd       	rcall	.-1510   	; 0x10c <mux_sensors>
 		hoger = look_up_long(hoger);
- 748:	94 df       	rcall	.-216    	; 0x672 <look_up_long>
- 74a:	08 2f       	mov	r16, r24
+ 6f2:	94 df       	rcall	.-216    	; 0x61c <look_up_long>
+ 6f4:	08 2f       	mov	r16, r24
 		clear_long();
- 74c:	ca df       	rcall	.-108    	; 0x6e2 <clear_long>
+ 6f6:	ca df       	rcall	.-108    	; 0x68c <clear_long>
 	}	
 	
 	uint8_t data_to_send [4];
 	data_to_send[0] = 0x31;
- 74e:	81 e3       	ldi	r24, 0x31	; 49
- 750:	89 83       	std	Y+1, r24	; 0x01
+ 6f8:	81 e3       	ldi	r24, 0x31	; 49
+ 6fa:	89 83       	std	Y+1, r24	; 0x01
 	data_to_send[1] = vanster;
- 752:	1a 83       	std	Y+2, r17	; 0x02
+ 6fc:	1a 83       	std	Y+2, r17	; 0x02
 	data_to_send[2] = rakt;
- 754:	fb 82       	std	Y+3, r15	; 0x03
+ 6fe:	fb 82       	std	Y+3, r15	; 0x03
 	data_to_send[3] = hoger;
- 756:	0c 83       	std	Y+4, r16	; 0x04
+ 700:	0c 83       	std	Y+4, r16	; 0x04
 		
 	if(data_to_send[1] > 25 || data_to_send[2] > 30 || data_to_send [3] > 30)
- 758:	1a 31       	cpi	r17, 0x1A	; 26
- 75a:	28 f4       	brcc	.+10     	; 0x766 <read_avstand_sensor+0x6e>
- 75c:	8e e1       	ldi	r24, 0x1E	; 30
- 75e:	8f 15       	cp	r24, r15
- 760:	10 f0       	brcs	.+4      	; 0x766 <read_avstand_sensor+0x6e>
- 762:	0f 31       	cpi	r16, 0x1F	; 31
- 764:	18 f0       	brcs	.+6      	; 0x76c <read_avstand_sensor+0x74>
+ 702:	1a 31       	cpi	r17, 0x1A	; 26
+ 704:	28 f4       	brcc	.+10     	; 0x710 <read_avstand_sensor+0x6e>
+ 706:	8e e1       	ldi	r24, 0x1E	; 30
+ 708:	8f 15       	cp	r24, r15
+ 70a:	10 f0       	brcs	.+4      	; 0x710 <read_avstand_sensor+0x6e>
+ 70c:	0f 31       	cpi	r16, 0x1F	; 31
+ 70e:	18 f0       	brcs	.+6      	; 0x716 <read_avstand_sensor+0x74>
 		avstand = false;
- 766:	10 92 0c 01 	sts	0x010C, r1
- 76a:	03 c0       	rjmp	.+6      	; 0x772 <read_avstand_sensor+0x7a>
+ 710:	10 92 0c 01 	sts	0x010C, r1
+ 714:	03 c0       	rjmp	.+6      	; 0x71c <read_avstand_sensor+0x7a>
 	else avstand=  true;	
- 76c:	81 e0       	ldi	r24, 0x01	; 1
- 76e:	80 93 0c 01 	sts	0x010C, r24
+ 716:	81 e0       	ldi	r24, 0x01	; 1
+ 718:	80 93 0c 01 	sts	0x010C, r24
 		
 	i2c_requestToSend(0x04, data_to_send);
- 772:	be 01       	movw	r22, r28
- 774:	6f 5f       	subi	r22, 0xFF	; 255
- 776:	7f 4f       	sbci	r23, 0xFF	; 255
- 778:	84 e0       	ldi	r24, 0x04	; 4
- 77a:	de dc       	rcall	.-1604   	; 0x138 <i2c_requestToSend>
+ 71c:	be 01       	movw	r22, r28
+ 71e:	6f 5f       	subi	r22, 0xFF	; 255
+ 720:	7f 4f       	sbci	r23, 0xFF	; 255
+ 722:	84 e0       	ldi	r24, 0x04	; 4
+ 724:	09 dd       	rcall	.-1518   	; 0x138 <i2c_requestToSend>
 }
- 77c:	0f 90       	pop	r0
- 77e:	0f 90       	pop	r0
- 780:	0f 90       	pop	r0
- 782:	0f 90       	pop	r0
- 784:	df 91       	pop	r29
- 786:	cf 91       	pop	r28
- 788:	1f 91       	pop	r17
- 78a:	0f 91       	pop	r16
- 78c:	ff 90       	pop	r15
- 78e:	08 95       	ret
+ 726:	0f 90       	pop	r0
+ 728:	0f 90       	pop	r0
+ 72a:	0f 90       	pop	r0
+ 72c:	0f 90       	pop	r0
+ 72e:	df 91       	pop	r29
+ 730:	cf 91       	pop	r28
+ 732:	1f 91       	pop	r17
+ 734:	0f 91       	pop	r16
+ 736:	ff 90       	pop	r15
+ 738:	08 95       	ret
 
-00000790 <__vector_1>:
+0000073a <__vector_1>:
 
 uint8_t do_kalibrering = TRUE;
 //uint8_t gyro_null;
 
 ISR(INT0_vect)	// INT0 sätter kalibrerings variabel
 {	
- 790:	1f 92       	push	r1
- 792:	0f 92       	push	r0
- 794:	0f b6       	in	r0, 0x3f	; 63
- 796:	0f 92       	push	r0
- 798:	11 24       	eor	r1, r1
- 79a:	2f 93       	push	r18
- 79c:	8f 93       	push	r24
- 79e:	9f 93       	push	r25
+ 73a:	1f 92       	push	r1
+ 73c:	0f 92       	push	r0
+ 73e:	0f b6       	in	r0, 0x3f	; 63
+ 740:	0f 92       	push	r0
+ 742:	11 24       	eor	r1, r1
+ 744:	2f 93       	push	r18
+ 746:	8f 93       	push	r24
+ 748:	9f 93       	push	r25
   PORTD |= 0x60;
- 7a0:	8b b1       	in	r24, 0x0b	; 11
- 7a2:	80 66       	ori	r24, 0x60	; 96
- 7a4:	8b b9       	out	0x0b, r24	; 11
- 7a6:	2f ef       	ldi	r18, 0xFF	; 255
- 7a8:	8f ef       	ldi	r24, 0xFF	; 255
- 7aa:	91 e1       	ldi	r25, 0x11	; 17
- 7ac:	21 50       	subi	r18, 0x01	; 1
- 7ae:	80 40       	sbci	r24, 0x00	; 0
- 7b0:	90 40       	sbci	r25, 0x00	; 0
- 7b2:	e1 f7       	brne	.-8      	; 0x7ac <__vector_1+0x1c>
- 7b4:	00 c0       	rjmp	.+0      	; 0x7b6 <__vector_1+0x26>
- 7b6:	00 00       	nop
+ 74a:	8b b1       	in	r24, 0x0b	; 11
+ 74c:	80 66       	ori	r24, 0x60	; 96
+ 74e:	8b b9       	out	0x0b, r24	; 11
+ 750:	2f ef       	ldi	r18, 0xFF	; 255
+ 752:	8f ef       	ldi	r24, 0xFF	; 255
+ 754:	91 e1       	ldi	r25, 0x11	; 17
+ 756:	21 50       	subi	r18, 0x01	; 1
+ 758:	80 40       	sbci	r24, 0x00	; 0
+ 75a:	90 40       	sbci	r25, 0x00	; 0
+ 75c:	e1 f7       	brne	.-8      	; 0x756 <__vector_1+0x1c>
+ 75e:	00 c0       	rjmp	.+0      	; 0x760 <__vector_1+0x26>
+ 760:	00 00       	nop
   _delay_ms(400);
   PORTD &= 0x9F;				
- 7b8:	8b b1       	in	r24, 0x0b	; 11
- 7ba:	8f 79       	andi	r24, 0x9F	; 159
- 7bc:	8b b9       	out	0x0b, r24	; 11
+ 762:	8b b1       	in	r24, 0x0b	; 11
+ 764:	8f 79       	andi	r24, 0x9F	; 159
+ 766:	8b b9       	out	0x0b, r24	; 11
   do_kalibrering = TRUE;
- 7be:	81 e0       	ldi	r24, 0x01	; 1
- 7c0:	80 93 00 01 	sts	0x0100, r24
+ 768:	81 e0       	ldi	r24, 0x01	; 1
+ 76a:	80 93 00 01 	sts	0x0100, r24
   SHUT_DOWN_INTERRUPT;	//Stänger av interrupt under pågående interrupt
- 7c4:	e0 9a       	sbi	0x1c, 0	; 28
+ 76e:	e0 9a       	sbi	0x1c, 0	; 28
 }
- 7c6:	9f 91       	pop	r25
- 7c8:	8f 91       	pop	r24
- 7ca:	2f 91       	pop	r18
- 7cc:	0f 90       	pop	r0
- 7ce:	0f be       	out	0x3f, r0	; 63
- 7d0:	0f 90       	pop	r0
- 7d2:	1f 90       	pop	r1
- 7d4:	18 95       	reti
+ 770:	9f 91       	pop	r25
+ 772:	8f 91       	pop	r24
+ 774:	2f 91       	pop	r18
+ 776:	0f 90       	pop	r0
+ 778:	0f be       	out	0x3f, r0	; 63
+ 77a:	0f 90       	pop	r0
+ 77c:	1f 90       	pop	r1
+ 77e:	18 95       	reti
 
-000007d6 <__vector_default>:
+00000780 <__vector_default>:
 
 ISR(BADISR_vect){
- 7d6:	1f 92       	push	r1
- 7d8:	0f 92       	push	r0
- 7da:	0f b6       	in	r0, 0x3f	; 63
- 7dc:	0f 92       	push	r0
- 7de:	11 24       	eor	r1, r1
- 7e0:	0b b6       	in	r0, 0x3b	; 59
- 7e2:	0f 92       	push	r0
- 7e4:	2f 93       	push	r18
- 7e6:	3f 93       	push	r19
- 7e8:	4f 93       	push	r20
- 7ea:	5f 93       	push	r21
- 7ec:	6f 93       	push	r22
- 7ee:	7f 93       	push	r23
- 7f0:	8f 93       	push	r24
- 7f2:	9f 93       	push	r25
- 7f4:	af 93       	push	r26
- 7f6:	bf 93       	push	r27
- 7f8:	ef 93       	push	r30
- 7fa:	ff 93       	push	r31
+ 780:	1f 92       	push	r1
+ 782:	0f 92       	push	r0
+ 784:	0f b6       	in	r0, 0x3f	; 63
+ 786:	0f 92       	push	r0
+ 788:	11 24       	eor	r1, r1
+ 78a:	0b b6       	in	r0, 0x3b	; 59
+ 78c:	0f 92       	push	r0
+ 78e:	2f 93       	push	r18
+ 790:	3f 93       	push	r19
+ 792:	4f 93       	push	r20
+ 794:	5f 93       	push	r21
+ 796:	6f 93       	push	r22
+ 798:	7f 93       	push	r23
+ 79a:	8f 93       	push	r24
+ 79c:	9f 93       	push	r25
+ 79e:	af 93       	push	r26
+ 7a0:	bf 93       	push	r27
+ 7a2:	ef 93       	push	r30
+ 7a4:	ff 93       	push	r31
   //PORTD |= 0x20;
   incomingData();
- 7fc:	f9 dc       	rcall	.-1550   	; 0x1f0 <incomingData>
+ 7a6:	24 dd       	rcall	.-1464   	; 0x1f0 <incomingData>
   TWCR = (1 << TWIE) | (1 << TWEN)| (1<<TWEA) | (1<<TWINT);//TWCR |= (1<<TWEA) | (1<<TWINT);
- 7fe:	85 ec       	ldi	r24, 0xC5	; 197
- 800:	80 93 bc 00 	sts	0x00BC, r24
+ 7a8:	85 ec       	ldi	r24, 0xC5	; 197
+ 7aa:	80 93 bc 00 	sts	0x00BC, r24
 }
- 804:	ff 91       	pop	r31
- 806:	ef 91       	pop	r30
- 808:	bf 91       	pop	r27
- 80a:	af 91       	pop	r26
- 80c:	9f 91       	pop	r25
- 80e:	8f 91       	pop	r24
- 810:	7f 91       	pop	r23
- 812:	6f 91       	pop	r22
- 814:	5f 91       	pop	r21
- 816:	4f 91       	pop	r20
- 818:	3f 91       	pop	r19
- 81a:	2f 91       	pop	r18
- 81c:	0f 90       	pop	r0
- 81e:	0b be       	out	0x3b, r0	; 59
- 820:	0f 90       	pop	r0
- 822:	0f be       	out	0x3f, r0	; 63
- 824:	0f 90       	pop	r0
- 826:	1f 90       	pop	r1
- 828:	18 95       	reti
+ 7ae:	ff 91       	pop	r31
+ 7b0:	ef 91       	pop	r30
+ 7b2:	bf 91       	pop	r27
+ 7b4:	af 91       	pop	r26
+ 7b6:	9f 91       	pop	r25
+ 7b8:	8f 91       	pop	r24
+ 7ba:	7f 91       	pop	r23
+ 7bc:	6f 91       	pop	r22
+ 7be:	5f 91       	pop	r21
+ 7c0:	4f 91       	pop	r20
+ 7c2:	3f 91       	pop	r19
+ 7c4:	2f 91       	pop	r18
+ 7c6:	0f 90       	pop	r0
+ 7c8:	0b be       	out	0x3b, r0	; 59
+ 7ca:	0f 90       	pop	r0
+ 7cc:	0f be       	out	0x3f, r0	; 63
+ 7ce:	0f 90       	pop	r0
+ 7d0:	1f 90       	pop	r1
+ 7d2:	18 95       	reti
 
-0000082a <interrupt_init>:
+000007d4 <interrupt_init>:
 	}
 }
 
 void interrupt_init()
 {
   ENABLE_INT0;
- 82a:	e8 9a       	sbi	0x1d, 0	; 29
+ 7d4:	e8 9a       	sbi	0x1d, 0	; 29
   FALLING_EDGE_TRIGGER;
- 82c:	e9 e6       	ldi	r30, 0x69	; 105
- 82e:	f0 e0       	ldi	r31, 0x00	; 0
- 830:	80 81       	ld	r24, Z
- 832:	82 60       	ori	r24, 0x02	; 2
- 834:	80 83       	st	Z, r24
+ 7d6:	e9 e6       	ldi	r30, 0x69	; 105
+ 7d8:	f0 e0       	ldi	r31, 0x00	; 0
+ 7da:	80 81       	ld	r24, Z
+ 7dc:	82 60       	ori	r24, 0x02	; 2
+ 7de:	80 83       	st	Z, r24
   sei();
- 836:	78 94       	sei
- 838:	08 95       	ret
+ 7e0:	78 94       	sei
+ 7e2:	08 95       	ret
 
-0000083a <main>:
+000007e4 <main>:
   incomingData();
   TWCR = (1 << TWIE) | (1 << TWEN)| (1<<TWEA) | (1<<TWINT);//TWCR |= (1<<TWEA) | (1<<TWINT);
 }
 
 int main(void){	
   DDRD |= 0x60;
- 83a:	8a b1       	in	r24, 0x0a	; 10
- 83c:	80 66       	ori	r24, 0x60	; 96
- 83e:	8a b9       	out	0x0a, r24	; 10
+ 7e4:	8a b1       	in	r24, 0x0a	; 10
+ 7e6:	80 66       	ori	r24, 0x60	; 96
+ 7e8:	8a b9       	out	0x0a, r24	; 10
   avstand_init();
- 840:	d7 de       	rcall	.-594    	; 0x5f0 <avstand_init>
+ 7ea:	d7 de       	rcall	.-594    	; 0x59a <avstand_init>
   mux_init();		
- 842:	42 dc       	rcall	.-1916   	; 0xc8 <mux_init>
+ 7ec:	6d dc       	rcall	.-1830   	; 0xc8 <mux_init>
   adc_init();
- 844:	45 dc       	rcall	.-1910   	; 0xd0 <adc_init>
+ 7ee:	70 dc       	rcall	.-1824   	; 0xd0 <adc_init>
   init_timer0();
- 846:	33 dd       	rcall	.-1434   	; 0x2ae <init_timer0>
+ 7f0:	5e dd       	rcall	.-1348   	; 0x2ae <init_timer0>
   i2c_setup(0x06);
- 848:	86 e0       	ldi	r24, 0x06	; 6
- 84a:	6f dc       	rcall	.-1826   	; 0x12a <i2c_setup>
+ 7f2:	86 e0       	ldi	r24, 0x06	; 6
+ 7f4:	9a dc       	rcall	.-1740   	; 0x12a <i2c_setup>
   interrupt_init();
- 84c:	ee df       	rcall	.-36     	; 0x82a <interrupt_init>
+ 7f6:	ee df       	rcall	.-36     	; 0x7d4 <interrupt_init>
 
   uint16_t cntr = 0;
   uint8_t data_to_send[1];
   data_to_send[0] = 0x0A;
 	int counter = 0;
- 84e:	00 e0       	ldi	r16, 0x00	; 0
- 850:	10 e0       	ldi	r17, 0x00	; 0
-  adc_init();
-  init_timer0();
-  i2c_setup(0x06);
-  interrupt_init();
-
-  uint16_t cntr = 0;
- 852:	c0 e0       	ldi	r28, 0x00	; 0
- 854:	d0 e0       	ldi	r29, 0x00	; 0
-	  do_kalibrering = FALSE;
-	}
-	
+ 7f8:	c0 e0       	ldi	r28, 0x00	; 0
+ 7fa:	d0 e0       	ldi	r29, 0x00	; 0
 	if(counter++ == 10){
+		//_delay_ms(1);
+		//read_rgb();
+		//_delay_ms(1);
 		counter = 0;
 		reflex = true;
- 856:	bb 24       	eor	r11, r11
- 858:	b3 94       	inc	r11
-	  kalibrering();
-	  do_kalibrering = FALSE;
-	}
+ 7fc:	ff 24       	eor	r15, r15
+ 7fe:	f3 94       	inc	r15
 	
 	if(counter++ == 10){
+		//_delay_ms(1);
+		//read_rgb();
+		//_delay_ms(1);
 		counter = 0;
- 85a:	c1 2c       	mov	r12, r1
- 85c:	d1 2c       	mov	r13, r1
- 85e:	02 c0       	rjmp	.+4      	; 0x864 <main+0x2a>
-      //i2c_requestToSend(0x04, data_to_send);
-      //read_reflex_sensors();
-      //read_avstand_sensor();     
-      //read_rgb();
-		
-		if(cntr++ >= 1000)
- 860:	21 96       	adiw	r28, 0x01	; 1
-		{
-			read_battery_voltage();
-			cntr = 0;
- 862:	87 01       	movw	r16, r14
+ 800:	d1 2c       	mov	r13, r1
+ 802:	e1 2c       	mov	r14, r1
+ 804:	01 c0       	rjmp	.+2      	; 0x808 <main+0x24>
+  //PORTD |= 0x20;
+  incomingData();
+  TWCR = (1 << TWIE) | (1 << TWEN)| (1<<TWEA) | (1<<TWINT);//TWCR |= (1<<TWEA) | (1<<TWINT);
+}
+
+int main(void){	
+ 806:	e8 01       	movw	r28, r16
   uint8_t data_to_send[1];
   data_to_send[0] = 0x0A;
 	int counter = 0;
   while(1)
     {
       if(do_kalibrering == TRUE)
- 864:	80 91 00 01 	lds	r24, 0x0100
- 868:	81 30       	cpi	r24, 0x01	; 1
- 86a:	19 f4       	brne	.+6      	; 0x872 <main+0x38>
+ 808:	80 91 00 01 	lds	r24, 0x0100
+ 80c:	81 30       	cpi	r24, 0x01	; 1
+ 80e:	19 f4       	brne	.+6      	; 0x816 <main+0x32>
 	{
 	  kalibrering();
- 86c:	25 dd       	rcall	.-1462   	; 0x2b8 <kalibrering>
+ 810:	53 dd       	rcall	.-1370   	; 0x2b8 <kalibrering>
 	  do_kalibrering = FALSE;
- 86e:	10 92 00 01 	sts	0x0100, r1
+ 812:	10 92 00 01 	sts	0x0100, r1
 	}
 	
 	if(counter++ == 10){
- 872:	78 01       	movw	r14, r16
- 874:	8f ef       	ldi	r24, 0xFF	; 255
- 876:	e8 1a       	sub	r14, r24
- 878:	f8 0a       	sbc	r15, r24
- 87a:	0a 30       	cpi	r16, 0x0A	; 10
- 87c:	11 05       	cpc	r17, r1
- 87e:	39 f4       	brne	.+14     	; 0x88e <main+0x54>
+ 816:	8e 01       	movw	r16, r28
+ 818:	0f 5f       	subi	r16, 0xFF	; 255
+ 81a:	1f 4f       	sbci	r17, 0xFF	; 255
+ 81c:	2a 97       	sbiw	r28, 0x0a	; 10
+ 81e:	39 f4       	brne	.+14     	; 0x82e <main+0x4a>
+		//_delay_ms(1);
+		//read_rgb();
+		//_delay_ms(1);
 		counter = 0;
 		reflex = true;
- 880:	b0 92 0d 01 	sts	0x010D, r11
+ 820:	f0 92 0d 01 	sts	0x010D, r15
 		avstand = true;
- 884:	b0 92 0c 01 	sts	0x010C, r11
-	  kalibrering();
-	  do_kalibrering = FALSE;
-	}
+ 824:	f0 92 0c 01 	sts	0x010C, r15
 	
 	if(counter++ == 10){
+		//_delay_ms(1);
+		//read_rgb();
+		//_delay_ms(1);
 		counter = 0;
- 888:	ec 2c       	mov	r14, r12
- 88a:	fd 2c       	mov	r15, r13
- 88c:	03 c0       	rjmp	.+6      	; 0x894 <main+0x5a>
+ 828:	0d 2d       	mov	r16, r13
+ 82a:	1e 2d       	mov	r17, r14
+ 82c:	03 c0       	rjmp	.+6      	; 0x834 <main+0x50>
 		reflex = true;
 		avstand = true;
 	}
 	if(reflex)
- 88e:	80 91 0d 01 	lds	r24, 0x010D
- 892:	81 11       	cpse	r24, r1
+ 82e:	80 91 0d 01 	lds	r24, 0x010D
+ 832:	81 11       	cpse	r24, r1
 		read_reflex_sensors();	
- 894:	75 de       	rcall	.-790    	; 0x580 <read_reflex_sensors>
+ 834:	a5 de       	rcall	.-694    	; 0x580 <read_reflex_sensors>
 	if(avstand) 
- 896:	80 91 0c 01 	lds	r24, 0x010C
- 89a:	81 11       	cpse	r24, r1
+ 836:	80 91 0c 01 	lds	r24, 0x010C
+ 83a:	88 23       	and	r24, r24
+ 83c:	21 f3       	breq	.-56     	; 0x806 <main+0x22>
 		read_avstand_sensor();
- 89c:	2d df       	rcall	.-422    	; 0x6f8 <read_avstand_sensor>
-      //i2c_requestToSend(0x04, data_to_send);
-      //read_reflex_sensors();
-      //read_avstand_sensor();     
-      //read_rgb();
-		
-		if(cntr++ >= 1000)
- 89e:	c8 3e       	cpi	r28, 0xE8	; 232
- 8a0:	83 e0       	ldi	r24, 0x03	; 3
- 8a2:	d8 07       	cpc	r29, r24
- 8a4:	e8 f2       	brcs	.-70     	; 0x860 <main+0x26>
-		{
-			read_battery_voltage();
- 8a6:	79 de       	rcall	.-782    	; 0x59a <read_battery_voltage>
-			cntr = 0;
- 8a8:	cc 2d       	mov	r28, r12
- 8aa:	dd 2d       	mov	r29, r13
- 8ac:	da cf       	rjmp	.-76     	; 0x862 <main+0x28>
+ 83e:	31 df       	rcall	.-414    	; 0x6a2 <read_avstand_sensor>
+ 840:	e2 cf       	rjmp	.-60     	; 0x806 <main+0x22>
 
-000008ae <_exit>:
- 8ae:	f8 94       	cli
+00000842 <_exit>:
+ 842:	f8 94       	cli
 
-000008b0 <__stop_program>:
- 8b0:	ff cf       	rjmp	.-2      	; 0x8b0 <__stop_program>
+00000844 <__stop_program>:
+ 844:	ff cf       	rjmp	.-2      	; 0x844 <__stop_program>

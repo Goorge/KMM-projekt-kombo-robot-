@@ -127,7 +127,7 @@ uint8_t look_up_long(uint8_t value)
 {
 	if(value>81)
 	{
-		return 30;
+		return 31;
 	}
 	else if(value>71)
 	{

@@ -55,6 +55,9 @@ int main(void){
 	}
 	
 	if(counter++ == 10){
+		//_delay_ms(1);
+		//read_rgb();
+		//_delay_ms(1);
 		counter = 0;
 		reflex = true;
 		avstand = true;
@@ -69,11 +72,11 @@ int main(void){
       //read_avstand_sensor();     
       //read_rgb();
 		
-		if(cntr++ >= 1000)
+		/*if(cntr++ >= 1000)
 		{
 			read_battery_voltage();
 			cntr = 0;
-		}
+		}*/
 	}
 }
 
