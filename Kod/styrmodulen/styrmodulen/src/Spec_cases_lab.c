@@ -9,9 +9,14 @@ bool turn_done = false;
 bool first_time=true;
 int sensor_front_tmp; //används då man kommer till ett vägskäl där man kan svänga eller köra rakt fram för att kunna åka ut i mitte av kurvan innan svän inleds
 int min_distance_front = 30;
+
 void req_gyro_turn(void){ // fuktion man kallar på för att starta Gyro inför 90 graders sväng
-	;
+	byte data[1] = { 0x07 };
+	i2c_send(0x06, data);
+	turning = true;
+	_delay_ms(100);
 }
+
 //hej
 //-----------------------------------------
 //Funktioner för att styra robot för höger/vänster eller framåt
@@ -64,7 +69,7 @@ void waypoint_lab(int distance_left,int distance_right,int distance_front,int st
 	}
 	else if(start_turn){					//startar svängen, kollar RGB, om vänster gira vänster annars gira höger(med eller utan rgb indikation).
 		
-		if(RGB_data == 1){					//RGB_data="blå" alltså sväng vänster
+		if(RGB_data == 3){					//RGB_data="blå" alltså sväng vänster vänster=blå
 			turn_left();
 		}
 		else {
@@ -73,14 +78,13 @@ void waypoint_lab(int distance_left,int distance_right,int distance_front,int st
 		
 		start_turn = false;					//Säger att svängen har inledits för att inte gå in i den här if-satsen igen
 	}
-	else if(ongoing_turn && gyro_90){	//Gyrot singnalerar att svängen är klar och det är klart att börja köra ur den
+	else if(ongoing_turn && !turning){	//Gyrot singnalerar att svängen är klar och det är klart att börja köra ur den
 		turn_done = true;
 		count_waypoint = 0;
-		gyro_turn = 0;
 		drive_forward();
 	}
-	else if(turn_done && count_waypoint >= 5){	//sväng är klar och roboten har kört ur kurvan, återgå till vanlig PD-reglering
-		waypoint = 0;						
+	else if(turn_done && distance_right < 31 && distance_left < 31){	//sväng är klar och roboten har kört ur kurvan, återgå till vanlig PD-reglering
+		waypoint = false;						
 		ongoing_turn = false;
 	}
 }
@@ -101,26 +105,26 @@ void oneway_turn_lab(int distance_left,int distance_right,int distance_front,int
 		req_gyro_turn();
 	}
 	else if(start_turn){									//Roboten är inne i kurvan och redo o svänga 
-		if(sensor_left > st_value){								//Kollar avstånd till höger och vänster för att -
+		if(distance_left > st_value){								//Kollar avstånd till höger och vänster för att -
 															//se vilket håll det ska svängas och inleder sedan sväng
 			turn_left();
 		}
-		else if(sensor_right > st_value){
+		else if(distance_right > st_value){
 			turn_right();
 		}
 		start_turn = false;										// Signalerar att sväng har	inledits för att inte gå in i denna if igen
 		
 	}
 	
-	else if(ongoing_turn && gyro_90){					//Gyrot singnalerar att svängen är klar och det är klart att börja köra ur den
+	else if(ongoing_turn && !turning){					//Gyrot singnalerar att svängen är klar och det är klart att börja köra ur den
 		turn_done = true;
-		count_waypoint = 0; //oneway_turn
+		//count_waypoint = 0; //oneway_turn
 		gyro_turn = 0;
 		drive_forward();
 	}
 	
-	else if(turn_done && count_waypoint >= 5){	//sväng är klar och roboten har kört ur kurvan, återgå till vanlig PD-reglering
-		oneway_turn = 0;
+	else if(turn_done && distance_left < 31 && distance_right < 31){	//sväng är klar och roboten har kört ur kurvan, återgå till vanlig PD-reglering
+		oneway_turn = false;
 		ongoing_turn = false;
 	}
 	
@@ -147,8 +151,8 @@ void twoway_turn_left_lab(int distance_left,int distance_right,int distance_fron
 				drive_forward();							
 			}
 			else {						//RGB säger att roboten ska svänga vänster så vänstersväng inleds samt kall på Gyro för att kontrollera 90-grader
-				turn_left();
 				req_gyro_turn();
+				turn_left();
 			}
 												
 		start_turn = false;				// Signalerar att sväng har	inledits för att inte gå in i denna if igen	
@@ -156,13 +160,12 @@ void twoway_turn_left_lab(int distance_left,int distance_right,int distance_fron
 	
 	else if(RGB_data != 3 && distance_left < st_value && distance_right < st_value && distance_front > st_value){	//Roboten har kört igenom kurvan och återgår till vanlig reglering 
 		twoway_turn_left = false;
-		first_time = false;
+		first_time = true;
 		ongoing_turn = false;
 	}
-	else if(RGB_data == 3 && gyro_90){ //RGB sensor visar på att vi ska svänga vänster och RGB säger att vi roterat 90-grader	
+	else if(RGB_data == 3 && !turning){ //RGB sensor visar på att vi ska svänga vänster och RGB säger att vi roterat 90-grader	
 		turn_done = true;
 		count_waypoint = 0;			//counter som används för att roboten ska köra i 0.5 sek för att komma ur kurvor 
-		gyro_90 = false;
 		RGB_data = 0;				// RGB värdet nollsätts för att kunna kontrollera för nästa kurva
 		drive_forward();			// motorerna kör framåt för att komma ur kurvan
 	}
@@ -191,26 +194,25 @@ void twoway_turn_right_lab(int distance_left,int distance_right,int distance_fro
 	
 	else if(start_turn){				//Robot är inne i kurva och kontrollerar vilket håll den ska svänga
 		
-		if(RGB_data!=3){			//RGB säger inte att roboten ska svänga höger så den kör rakt fram
+		if(RGB_data!=1){			//RGB säger inte att roboten ska svänga höger så den kör rakt fram
 			drive_forward();
 		}
 		else {						//RGB säger att roboten ska svänga höger så högersväng inleds samt kall på Gyro för att kontrollera 90-grader
-			turn_right();
 			req_gyro_turn();
+			turn_right();
 		}
 		
 		start_turn = false;				// Signalerar att sväng har	inledits för att inte gå in i denna if igen
 	}
 	
 	else if(RGB_data != 1 && distance_left < st_value && distance_right < st_value && distance_front > st_value){	//Roboten har kört igenom kurvan och återgår till vanlig reglering
-		twoway_turn_left = false;
+		twoway_turn_right = false;
 		first_time = false;
 		ongoing_turn = false;
 	}
-	else if(RGB_data == 1 && gyro_90){ //RGB sensor visar på att vi ska svänga höger och RGB säger att vi roterat 90-grader
+	else if(RGB_data == 1 && !turning){ //RGB sensor visar på att vi ska svänga höger och RGB säger att vi roterat 90-grader
 		turn_done = true;
-		count_waypoint = 0;			//counter som används för att roboten ska köra i 0.5 sek för att komma ur kurvor
-		gyro_90 = false;
+		//count_waypoint = 0;			//counter som används för att roboten ska köra i 0.5 sek för att komma ur kurvor
 		RGB_data = 0;				// RGB värdet nollsätts för att kunna kontrollera för nästa kurva
 		drive_forward();			// motorerna kör framåt för att komma ur kurvan
 	}

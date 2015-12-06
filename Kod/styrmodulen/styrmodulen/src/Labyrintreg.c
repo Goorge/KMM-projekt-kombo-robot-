@@ -2,10 +2,10 @@
 #include <avr/io.h>
 #include <stdbool.h>
 #include "asf.h"
-bool waypoint=false;
-bool oneway_turn=false;
-bool twoway_turn_left=false;
-bool twoway_turn_right=false;
+bool waypoint = false;
+bool oneway_turn = false;
+bool twoway_turn_left = false;
+bool twoway_turn_right = false;
 int sensor_front;
 int sensor_left;
 int sensor_right;
@@ -17,25 +17,51 @@ void labyreg(){
 	int sensor_right_tmp = distans_right;
 	int sensor_left_tmp = distans_left;
 	sei();
-	
 	int st_value = 40;
+	
+	/*
+	if(waypoint){
+		waypoint_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
+		return;	
+	}
+	else if(oneway_turn){
+		oneway_turn_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
+		return;
+	}
+	else if(twoway_turn_left){
+		twoway_turn_left_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
+		return;
+	}
+	else if(twoway_turn_right){
+		twoway_turn_right_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
+		return;
+	}
+	*/
+	
 	// Normalfall
-	/*if((sensor_left_tmp < st_value && sensor_front_tmp > st_value && sensor_right_tmp < st_value) &&
-	(!oneway_turn && !waypoint && !twoway_turn_left && !twoway_turn_right))*/
-		PD_for_lab(sensor_left_tmp,sensor_right_tmp);
+	//if(sensor_left_tmp < st_value && sensor_front_tmp > st_value && sensor_right_tmp < st_value)
+		PD_for_lab(sensor_left_tmp, sensor_right_tmp, sensor_front_tmp);
 	//Enkelsväng	
 	/*else if(((sensor_left_tmp < st_value && sensor_front_tmp < st_value && sensor_right_tmp > st_value) 
-		|| (sensor_left_tmp > st_value && sensor_front_tmp < st_value && sensor_right_tmp < st_value)) || oneway_turn)	
+		|| (sensor_left_tmp > st_value && sensor_front_tmp < st_value && sensor_right_tmp < st_value)))	{
 		oneway_turn_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
+		oneway_turn = true;
+	}
 	//t-korsning rakt framifrån
-	else if((sensor_left_tmp > st_value && sensor_front_tmp < st_value && sensor_right_tmp > st_value) || waypoint)		
+	else if((sensor_left_tmp > st_value && sensor_front_tmp < st_value && sensor_right_tmp > st_value))	{	
 		waypoint_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
+		waypoint = true;
+	}
 	// T-korsning där roboten kan köra framåt eller åt vänster
-	else if((sensor_left_tmp > st_value && sensor_front_tmp > st_value && sensor_right_tmp < st_value) || twoway_turn_left)
+	else if(sensor_left_tmp > st_value && sensor_front_tmp > st_value && sensor_right_tmp < st_value){
+		twoway_turn_left = true;
 		twoway_turn_left_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
+	}
 	// T-korsning där roboten kan köra framåt eller åt höger	
-	else if((sensor_left_tmp < st_value && sensor_front_tmp > st_value && sensor_right_tmp > st_value) || twoway_turn_right)
-		twoway_turn_right_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);*/
+	else if(sensor_left_tmp < st_value && sensor_front_tmp > st_value && sensor_right_tmp > st_value){
+		twoway_turn_right_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
+		twoway_turn_right = true;
+	}*/
 }
 
 
