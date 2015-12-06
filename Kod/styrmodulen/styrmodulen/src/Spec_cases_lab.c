@@ -9,6 +9,7 @@ bool turn_done = false;
 bool first_time=true;
 int sensor_front_tmp; //används då man kommer till ett vägskäl där man kan svänga eller köra rakt fram för att kunna åka ut i mitte av kurvan innan svän inleds
 int min_distance_front = 30;
+int previous_errors[3];
 
 void req_gyro_turn(void){ // fuktion man kallar på för att starta Gyro inför 90 graders sväng
 	byte data[1] = { 0x07 };
@@ -42,6 +43,57 @@ void drive_forward(void){
 	motor_left = left;
 	motor_right = right;
 }
+
+void drive_forward_left(int distance){
+	int current_error = distance_wall_desired - distance; //-sensor_left_tmp
+	derivate = current_error - previous_errors[error_count];///10; //
+	int output = (p_constant_lab * current_error + d_constant_lab * derivate)/10;
+	previous_errors[error_count] = current_error;
+
+	if(++error_count >= number_of_errors)
+		error_count=0;
+	
+	if(output <= (-left))
+		output = -left;
+	
+	else if(output >= right)
+		output=right;
+	
+	if(output <= 0){
+		motor_right = right;
+		motor_left = left + output;
+	}
+	else{ 
+		motor_left = left;
+		motor_right = right - output;	
+	}
+}
+
+void drive_forward_right(int distance){
+	 int current_error = distance_wall_desired - distance; //-sensor_left_tmp
+	derivate = current_error - previous_errors[error_count];///10; //
+	int output = (p_constant_lab * current_error + d_constant_lab * derivate)/10;
+	previous_errors[error_count] = current_error;
+
+	if(++error_count >= number_of_errors)
+	error_count = 0;
+	
+	if(output >= (left))
+	output = left;
+	
+	else if(output <= -right)
+	output = -right;
+	
+	if(output >= 0){
+		motor_right = right;
+		motor_left = left - output;
+	}
+	else{
+		motor_left = left;
+		motor_right = right + output;
+	}
+}
+
 
 void stand_still(void){
 	PORTB &= ~(1 << motor_dir_left); 
