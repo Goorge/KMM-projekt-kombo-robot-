@@ -46,9 +46,9 @@ void manual_drive(){
 		else if(manual_function == 5){											// Spin right
 			if(gyro_right == 0){												// Start gyrocheck
 				gyro_right = 1;
-				;																// Request gyroturn
+				req_gyro_turn();																// Request gyroturn
 			}
-			else if(gyro_turn == 1){											// 90 turn done								
+			else if(turning == 0){											// 90 turn done								
 				manual_function = 0;
 				gyro_right = 0;
 			}
@@ -62,9 +62,9 @@ void manual_drive(){
 		else if(manual_function == 6){											// Spin left
 			if(gyro_left == 0){													// Start gyrocheck
 				gyro_left = 1;
-				;																// Request gyroturn
+				req_gyro_turn();																// Request gyroturn
 			}
-			else if(gyro_turn == 1){											// 90 turn done
+			else if(turning == 0){											// 90 turn done
 				manual_function = 0;
 				gyro_right = 0;
 			}

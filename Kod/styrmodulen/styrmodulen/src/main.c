@@ -59,7 +59,10 @@ int main(void)
 		i2c_handel_data();  //test av fregulito
 		if(drive_mode == 1){						// Drivemode is auto    // (drive_mode == 1 && start == 1)
 			//current_position = arre[count_arre];	// används för att simulera linjeföljning, arrayen ändras i globala
-			if(start == 1){
+			if((gyro_left == 1)|| (gyro_right == 1)){
+				drive_mode = 0;
+			}
+			else if(start == 1){
 				regulator();	
 			}
 			else if(start == 0){					// if start is zero then turn off the auto, stops motors

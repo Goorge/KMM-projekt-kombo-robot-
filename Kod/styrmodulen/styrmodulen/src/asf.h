@@ -92,6 +92,7 @@ extern bool twoway_turn_right;
 extern int sensor_left;
 extern int sensor_right;
 //global init
+void req_gyro_turn(void);
 void initengine(void);
 void timerinit(void);
 void interrupt_init(void);
