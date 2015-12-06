@@ -44,6 +44,8 @@
 #ifndef ASF_H
 #define ASF_H
 
+typedef unsigned char byte;
+
 /*
  * This file includes all API header files for the selected drivers from ASF.
  * Note: There might be duplicate includes required by more than one driver.
@@ -100,4 +102,7 @@ void regulator(void);
 void labyreg(void);
 void linje(void);
 void i2c_handel_data(void);
+bool i2c_send(byte prossesor,byte* data);
+
+
 #endif // ASF_H

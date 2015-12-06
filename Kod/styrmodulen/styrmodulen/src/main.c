@@ -2,7 +2,7 @@
 #include <avr/interrupt.h>
 #include <asf.h>
 #include <compat/twi.h>
-typedef unsigned char byte;
+
 // Global variables
 int drive_mode = 0;			// Manual or auto mode
 int start = 0;				// Start and stop
@@ -26,6 +26,10 @@ int Reflex_data2;
 int regulator_mode = 1;		//1=linje, 0=labyrint
 int regler_ready_linje=0;
 
+bool updaterad_labyrint = false;
+bool turning = false;
+
+#include <util/delay.h>
 #include "linjealg.c"
 #include "PDreglering.c"
 #include "Manual_drive.c"
@@ -35,7 +39,6 @@ int regler_ready_linje=0;
 #include "Linje.c"
 #include "Init_styr.c"
 #include "i2c_master.c"
-
 
 
 int main(void)

@@ -4,7 +4,6 @@ byte i2c_recive(byte prossesor);
 void i2c_store_data(byte data);
 void i2c_handel_data();
 
-
 byte i2c_data[15];
 bool i2c_newdata=false;
 int Reflex_data;
@@ -33,10 +32,7 @@ void i2c_setup(bool master) {
 		EICRA |= (1<<ISC01)|(1<<ISC00); // Trigger INT0 on rising edge
 		TWBR = 0x10;
 		TWSR = (0<<TWPS1)|(0<<TWPS0); // set TWI till master
-		
-
 	}
-	
 };
 	
 bool i2c_send(byte prossesor,byte data[]){ //skicka arayen data till prossesor
@@ -201,9 +197,10 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 				batteri=i2c_data[1],i2c_data[2];
 				break;
 			case 0x01 ://avståndssensorer
-				distans_right=i2c_data[3];
+				distans_right = i2c_data[3];
 				distans_fram = i2c_data[2];;
-				distans_left=i2c_data[1];
+				distans_left = i2c_data[1];
+				updaterad_labyrint = true;
 				break;
 			case 0x02 :// refelxsensor data
 				regler_ready_linje = 1;					// Ny data har lästs in då uppdaterar vi regleringen
@@ -219,11 +216,13 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 			case 0x05 :
 				RGB_data=3;//"blå";
 				break;
-			case 0x06 :
-			
+			case 0x06 : // gyro klart
+				gyro_90 = true;
+				turning = false;
+				start = 0;
 				break;
 			case 0x07 :// gyro data
-				gyro_90=true;
+				// Kod vi skickar till sensor
 				break;
 			case 0x08 : // manuel stå still
 				manual_function=0;
@@ -246,7 +245,7 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 			case 0x0e :// spin på stället åt höger
 				manual_function=5;
 				break;
-			case 0x0f :							// GUI skickar en extra byte där vi behandlar knapparna "man/auto" samt "start" (av/på) (används för extrafunktioner i almenhet som inte får plats i vanliga data tabellen)
+			case 0x0f :	// GUI skickar en extra byte där vi behandlar knapparna "man/auto" samt "start" (av/på) (används för extrafunktioner i almenhet som inte får plats i vanliga data tabellen)
 				if(i2c_data[1]==0xf0){
 					if(start==1){
 						start=0;
