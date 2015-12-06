@@ -4,10 +4,10 @@
 
 void regulator(){
 	if(turning){ // Spinn vänster
+		motor_left = 70;
+		motor_right = 60;
 		PORTB &= ~(1 << motor_dir_right);								// Set motor direction to forward
 		PORTB |= (1 << motor_dir_left);									// Set motor direction to backward
-		motor_left = left;
-		motor_right = right;
 	}
 	else if(regulator_mode == 1){
 		linje_main();
