@@ -203,6 +203,7 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 				updaterad_labyrint = true;
 				break;
 			case 0x02 :// refelxsensor data
+				regler_ready_linje = 1;					// Ny data har lästs in då uppdaterar vi regleringen
 				Reflex_data = (i2c_data[2]<<8) + i2c_data[1];
 				Reflex_data2 = i2c_data[3];// går inte att få in mer än 16 bitar i en int...
 				break;
@@ -255,10 +256,14 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 				}
 				else if(i2c_data[1]==0x0f){
 					if(drive_mode==1){
+						PORTD |= (1 << PD1);
+						PORTD &= ~(1 << PD0);
 						drive_mode=0;
 						start=0;
 					}
 					else{
+						PORTD |= (1 << PD0);
+						PORTD &= ~(1 << PD1);
 						drive_mode=1;
 						start=0;
 					}

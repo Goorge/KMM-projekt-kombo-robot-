@@ -7,8 +7,8 @@ float current_error=0;
 float derivate=0;
 int output=0; //vad motorenrna ska regleras med
 float previous_error = 0;
-int p_constant=110;  
-int d_constant=20; 
+int p_constant=120;  
+int d_constant=40; 
 float current_position = 0;
 
 
@@ -25,7 +25,8 @@ void linje(void){
 	previous_error = current_error;
 //***********************************
 //Reglering
-//***********************************		
+//***********************************
+		
 	if (fel_antal==0){ //om utanför linje behöver kanske en tidsbegränsning 
 		PORTB |= (1 << motor_dir_left); //baka tillbaka till linjen för hoppnngsvis
 		PORTB |= (1 << motor_dir_right);
