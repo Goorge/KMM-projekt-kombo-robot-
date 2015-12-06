@@ -28,8 +28,8 @@ void PD_for_lab(int distance_left,int distance_right){
 	derivate = (current_error_lab - previous_errors_left[error_count]);///10; //
 	output_left = (p_constant_lab * current_error_lab + d_constant_lab * derivate)/10.0;
 	previous_errors_left[error_count] = current_error_lab;
-	if(error_count == 999)
-	PORTD ^= (1 << PD1);
+	//if(error_count == 999)
+	//PORTD ^= (1 << PD1);
 	
 	if(++error_count >= number_of_errors)
 		error_count=0;

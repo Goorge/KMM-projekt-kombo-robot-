@@ -3,11 +3,11 @@
 #include "asf.h"
 
 void regulator(){
-	if(regulator_mode == 1){
+	if((regulator_mode == 1) && (regler_ready_linje == 1)){
 		linje_main();
+		regler_ready_linje = 0;
 	}
-	else
-	{	
-		labyreg();//kalla på labyrint funktion
+	else if(regulator_mode == 0){	
+		//labyreg();//kalla på labyrint funktion	
 	}
 }

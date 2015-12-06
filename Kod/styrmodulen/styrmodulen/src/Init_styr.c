@@ -27,12 +27,16 @@ void timerinit(void){
 }
 // -- Interrupt
 ISR(TIMER1_COMPA_vect){
-	regler_ready=1;
+	//regler_ready=1;
 	//if(counter_timer<10)
 	//counter_timer++;
-	counter_goal_line++;
-	if(counter_goal_line > 50){			
-		counter_goal_line = 50;			// för att undvika overflow
+	counter_timer_line_lab++;
+	if(counter_timer_line_lab >= 50){
+		counter_timer_line_lab = 50;			// för att undvika overflow
+	}
+	counter_timer_line++;
+	if(counter_timer_line >= 50){			
+		counter_timer_line = 50;			// för att undvika overflow
 	}
 	count_waypoint++;			//räknare för att köra ur svängar i labyrinter
 }
