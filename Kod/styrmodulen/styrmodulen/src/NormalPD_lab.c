@@ -11,8 +11,9 @@ int output_right;
 int output_left;
 float derivate;
 int distance_wall_desired = 20;
-int previous_errors_left[5];
-int previous_errors_right[5];
+int number_of_errors = 1000;
+int previous_errors_left[1000];
+int previous_errors_right[1000];
 int error_count=0;
 
 void PD_for_lab(int distance_left,int distance_right){
@@ -27,9 +28,10 @@ void PD_for_lab(int distance_left,int distance_right){
 	derivate = (current_error_lab - previous_errors_left[error_count]);///10; //
 	output_left = (p_constant_lab * current_error_lab + d_constant_lab * derivate)/10.0;
 	previous_errors_left[error_count] = current_error_lab;
+	if(error_count == 999)
+	PORTD ^= (1 << PD1);
 	
-	
-	if(++error_count ==5)
+	if(++error_count >= number_of_errors)
 		error_count=0;
 	if(output_left >= 0)
 		output_left = 0;
