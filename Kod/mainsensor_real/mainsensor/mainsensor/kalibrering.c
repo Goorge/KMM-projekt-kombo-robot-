@@ -20,7 +20,7 @@
 
 void kalibrering()
 {
-  const uint8_t highest_value = 205;
+  const uint8_t highest_value = 205;	//Över 4 volt och vi räknar med att sensorn är "11"
   uint8_t lowest_value;
   //uint8_t reflex_values[11];
   uint8_t diff;

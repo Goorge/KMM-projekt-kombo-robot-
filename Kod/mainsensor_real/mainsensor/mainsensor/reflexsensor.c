@@ -8,6 +8,7 @@
 
 #include "reflexsensor.h"
 #include "kal_struct.h"
+#include "do_sensor_struct.h"
 
 #define F_CPU 14.7456E6
 #include <util/delay.h>
@@ -23,7 +24,7 @@ void read_reflex_sensors()
 	{
 		sensor_value = mux_sensors(i);
 		looked_up_value = look_up_value(sensor_value, i);
-		package_sensor_data(looked_up_value, i);
+		package_and_send_sensor_data(looked_up_value, i);
 	}
 }
 
@@ -31,43 +32,23 @@ uint8_t look_up_value(const uint8_t sensor_value, const uint8_t i)
 {
 	if(sensor_value < reflex_kal[i].low)	//00
 	{
-		if(i == 6)
-		{
-			PORTD &= ~(0x60);
-			PORTD |= 0x20;	
-		}
 		return 0x00; //00
 	}
 	else if (sensor_value < reflex_kal[i].middle)	//01
 	{	
-		if(i == 6)
-		{
-			PORTD &= ~(0x60);
-			PORTD |= 0x40;
-		}
 		return 0x01; //01
 	}
 	else if (sensor_value < reflex_kal[i].high)	//10
 	{
-		if(i == 6)
-		{
-			PORTD &= ~(0x60);
-			PORTD |= 0x60;
-		}
 		return 0x02; //10
 	}
 	else	//11
 	{
-		if(i == 6)
-		{
-			PORTD &= ~(0x60);
-			PORTD |= 0x60;
-		}
 		return 0x03;//11
 	}
 }
 
-void package_sensor_data(const uint8_t sensor_data, const uint8_t pin)
+void package_and_send_sensor_data(const uint8_t sensor_data, const uint8_t pin)
 {
 	static uint8_t byte_1;
 	static uint8_t byte_2;
@@ -123,13 +104,17 @@ void package_sensor_data(const uint8_t sensor_data, const uint8_t pin)
 		data_to_send[2] = byte_2;
 		data_to_send[3] = byte_3;
 		
-		if(data_to_send[1] != 0 || data_to_send[2] != 0 ||data_to_send[3] != 0){
-			reflex = true;	
-		}
-		else reflex = false;
-		
 		i2c_requestToSend(0x04, data_to_send); 
 		//skicka data_to_send med I2C
+		
+		if(byte_1 == 0 && byte_2 == 0 && byte_3 == 0)
+		{
+			do_sensor.reflex = FALSE;
+		}
+		else
+		{
+			do_sensor.reflex = TRUE;
+		}
 		
 		byte_1 = 0x00;
 		byte_2 = 0x00;

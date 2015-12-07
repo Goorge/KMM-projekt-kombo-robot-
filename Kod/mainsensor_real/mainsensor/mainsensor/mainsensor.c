@@ -5,17 +5,15 @@
  *  Author: calva694
  */ 
 
-
-
 #include "mainsensor.h"
 #include "kal_struct.h"
+#include "do_sensor_struct.h"
 
 #include <util/delay.h>
 #include <avr/io.h>
 #include <stdint.h>
 #include <avr/interrupt.h>
 
-uint8_t do_kalibrering = TRUE;
 //uint8_t gyro_null;
 
 ISR(INT0_vect)	// INT0 sätter kalibrerings variabel
@@ -23,7 +21,7 @@ ISR(INT0_vect)	// INT0 sätter kalibrerings variabel
   PORTD |= 0x60;
   _delay_ms(400);
   PORTD &= 0x9F;				
-  do_kalibrering = TRUE;
+  do_sensor.kalib = TRUE;
   SHUT_DOWN_INTERRUPT;	//Stänger av interrupt under pågående interrupt
 }
 
@@ -34,50 +32,58 @@ ISR(BADISR_vect){
 }
 
 int main(void){	
-  DDRD |= 0x60;
-  avstand_init();
-  mux_init();		
-  adc_init();
-  init_timer0();
-  i2c_setup(0x06);
-  interrupt_init();
-
-  uint16_t cntr = 0;
-  uint8_t data_to_send[1];
-  data_to_send[0] = 0x0A;
-	int counter = 0;
-  while(1)
-    {
-      if(do_kalibrering == TRUE)
-	{
-	  kalibrering();
-	  do_kalibrering = FALSE;
-	}
+	DDRD |= 0x60;
+	avstand_init();
+	mux_init();		
+	adc_init();
+	init_timer0();
+	i2c_setup(0x06);
+	interrupt_init();
+	variable_init();
 	
-	if(counter++ >= 10){
-		//_delay_ms(1);
-		//read_rgb();
-		//_delay_ms(1);
-		counter = 0;
-		reflex = true;
-		avstand = true;
-	}
-	if(reflex)
-		read_reflex_sensors();	
-	if(avstand) 
-		read_avstand_sensor();
-      //_delay_ms(40);
-      //i2c_requestToSend(0x04, data_to_send);
-      //read_reflex_sensors();
-      //read_avstand_sensor();     
-      //read_rgb();
+	while(1)
+	{
+		if(do_sensor.kalib == TRUE)
+		{
+			kalibrering();
+			do_sensor.kalib = FALSE;
+		}
 		
-		/*if(cntr++ >= 1000)
+		if(do_sensor.counter == 100)
+		{
+			do_sensor.avstand = TRUE;
+			do_sensor.reflex = TRUE;
+			do_sensor.counter = 0;
+		}
+		else
+		{
+			++do_sensor.counter;
+		}
+		
+		if(do_sensor.reflex == TRUE)
+		{
+			read_reflex_sensors();	
+		}
+		
+		if(do_sensor.avstand == TRUE)
+		{
+			read_avstand_sensor();
+		}
+		
+		//PORTD &= ~(0x60);  
+		read_rgb();
+		i2c_handle_data();	//för att köra gyrot när vi tar emot att vi ska göra något så roligt! Snurr snurr
+		
+		/*if(do_sensor.long_counter == 1000)
 		{
 			read_battery_voltage();
-			cntr = 0;
+			do_sensor.long_counter = 0;
+		}
+		else
+		{
+			++do_sensor.long_counter;	
 		}*/
-	}
+    }
 }
 
 void interrupt_init()
@@ -85,4 +91,15 @@ void interrupt_init()
   ENABLE_INT0;
   FALLING_EDGE_TRIGGER;
   sei();
+}
+
+void variable_init()
+{
+	do_sensor.counter = 0;
+	do_sensor.long_counter = 0;
+	do_sensor.avstand = TRUE;
+	do_sensor.reflex = TRUE;
+	do_sensor.battery = TRUE;
+	do_sensor.kalib = FALSE;
+	do_sensor.gyro_null = read_adc(6);
 }

@@ -6,9 +6,10 @@
  */ 
 
 #include "gyro.h"
+#include "do_sensor_struct.h"
 #include <stdlib.h>
-	
-void read_gyro(const uint8_t wanted_degrees, const uint8_t gyro_null)
+
+void read_gyro(const uint8_t wanted_degrees)
 {
 	/*
 	Gyrots känslighet är 300 dgs/s
@@ -29,41 +30,31 @@ void read_gyro(const uint8_t wanted_degrees, const uint8_t gyro_null)
 	Är absolutbeloppet på grader totalt större eller lika med rotera*34 så har man roterat 90 grader		
 	*/
 
-	const int wanted_degrees_34 = wanted_degrees*34;
+	const int wanted_degrees_34 = (wanted_degrees-5)*34;
 	int degrees_rotated_34 = 0;
-	DDRD |= 0x60;
+	PORTD |= 0x60;
 	
 	while(abs(degrees_rotated_34) <= wanted_degrees_34)
 	{	
-		PORTD |= 0x20;
-		if(TCNT0 >= 143) //timer 100gånger/sekund
+		/*if(TCNT0 >= 143) //timer 100gånger/sekund
 		{
 			TCNT0 = 0;
-			degrees_rotated_34 += read_adc(6)-gyro_null;
-		}
+			degrees_rotated_34 += read_adc(6)- do_sensor.gyro_null;
+		}*/
+		
+		degrees_rotated_34 += read_adc(6) - do_sensor.gyro_null;
+		_delay_ms(10);
 	}
-	
-	uint8_t i;
-	
-	for(i=0; i<10 ; ++i)
-	{
-		PORTD |= 0x20;
-		_delay_ms(100);
-		PORTD &= 0x9F;
-		_delay_ms(200);
-		PORTD |= 0x40;
-		_delay_ms(100);
-		PORTD &= 0x9F;
-		_delay_ms(100);	
-	}
+
 	uint8_t data_to_send[1];
-	data_to_send[1] = 0x06;	
+	data_to_send[0] = 0x06;	
 	i2c_requestToSend(0x04, data_to_send);
 	degrees_rotated_34 = 0;
+	PORTD &= ~(0x60);
 }
 
 void init_timer0()
 {
 	PRESCALE_1024;	//Prescale 1024
-	INIT_COUNTER;							//Init counter
+	INIT_COUNTER;	//Init counter
 }
