@@ -6,6 +6,7 @@
  */ 
 
 #include "mainsensor.h"
+#include "do_sensor_struct.h"
 
 void avstand_init()
 {
@@ -35,6 +36,7 @@ void read_avstand_sensor()
 	rakt = look_up_long(rakt);
 	vanster = look_up_mellan(vanster);
 	hoger = look_up_mellan(hoger);
+
 	if(vanster > 34)					//Över 34 cm får vi högre precision med långa sensorn
 	{
 		long_init();
@@ -48,19 +50,23 @@ void read_avstand_sensor()
 		hoger = mux_sensors(13);		//Hämtar nytt värde från långa sensorn till höger
 		hoger = look_up_long(hoger);
 		clear_long();
-	}	
+	}
 	
 	uint8_t data_to_send [4];
 	data_to_send[0] = 0x31;
 	data_to_send[1] = vanster;
 	data_to_send[2] = rakt;
 	data_to_send[3] = hoger;
-		
-	if(data_to_send[1] > 25 || data_to_send[2] > 30 || data_to_send [3] > 30)
-		avstand = false;
-	else avstand=  true;	
-		
 	i2c_requestToSend(0x04, data_to_send);
+	
+	if(vanster > 25 &&  hoger > 25)
+	{
+		do_sensor.avstand = FALSE;
+	}
+	else
+	{
+		do_sensor.avstand = TRUE;
+	}
 }
 
 uint8_t look_up_mellan (uint8_t value)
@@ -77,23 +83,47 @@ uint8_t look_up_mellan (uint8_t value)
 	{
 		return 15;
 	}
+	else if(value > 60)
+	{
+		return 16;
+	}
 	else if(value>57)
 	{
 		return 17;	
 	}
-	else if(value>51)
+	else if(value > 55)
+	{
+		return 18;
+	}
+	else if(value > 53)
+	{
+		return 19;
+	}
+	else if(value > 51)
 	{
 		return 20;
 	}
-	else if(value>47)
+	else if(value > 49)
+	{
+		return 21;
+	}
+	else if(value > 47)
 	{
 		return 22;
 	}
-	else if(value>44)
+	else if(value > 46)
+	{
+		return 23;
+	}
+	else if(value > 45)
+	{
+		return 24;
+	}
+	else if(value > 44)
 	{
 		return 25;
 	}
-	else if(value>40)
+	else if(value > 40)
 	{
 		return 28 ;
 	}
@@ -127,7 +157,7 @@ uint8_t look_up_long(uint8_t value)
 {
 	if(value>81)
 	{
-		return 31;
+		return 30;
 	}
 	else if(value>71)
 	{
@@ -136,6 +166,7 @@ uint8_t look_up_long(uint8_t value)
 	else if(value>58)
 	{
 		return 40;
+		
 	}
 	else if(value>49)
 	{
@@ -177,14 +208,14 @@ uint8_t look_up_long(uint8_t value)
 
 void long_init()
 {
-	PORTD &= ~(0x01);
+	PORTD &= ~(0x03);
+	_delay_ms(1);
 	PORTD |= 0x02;
-	_delay_ms(45);
+	_delay_ms(50);
 }
 
 void clear_long()
 {
-	PORTD &= ~(0x02);
+	PORTD &= ~(0x03);
 	PORTD |= 0x01;
-	_delay_ms(30);
 }

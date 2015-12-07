@@ -16,14 +16,16 @@ uint8_t battery_cell_2;
 	DDRD |= 0x60;
 	
 	battery_cell_1 = read_adc(4); 
-	//if(battery_cell_1 < 180)
-		//PORTD = 0x60;
-		//_delay_ms(1000);
-		//PORTD = 0x00;
+	if(battery_cell_1 < 180)
+	{
+		PORTD = 0x60;
+	}
 	
-	battery_cell_2 = read_adc(7); 
-	//if(battery_cell_2 < 180)
-		//PORTD = 0x60;
+	battery_cell_2 = read_adc(5); 
+	if(battery_cell_2 < 180)
+	{
+		PORTD = 0x60;
+	}
 	
 	uint8_t data_to_send [3];
 	data_to_send[0] = 0x20;

@@ -7,4 +7,7 @@ uint8_t look_up_long(uint8_t value);
 void long_init();
 void clear_long();
 
+#define TRUE 1
+#define FALSE 0
+
 #endif
