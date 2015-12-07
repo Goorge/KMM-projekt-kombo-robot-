@@ -57,7 +57,9 @@ int main(void)
 	motor_right=right;
 	while(1){
 		i2c_handel_data();  //test av fregulito
-		if(drive_mode == 1){						// Drivemode is auto    // (drive_mode == 1 && start == 1)
+		if(turning)
+			;
+		else if(drive_mode == 1){						// Drivemode is auto    // (drive_mode == 1 && start == 1)
 			//current_position = arre[count_arre];	// används för att simulera linjeföljning, arrayen ändras i globala
 			if((gyro_left == 1)|| (gyro_right == 1)){
 				drive_mode = 0;

@@ -48,12 +48,14 @@ void PD_for_lab(int distance_left, int distance_right, int distance_front){
 		output_right = -motor_right;
 
 	if(distance_front <= 31){
-		motor_left = 0; 
+		/*motor_left = 0; 
 		motor_right = 0;
 		byte data[1] = { 0x07 };
 		i2c_send(0x06, data);
 		turning = true;
-		_delay_ms(100);
+		_delay_ms(100);*/
+		req_gyro_turn();
+		turn_left();
 		return;
 	}
 	

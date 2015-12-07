@@ -5,6 +5,40 @@ int manual_function=0;
 int gyro_left = 0;
 int gyro_right = 0;
 
+void req_gyro_turn(void){ // fuktion man kallar på för att starta Gyro inför 90 graders sväng
+	byte data[1] = { 0x07 };
+	i2c_send(0x06, data);
+	turning = true;
+	_delay_ms(100);
+}
+
+//-----------------------------------------
+//Funktioner för att styra robot för höger/vänster eller framåt
+//-----------------------------------------
+void turn_left(void){
+	PORTB &= ~(1 << motor_dir_right);
+	PORTB |= (1 << motor_dir_left);
+	motor_left = 70;//left;
+	motor_right = 60;//right;
+	turning = true;
+}
+
+void turn_right(void){
+	PORTB |= (1 << motor_dir_right);
+	PORTB &= ~(1 << motor_dir_left);
+	motor_left = 70;//left;
+	motor_right = 60;//right;
+	turning = true;
+}
+
+
+void drive_forward(void){
+	PORTB &= ~(1 << motor_dir_left); 
+	PORTB &= ~(1 << motor_dir_right);
+	motor_left = left;
+	motor_right = right;
+}
+
 void manual_drive(){
 		//******************************* Om vänster eller höger-sväng har startats så kör vi klart den, skippa andra inkommandon 
 		if(gyro_left == 1){
@@ -78,6 +112,4 @@ void manual_drive(){
 		else{
 			manual_function=0;												// why not :D 
 		}
-	
-	
 }
