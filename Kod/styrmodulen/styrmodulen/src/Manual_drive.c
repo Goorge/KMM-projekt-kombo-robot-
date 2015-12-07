@@ -31,14 +31,6 @@ void turn_right(void){
 	turning = true;
 }
 
-
-void drive_forward(void){
-	PORTB &= ~(1 << motor_dir_left); 
-	PORTB &= ~(1 << motor_dir_right);
-	motor_left = left;
-	motor_right = right;
-}
-
 void manual_drive(){
 		//******************************* Om vänster eller höger-sväng har startats så kör vi klart den, skippa andra inkommandon 
 		if(gyro_left == 1){
@@ -78,7 +70,9 @@ void manual_drive(){
 			motor_right = right;
 		}
 		else if(manual_function == 5){											// Spin right
-			if(gyro_right == 0){												// Start gyrocheck
+			req_gyro_turn();
+			turn_right();
+			/*if(gyro_right == 0){												// Start gyrocheck
 				gyro_right = 1;
 				req_gyro_turn();																// Request gyroturn
 			}
@@ -91,12 +85,13 @@ void manual_drive(){
 				PORTB |= (1 << motor_dir_right);								// Set motor direction to backward
 				motor_left = left;
 				motor_right = right;
-			}
+			}*/
 		}
 		else if(manual_function == 6){											// Spin left
 			if(gyro_left == 0){													// Start gyrocheck
-				gyro_left = 1;
-				req_gyro_turn();																// Request gyroturn
+				req_gyro_turn();
+				turn_left();//gyro_left = 1;
+																				// Request gyroturn
 			}
 			else if(turning == 0){											// 90 turn done
 				manual_function = 0;

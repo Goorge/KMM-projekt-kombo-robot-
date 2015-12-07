@@ -129,7 +129,7 @@ public class Grafik {
 			if(test){
 				//System.out.println("Klar med setup");
 				if(com.isDataAvailable()){
-					System.out.println("Mottagen data");
+					//System.out.println("Mottagen data");
 					handleData(com.deliverData());
 				}
 			}
@@ -204,7 +204,7 @@ public class Grafik {
 			String text2 = ""; 
 			for(int i = 0; i < data.length; i++){
 				text2 += data[i];
-				System.out.println(" " + data[i]);
+				//System.out.println(" " + data[i]);
 			}
 			addToList(listEnum.garbage, getCurrentTime() + " " + text2);
 			break; 
@@ -759,7 +759,7 @@ public class Grafik {
 				String port = (String)graficList.getSelectedValue();
 				if((graficList.getModel() == comPorts) && port != null ){
 					com.setup(port, baudRate);
-					System.out.println("Port setup färdig");
+					//System.out.println("Port setup färdig");
 				}
 			}
 		});

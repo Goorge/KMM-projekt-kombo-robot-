@@ -106,7 +106,7 @@ byte i2c_recive(byte prossesor){
 		data = data[(TWDR>>4) & 0x0f];
 		size= (TWDR>>4) & 0x0f;
 	}*/
-	data=TWDR; //ta emot data 
+	data = TWDR; //ta emot data 
 	counter++;	
 	start=TW_REP_START;
 	//TWCR = (1<<TWINT);
@@ -200,7 +200,7 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 				distans_right = i2c_data[3];
 				distans_fram = i2c_data[2];;
 				distans_left = i2c_data[1];
-				updaterad_labyrint = true;
+				//updaterad_labyrint = true;
 				break;
 			case 0x02 :// refelxsensor data
 				regler_ready_linje = 1;					// Ny data har lästs in då uppdaterar vi regleringen

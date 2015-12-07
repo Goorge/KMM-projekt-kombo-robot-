@@ -11,9 +11,9 @@ int output_right;
 int output_left;
 float derivate;
 int distance_wall_desired = 20;
-int number_of_errors = 3;
-int previous_errors_left[3];
-int previous_errors_right[3];
+int number_of_errors = 1;
+int previous_errors_left[1];
+int previous_errors_right[1];
 int error_count = 0;
 
 void PD_for_lab(int distance_left, int distance_right, int distance_front){
@@ -48,9 +48,9 @@ void PD_for_lab(int distance_left, int distance_right, int distance_front){
 		output_right = -motor_right;
 
 	if(distance_front <= 31){
-		/*motor_left = 0; 
-		motor_right = 0;
-		byte data[1] = { 0x07 };
+		//motor_left = 0; 
+		//motor_right = 0;
+		/*byte data[1] = { 0x07 };
 		i2c_send(0x06, data);
 		turning = true;
 		_delay_ms(100);*/

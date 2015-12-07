@@ -29,6 +29,7 @@ ISR(TIMER1_COMPA_vect){
 	//regler_ready=1;
 	//if(counter_timer<10)
 	//counter_timer++;
+	updaterad_labyrint = true;
 	counter_timer_line_lab++;
 	if(counter_timer_line_lab >= 50){
 		counter_timer_line_lab = 50;			// för att undvika overflow
