@@ -5,7 +5,7 @@
 #include "gyro.h"
 #include "adc.h"
 #include "i2c_slave.h"
-#include "do_sensor_struct.h"
+//#include do_sensor_struct.h"
 
 byte dataToSend[15];
 byte reciverAdress;
@@ -87,10 +87,10 @@ byte i2c_recive(void){
 	return test;
 }
 
-void i2c_handle_data(void){
+void i2c_handle_data(const uint8_t gyro_null){
 	if(i2c_new_data == true){
 		//if(((i2c_data[0] >> 4) & 0x0f) == 3)
-		read_gyro(90);
+		read_gyro(90, gyro_null);
 		i2c_new_data = false;
 		bytefrom_i2c = 0;
 		TWCR &= ~(1 << TWINT);

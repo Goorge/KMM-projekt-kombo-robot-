@@ -7,21 +7,21 @@
 
 #include "mainsensor.h"
 #include "kal_struct.h"
-#include "do_sensor_struct.h"
+//#include "do_sensor_struct.h"
 
 #include <util/delay.h>
 #include <avr/io.h>
 #include <stdint.h>
 #include <avr/interrupt.h>
 
-//uint8_t gyro_null;
+static uint8_t kalibrate = FALSE;
 
 ISR(INT0_vect)	// INT0 sätter kalibrerings variabel
 {	
   PORTD |= 0x60;
   _delay_ms(400);
   PORTD &= 0x9F;				
-  do_sensor.kalib = TRUE;
+  kalibrate = TRUE;
   SHUT_DOWN_INTERRUPT;	//Stänger av interrupt under pågående interrupt
 }
 
@@ -36,53 +36,35 @@ int main(void){
 	avstand_init();
 	mux_init();		
 	adc_init();
-	init_timer0();
 	i2c_setup(0x06);
 	interrupt_init();
-	variable_init();
+	const uint8_t gyro_null = read_adc(6);
+	
+	static uint16_t cntr = 0;
+	static uint8_t avstand_counter = 0;
 	
 	while(1)
 	{
-		if(do_sensor.kalib == TRUE)
+		if(kalibrate == TRUE)
 		{
 			kalibrering();
-			do_sensor.kalib = FALSE;
+			kalibrate = FALSE;
 		}
+
+		read_reflex_sensors();	//kör reflexsensorer. Muxar hela längan
+		read_avstand_sensor(&avstand_counter);	//läser avståndssensorer
+		read_rgb();			//läs RGB
+		i2c_handle_data(gyro_null);	//för att köra gyrot när vi tar emot att vi ska göra något så roligt! Snurr snurr
 		
-		if(do_sensor.counter == 100)
+		if(cntr == 1000)
 		{
-			do_sensor.avstand = TRUE;
-			do_sensor.reflex = TRUE;
-			do_sensor.counter = 0;
+			//read_battery_voltage();
+			cntr = 0;
 		}
 		else
 		{
-			++do_sensor.counter;
+			++cntr;	
 		}
-		
-		if(do_sensor.reflex == TRUE)
-		{
-			read_reflex_sensors();	
-		}
-		
-		if(do_sensor.avstand == TRUE)
-		{
-			read_avstand_sensor();
-		}
-		
-		//PORTD &= ~(0x60);  
-		read_rgb();
-		i2c_handle_data();	//för att köra gyrot när vi tar emot att vi ska göra något så roligt! Snurr snurr
-		
-		/*if(do_sensor.long_counter == 1000)
-		{
-			read_battery_voltage();
-			do_sensor.long_counter = 0;
-		}
-		else
-		{
-			++do_sensor.long_counter;	
-		}*/
     }
 }
 
@@ -93,7 +75,7 @@ void interrupt_init()
   sei();
 }
 
-void variable_init()
+/*void variable_init()
 {
 	do_sensor.counter = 0;
 	do_sensor.long_counter = 0;
@@ -102,4 +84,4 @@ void variable_init()
 	do_sensor.battery = TRUE;
 	do_sensor.kalib = FALSE;
 	do_sensor.gyro_null = read_adc(6);
-}
+}*/

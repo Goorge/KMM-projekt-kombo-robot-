@@ -6,10 +6,9 @@
  */ 
 
 #include "gyro.h"
-#include "do_sensor_struct.h"
 #include <stdlib.h>
 
-void read_gyro(const uint8_t wanted_degrees)
+void read_gyro(const uint8_t wanted_degrees, const uint8_t gyro_null)
 {
 	/*
 	Gyrots känslighet är 300 dgs/s
@@ -35,14 +34,8 @@ void read_gyro(const uint8_t wanted_degrees)
 	PORTD |= 0x60;
 	
 	while(abs(degrees_rotated_34) <= wanted_degrees_34)
-	{	
-		/*if(TCNT0 >= 143) //timer 100gånger/sekund
-		{
-			TCNT0 = 0;
-			degrees_rotated_34 += read_adc(6)- do_sensor.gyro_null;
-		}*/
-		
-		degrees_rotated_34 += read_adc(6) - do_sensor.gyro_null;
+	{			
+		degrees_rotated_34 += read_adc(6) - gyro_null;
 		_delay_ms(10);
 	}
 
@@ -51,10 +44,4 @@ void read_gyro(const uint8_t wanted_degrees)
 	i2c_requestToSend(0x04, data_to_send);
 	degrees_rotated_34 = 0;
 	PORTD &= ~(0x60);
-}
-
-void init_timer0()
-{
-	PRESCALE_1024;	//Prescale 1024
-	INIT_COUNTER;	//Init counter
 }

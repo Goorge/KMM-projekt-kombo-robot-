@@ -20,7 +20,7 @@ uint8_t mux_sensors(uint8_t mux_select_pin)
 	uint8_t adc_value;
 	PORTB &= 0xF0; 
 	PORTB |= mux_select_pin;
-	_delay_ms(4);
+	_delay_ms(1);
 	adc_value = read_adc(0x00);
 	return adc_value;
 }

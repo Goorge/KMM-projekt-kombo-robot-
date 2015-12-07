@@ -1,4 +1,3 @@
-
 /*
  * reflexsensor.c
  *
@@ -8,7 +7,6 @@
 
 #include "reflexsensor.h"
 #include "kal_struct.h"
-#include "do_sensor_struct.h"
 
 #define F_CPU 14.7456E6
 #include <util/delay.h>
@@ -50,9 +48,9 @@ uint8_t look_up_value(const uint8_t sensor_value, const uint8_t i)
 
 void package_and_send_sensor_data(const uint8_t sensor_data, const uint8_t pin)
 {
-	static uint8_t byte_1;
-	static uint8_t byte_2;
-	static uint8_t byte_3;
+	uint8_t byte_1;
+	uint8_t byte_2;
+	uint8_t byte_3;
 	
 	if(pin == 0)
 	{
@@ -104,20 +102,6 @@ void package_and_send_sensor_data(const uint8_t sensor_data, const uint8_t pin)
 		data_to_send[2] = byte_2;
 		data_to_send[3] = byte_3;
 		
-		i2c_requestToSend(0x04, data_to_send); 
-		//skicka data_to_send med I2C
-		
-		if(byte_1 == 0 && byte_2 == 0 && byte_3 == 0)
-		{
-			do_sensor.reflex = FALSE;
-		}
-		else
-		{
-			do_sensor.reflex = TRUE;
-		}
-		
-		byte_1 = 0x00;
-		byte_2 = 0x00;
-		byte_3 = 0x00;
+		i2c_requestToSend(0x04, data_to_send);
 	}
 }

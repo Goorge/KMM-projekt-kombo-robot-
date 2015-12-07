@@ -21,7 +21,7 @@ void read_rgb()
 	if(color_value > 70)
 	{	
 		PORTD |= 0x20;
-		_delay_ms(40);
+		_delay_ms(10);
 		PORTD &= ~(0x60);
 		data_to_send[0] = 0x03;
 		i2c_requestToSend(0x04, data_to_send);	//skickar röd med I2C
@@ -31,7 +31,7 @@ void read_rgb()
 	if(color_value > 60)
 	{
 		PORTD |= 0x40;
-		_delay_ms(40);
+		_delay_ms(10);
 		PORTD &= ~(0x60);
 		data_to_send[0] = 0x04;
 		i2c_requestToSend(0x04, data_to_send);	//skickar grön med I2C
@@ -41,7 +41,7 @@ void read_rgb()
 	if(color_value > 70)
 	{
 		PORTD |= 0x60;
-		_delay_ms(40);
+		_delay_ms(10);
 		PORTD &= ~(0x60);
 		data_to_send[0] = 0x05;
 		i2c_requestToSend(0x04, data_to_send);	//skickar blå med I2C
