@@ -11,28 +11,28 @@ int Lab_reset_timer = 0;
 
 void linje_main() //funktion so  sköter linjeföjlning och hantering av specialfall
 {
-	if(distans_fram<34){
+	/*if(distans_fram<34){
 		start=0; // kör inte in i väggar (värkar som sensor fram ger minimum 30)
 		PORTD |= (1 << PD1);
 		PORTD |= (1 << PD0);
 	}
-	else if((RGB_data==1) | (RGB_data==2) | (RGB_data==3)){ // == röd,grön,blå
+	else*/ if((RGB_data==1) | (RGB_data==2) | (RGB_data==3)){ // == röd,grön,blå
 		current_position=linje_RGBsveng();
-		linje();
+		//linje();
 	}
 	else if(detect_goal()==true){
 		start=0;
-		//PORTD |= (1 << PD1);
+		PORTD |= (1 << PD1);
 		//signalera i mål och stanna
 	}
-	else if(detect_labyrint()==true){
+	/*else if(detect_labyrint()==true){
 		PORTD |= (1 << PD0);
 		start = 0;
 		//regulator_mode=0; //byt till kör i labyrintmode(är 2 rätt eller ska det vara 0)
-	}
+	}*/
 	else{
 		current_position=linje_get_error();
-		linje();
+		//linje();
 	}
 	
 }
@@ -59,18 +59,19 @@ signed char linje_RGBsveng() //om RGB ger utslag
 		counter_timer_line = 0;
 		RGB_reset_timer = 1;
 	}
-	else if(counter_timer_line <= 20){  // 2sekunder ish
+	else if(counter_timer_line <= 15){  // 2sekunder ish
 		
-		if(RGB_data==1){ //sväng höger reglera bara på sensor mest till höger
+		if(RGB_data==3){ //sväng höger reglera bara på sensor mest till höger
 			
 			for(int i=0;i<11;i++)
 			{
-				if (styr_fel==0)
-				if(i < 8){ //första 8 sensorenrna
-					styr_fel= (i-5) * ((Reflex_data_tmp >> (i * 2) & 0x02)>>1);
-				}
-				else{ // sista 3 sensorerna
-					styr_fel= (i-5) * ((Reflex_data2_tmp >> ((i-8) * 2) & 0x02)>>1);
+				if (styr_fel==0){
+					if(i < 8){ //första 8 sensorenrna
+						styr_fel= (i-5) * ((Reflex_data_tmp >> (i * 2) & 0x02)>>1);
+					}
+					else{ // sista 3 sensorerna
+						styr_fel= (i-5) * ((Reflex_data2_tmp >> ((i-8) * 2) & 0x02)>>1);
+					}
 				}
 			}
 		}
@@ -80,23 +81,26 @@ signed char linje_RGBsveng() //om RGB ger utslag
 			Reflex_data2 = Reflex_data2_tmp & 0x03;
 			return linje_get_error();
 		}
-		else if(RGB_data == 3){// sväng hvänster reglera bara på sensor mest till vänster
+		else if(RGB_data == 1){// sväng hvänster reglera bara på sensor mest till vänster
 			for(int i=11;i>0;i--){
-				if (styr_fel == 0)
-				if(i < 8){ //första 8 sensorenrna
-					styr_fel= (i-5) * ((Reflex_data_tmp >> (i * 2) & 0x02)>>1);
-				}
-				else{ // sista 3 sensorerna
-					styr_fel= (i-5) * ((Reflex_data2_tmp >> ((i-8) * 2) & 0x02)>>1);
+				if (styr_fel == 0){
+					if(i < 8){ //första 8 sensorenrna
+						styr_fel= (i-5) * ((Reflex_data_tmp >> (i * 2) & 0x02)>>1);
+					}
+					else{ // sista 3 sensorerna
+						styr_fel= (i-5) * ((Reflex_data2_tmp >> ((i-8) * 2) & 0x02)>>1);
+					}
 				}
 			}
 		}
 		else{
-		return 0x00; //något har blivit fel hoppas på att det löser sig
+			return 0x00; //något har blivit fel hoppas på att det löser sig
 		}
 	}
 	else{
+		RGB_data=0;
 		RGB_reset_timer = 0;
+		
 	}
 	 
 	return styr_fel;
@@ -136,6 +140,7 @@ bool detect_goal(){// brettar om robotten är i mål eller inte
 			static int count;
 		#endif
 	// ***************************************Ny mål algorithm, kan funka mabe***********************************************'	
+	linje_get_error();
 	if(sekvens_goal_detekted() == true && (count == 0)){			// Kollar om counter är 0, alltså första indikeringen
 		counter_timer_line = 0;										// Nollar timern som sitter i timerintrerruptet, ISR för timern sker 10ggr per sekund
 		count++;						
@@ -186,13 +191,15 @@ bool sekvens_goal_detekted(){
 	int min=11;
 	int max=0;
 	// Goal funkar inte
-	//if(fel_antal>28)// om robbot paserar tejp på tvären 
-	if(((Reflex_data2 >= 42)|| (Reflex_data2 >= 10)) && ((Reflex_data >= 43690) || (Reflex_data >= 2730))){ // om alla sensorer visar "10" eller högre
-		
+	
+	
+	if(fel_antal>28){// om robbot paserar tejp på tvären 
+	//if(((Reflex_data2 >= 42)|| (Reflex_data2 >= 10)) && ((Reflex_data >= 43690) || (Reflex_data >= 2730))){ // om alla sensorer visar "10" eller högre
+		PORTD |= (1 << PD1);
 		return true;
 	}
 	else
-	PORTD ^= (1 << PD1);
+	
 		return false;
 	
 	//orginal mål tre paralela linjer

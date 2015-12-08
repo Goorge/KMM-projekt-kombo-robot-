@@ -192,6 +192,7 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 			_delay_us(300);
 			i2c_send(0x02,i2c_data);// send to komunikation
 		}
+		
 		switch (i2c_data[0] & 0x0f){
 			case 0x00 ://batteri nivå
 				batteri=i2c_data[1],i2c_data[2];
@@ -204,6 +205,7 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 				break;
 			case 0x02 :// refelxsensor data
 				regler_ready_linje = 1;					// Ny data har lästs in då uppdaterar vi regleringen
+				
 				Reflex_data = (i2c_data[2]<<8) + i2c_data[1];
 				Reflex_data2 = i2c_data[3];// går inte att få in mer än 16 bitar i en int...
 				break;
