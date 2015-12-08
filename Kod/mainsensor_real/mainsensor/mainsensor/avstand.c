@@ -49,14 +49,13 @@ void read_avstand_sensor(uint8_t *counter)
 		{
 			vanster = mux_sensors(12);		//Hämtar nytt värde från långa sensorn till vänster
 			vanster = look_up_long(vanster);
-			clear_long();
 		}
 		if(hoger > 34)						//Över 34 cm får vi högre precision med långa sensorn
 		{
 			hoger = mux_sensors(13);		//Hämtar nytt värde från långa sensorn till höger
 			hoger = look_up_long(hoger);
-			clear_long();
 		}
+		clear_long();
 	}
 	else //Mellan 25 och 34 cm kan vi inte säkerställa att vi är i labyrinten, men vi vill ändå skicka mellansensorn
 	{

@@ -41,16 +41,16 @@ uint8_t look_up_value(const uint8_t sensor_value, const uint8_t i)
 		return 0x02; //10
 	}
 	else	//11
-	{
+	{		
 		return 0x03;//11
 	}
 }
 
 void package_and_send_sensor_data(const uint8_t sensor_data, const uint8_t pin)
 {
-	uint8_t byte_1;
-	uint8_t byte_2;
-	uint8_t byte_3;
+	static uint8_t byte_1;
+	static uint8_t byte_2;
+	static uint8_t byte_3;
 	
 	if(pin == 0)
 	{
@@ -103,5 +103,9 @@ void package_and_send_sensor_data(const uint8_t sensor_data, const uint8_t pin)
 		data_to_send[3] = byte_3;
 		
 		i2c_requestToSend(0x04, data_to_send);
+		
+		byte_1 = 0x00;
+		byte_2 = 0x00;
+		byte_3 = 0x00;
 	}
 }
