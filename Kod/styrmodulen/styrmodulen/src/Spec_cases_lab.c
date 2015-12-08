@@ -90,6 +90,7 @@ void waypoint_lab(int distance_left,int distance_right,int distance_front,int st
 	else if(!ongoing_turn && distance_front <= min_distance_front){			// redo att påbörja sväng
 		ongoing_turn = true;
 		start_turn = true;
+		stand_still();
 	}
 	else if(start_turn){					//startar svängen, kollar RGB, om vänster gira vänster annars gira höger(med eller utan rgb indikation).
 		
@@ -125,6 +126,7 @@ void oneway_turn_lab(int distance_left,int distance_right,int distance_front,int
 	else if(!ongoing_turn && distance_front <= min_distance_front){			// redo att påbörja sväng
 		ongoing_turn = true;
 		start_turn = true;
+		stand_still();
 		
 	}
 	else if(start_turn){									//Roboten är inne i kurvan och redo o svänga 
@@ -167,6 +169,7 @@ void twoway_turn_left_lab(int distance_left,int distance_right,int distance_fron
 	else if(!ongoing_turn && ++count_waypoint <= 1){	// Roboten har kört ut i kurvan och signalerar att den är klar och svänga
 		ongoing_turn = true;
 		start_turn = true;
+		stand_still();
 	}
 	
 	else if(start_turn){				//Robot är inne i kurva och kontrollerar vilket håll den ska svänga
@@ -221,6 +224,7 @@ void twoway_turn_right_lab(int distance_left,int distance_right,int distance_fro
 	else if(!ongoing_turn && ++count_waypoint <=1){	// Roboten har kört ut i kurvan och signalerar att den är klar och svänga
 		ongoing_turn = true;
 		start_turn = true;
+		stand_still();
 	}
 	
 	else if(start_turn){				//Robot är inne i kurva och kontrollerar vilket håll den ska svänga
