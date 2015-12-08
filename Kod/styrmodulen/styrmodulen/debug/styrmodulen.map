@@ -144,13 +144,13 @@ Discarded input sections
  .text.stand_still
                 0x00000000        0xa src/main.o
  .text.waypoint_lab
-                0x00000000       0x88 src/main.o
+                0x00000000       0x8c src/main.o
  .text.oneway_turn_lab
-                0x00000000       0x8a src/main.o
+                0x00000000       0x8e src/main.o
  .text.twoway_turn_left_lab
-                0x00000000      0x106 src/main.o
+                0x00000000      0x10a src/main.o
  .text.twoway_turn_right_lab
-                0x00000000      0x106 src/main.o
+                0x00000000      0x10a src/main.o
  .bss.twoway_turn_right
                 0x00000000        0x1 src/main.o
  .bss.twoway_turn_left
@@ -941,36 +941,36 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x10e2
+.debug_info     0x00000000     0x1106
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000       0x7c src/ASF/common/boards/user_board/init.o
- .debug_info    0x0000007c     0x1066 src/main.o
+ .debug_info    0x0000007c     0x108a src/main.o
 
 .debug_abbrev   0x00000000      0x2fc
  *(.debug_abbrev)
  .debug_abbrev  0x00000000       0x47 src/ASF/common/boards/user_board/init.o
  .debug_abbrev  0x00000047      0x2b5 src/main.o
 
-.debug_line     0x00000000     0x1a02
+.debug_line     0x00000000     0x1a22
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x392 src/ASF/common/boards/user_board/init.o
- .debug_line    0x00000392     0x1670 src/main.o
+ .debug_line    0x00000392     0x1690 src/main.o
 
 .debug_frame    0x00000000      0x4cc
  *(.debug_frame)
  .debug_frame   0x00000000       0x24 src/ASF/common/boards/user_board/init.o
  .debug_frame   0x00000024      0x4a8 src/main.o
 
-.debug_str      0x00000000    0x10882
+.debug_str      0x00000000    0x10889
  *(.debug_str)
  .debug_str     0x00000000     0xfb36 src/ASF/common/boards/user_board/init.o
                                0xfcf3 (size before relaxing)
- .debug_str     0x0000fb36      0xd4c src/main.o
-                              0x10a19 (size before relaxing)
+ .debug_str     0x0000fb36      0xd53 src/main.o
+                              0x10a20 (size before relaxing)
 
-.debug_loc      0x00000000     0x1722
+.debug_loc      0x00000000     0x18c4
  *(.debug_loc)
- .debug_loc     0x00000000     0x1722 src/main.o
+ .debug_loc     0x00000000     0x18c4 src/main.o
 
 .debug_macinfo
  *(.debug_macinfo)
