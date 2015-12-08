@@ -70,13 +70,16 @@ void manual_drive(){
 			motor_right = right;
 		}
 		else if(manual_function == 5){											// Spin right
-			req_gyro_turn();
-			turn_right();
-			/*if(gyro_right == 0){												// Start gyrocheck
-				gyro_right = 1;
-				req_gyro_turn();																// Request gyroturn
+			if(gyro_right == 0){
+				req_gyro_turn();
+				turn_right();
+				gyro_right = 1; 
 			}
-			else if(turning == 0){											// 90 turn done								
+			else if(gyro_right == 1){												// Start gyrocheck
+				manual_function = 0;  //kan behövas nollställning av funktion (probably not)
+				gyro_right = 0;																// Request gyroturn
+			}
+			/*else if(turning == 0){											// 90 turn done								
 				manual_function = 0;
 				gyro_right = 0;
 			}
@@ -91,18 +94,18 @@ void manual_drive(){
 			if(gyro_left == 0){													// Start gyrocheck
 				req_gyro_turn();
 				turn_left();//gyro_left = 1;
-																				// Request gyroturn
+				gyro_left = 1;																// Request gyroturn
 			}
-			else if(turning == 0){											// 90 turn done
-				manual_function = 0;
-				gyro_right = 0;
+			else if(gyro_left == 1){											// 90 turn done
+				manual_function = 0;  //kanske behövs nollställa funktion  (probably not monsieur)
+				gyro_left = 0;
 			}
-			else{																// Keep turn left
+			/*else{																// Keep turn left
 				PORTB &= ~(1 << motor_dir_right);								// Set motor direction to forward
 				PORTB |= (1 << motor_dir_left);									// Set motor direction to backward
 				motor_left = left;
 				motor_right = right;
-			}
+			}*/
 		}
 		else{
 			manual_function=0;												// why not :D 
