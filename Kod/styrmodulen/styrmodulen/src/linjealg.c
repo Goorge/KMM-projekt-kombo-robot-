@@ -56,10 +56,10 @@ signed char linje_RGBsveng() //om RGB ger utslag
 		time++;*/
 	
 	if((RGB_data > 0) && (RGB_reset_timer == 0)){  // Detta kommer bara göras en gång då vi fått någon RGB data , röd/blå/grön
-		counter_timer_line = 0;
+		counter_timer_line_RGB = 0;
 		RGB_reset_timer = 1;
 	}
-	else if(counter_timer_line <= 15){  // 2sekunder ish
+	else if(counter_timer_line_RGB <= 15){  // 2sekunder ish
 		
 		if(RGB_data==3){ //sväng höger reglera bara på sensor mest till höger
 			
@@ -140,21 +140,21 @@ bool detect_goal(){// brettar om robotten är i mål eller inte
 			static int count;
 		#endif
 	// ***************************************Ny mål algorithm, kan funka mabe***********************************************'	
-	linje_get_error();
+	
 	if(sekvens_goal_detekted() == true && (count == 0)){			// Kollar om counter är 0, alltså första indikeringen
-		counter_timer_line = 0;										// Nollar timern som sitter i timerintrerruptet, ISR för timern sker 10ggr per sekund
+		counter_timer_line_goal = 0;										// Nollar timern som sitter i timerintrerruptet, ISR för timern sker 10ggr per sekund
 		count++;						
 		return false;
 	}	
-	else if(sekvens_goal_detekted() == true && (count == 1)&& (counter_timer_line < 20)){	// Kontroll görs att timer countern inte passerat tiden X (just nu inom 2sekunder) innan nästa indikering
+	else if(sekvens_goal_detekted() == true && (count == 1)&& (counter_timer_line_goal < 20)){	// Kontroll görs att timer countern inte passerat tiden X (just nu inom 2sekunder) innan nästa indikering
 		count++;
 		return false;
 	}
-	else if(sekvens_goal_detekted() == true && (count == 2)&& (counter_timer_line < 20)){	// Kontroll görs att timer countern inte passerat tiden X (just nu inom 2sekunder) innan nästa indikering
+	else if(sekvens_goal_detekted() == true && (count == 2)&& (counter_timer_line_goal < 20)){	// Kontroll görs att timer countern inte passerat tiden X (just nu inom 2sekunder) innan nästa indikering
 		count = 0;
 		return true;																		// Om tre korsningar har passerats inom tiden av X kommer mål indikeras
 	}
-	else if(counter_timer_line >= 20){								// Timeout, tiden har passerat. Alltså inget mål utan bara en T korsning
+	else if(counter_timer_line_goal >= 20){								// Timeout, tiden har passerat. Alltså inget mål utan bara en T korsning
 		count = 0;
 		return false;
 	}
@@ -187,21 +187,15 @@ bool detect_goal(){// brettar om robotten är i mål eller inte
 }
 
 bool sekvens_goal_detekted(){
-	int fel_antal=0;
-	int min=11;
-	int max=0;
-	// Goal funkar inte
-	
-	
-	if(fel_antal>28){// om robbot paserar tejp på tvären 
-	//if(((Reflex_data2 >= 42)|| (Reflex_data2 >= 10)) && ((Reflex_data >= 43690) || (Reflex_data >= 2730))){ // om alla sensorer visar "10" eller högre
+	//int fel_antal=0;
+	linje_get_error();		// Borde uppdatera fel_antal
+	if(fel_antal>28){		// om robbot paserar tejp på tvären 
 		PORTD |= (1 << PD1);
 		return true;
 	}
-	else
-	
+	else{
 		return false;
-	
+	}
 	//orginal mål tre paralela linjer
 	/*for(int i=0;i<11;i++)
 	{

@@ -34,10 +34,14 @@ ISR(TIMER1_COMPA_vect){
 	if(counter_timer_line_lab >= 50){
 		counter_timer_line_lab = 50;			// för att undvika overflow
 	}
-	counter_timer_line++;
-	if(counter_timer_line >= 50){			
-		counter_timer_line = 50;			// för att undvika overflow
+	counter_timer_line_RGB++;
+	if(counter_timer_line_RGB >= 50){			
+		counter_timer_line_RGB = 50;			// för att undvika overflow
 	}
+	counter_timer_line_goal++;
+	if(counter_timer_line_goal >= 50)
+		counter_timer_line_goal = 50;
+		
 	count_waypoint++;			//räknare för att köra ur svängar i labyrinter
 }
 // ------------------------------------------------------------------------------------------------------

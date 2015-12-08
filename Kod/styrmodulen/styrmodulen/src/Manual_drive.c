@@ -12,9 +12,7 @@ void req_gyro_turn(void){ // fuktion man kallar på för att starta Gyro inför 
 	_delay_ms(100);
 }
 
-//-----------------------------------------
-//Funktioner för att styra robot för höger/vänster eller framåt
-//-----------------------------------------
+
 void turn_left(void){
 	PORTB &= ~(1 << motor_dir_right);
 	PORTB |= (1 << motor_dir_left);
@@ -30,6 +28,10 @@ void turn_right(void){
 	motor_right = 60;//right;
 	turning = true;
 }
+
+//--------------------------------------------------------------
+//Funktioner för att styra robot för höger/vänster eller framåt
+//--------------------------------------------------------------
 
 void manual_drive(){
 		//******************************* Om vänster eller höger-sväng har startats så kör vi klart den, skippa andra inkommandon 
@@ -69,43 +71,29 @@ void manual_drive(){
 			motor_left = (left - (left/3));									// Speed value minus one third of the speedvalue
 			motor_right = right;
 		}
-		else if(manual_function == 5){											// Spin right
-			if(gyro_right == 0){
-				req_gyro_turn();
-				turn_right();
+		else if(manual_function == 5){										// Spin right
+			if(gyro_right == 0){											// Only once when pressed
+				req_gyro_turn();											// Request gyroturn
+				turn_right();												// Turn motors on for left spin	
 				gyro_right = 1; 
 			}
-			else if(gyro_right == 1){												// Start gyrocheck
-				manual_function = 0;  //kan behövas nollställning av funktion (probably not)
-				gyro_right = 0;																// Request gyroturn
+			else if((gyro_right == 1) && (gyro_90 == true)){				// 90 turn done
+				manual_function = 0;										// kan behövas nollställning av funktion (probably not)
+				gyro_right = 0;												
+				gyro_90 = false;											// Kanske behövs? Mr pont and Ohana? :D
 			}
-			/*else if(turning == 0){											// 90 turn done								
-				manual_function = 0;
-				gyro_right = 0;
-			}
-			else{
-				PORTB &= ~(1 << motor_dir_left);								// Set motor direction to forward
-				PORTB |= (1 << motor_dir_right);								// Set motor direction to backward
-				motor_left = left;
-				motor_right = right;
-			}*/
 		}
-		else if(manual_function == 6){											// Spin left
-			if(gyro_left == 0){													// Start gyrocheck
-				req_gyro_turn();
-				turn_left();//gyro_left = 1;
-				gyro_left = 1;																// Request gyroturn
+		else if(manual_function == 6){										// Spin left
+			if(gyro_left == 0){												// Only once when pressed
+				req_gyro_turn();											// Request gyroturn
+				turn_left();												// Turn motors on for left spin						
+				gyro_left = 1;												
 			}
-			else if(gyro_left == 1){											// 90 turn done
-				manual_function = 0;  //kanske behövs nollställa funktion  (probably not monsieur)
+			else if((gyro_left == 1) && (gyro_90 == true)){					// 90 turn done
+				manual_function = 0;										//kanske behövs nollställa funktion  (probably not monsieur)
 				gyro_left = 0;
+				gyro_90 = false;											// Kanske behövs? Mr pont and Ohana? :D
 			}
-			/*else{																// Keep turn left
-				PORTB &= ~(1 << motor_dir_right);								// Set motor direction to forward
-				PORTB |= (1 << motor_dir_left);									// Set motor direction to backward
-				motor_left = left;
-				motor_right = right;
-			}*/
 		}
 		else{
 			manual_function=0;												// why not :D 

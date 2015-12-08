@@ -11,8 +11,9 @@ int right = 0;				// Set speed for right motor
 int regler_ready = 0;			// Ready for new values from sensors if 1
 int count_waypoint = 0;		// Time to move away from waypoint
 int counter_timer = 0;		// Counter for how long time a manual function going to run
-int counter_timer_line=0;
+int counter_timer_line_RGB = 0;
 int counter_timer_line_lab = 0;
+int counter_timer_line_goal = 0;
 
 bool gyro_90;				//om gyro har svängt 90 grader
 byte batteri;				//batteri nivå
