@@ -430,7 +430,7 @@ Disassembly of section .text:
  30c:	cd b7       	in	r28, 0x3d	; 61
  30e:	de b7       	in	r29, 0x3e	; 62
  310:	90 e0       	ldi	r25, 0x00	; 0
- 312:	05 97       	sbiw	r24, 0x05	; 5
+ 312:	0c 97       	sbiw	r24, 0x0c	; 12
  314:	22 e2       	ldi	r18, 0x22	; 34
  316:	28 9f       	mul	r18, r24
  318:	70 01       	movw	r14, r0
