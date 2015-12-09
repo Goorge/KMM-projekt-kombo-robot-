@@ -16,16 +16,16 @@ void req_gyro_turn(void){ // fuktion man kallar på för att starta Gyro inför 
 void turn_left(void){
 	PORTB &= ~(1 << motor_dir_right);
 	PORTB |= (1 << motor_dir_left);
-	motor_left = 70;//left;
-	motor_right = 60;//right;
+	motor_left = 60;//left;
+	motor_right = 55;//right;
 	turning = true;
 }
 
 void turn_right(void){
 	PORTB |= (1 << motor_dir_right);
 	PORTB &= ~(1 << motor_dir_left);
-	motor_left = 70;//left;
-	motor_right = 60;//right;
+	motor_left = 60;//left;
+	motor_right = 55;//right;
 	turning = true;
 }
 

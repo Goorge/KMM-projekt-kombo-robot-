@@ -141,7 +141,7 @@ void oneway_turn_lab(int distance_left,int distance_right,int distance_front,int
 		start_turn = false;										// Signalerar att sväng har	inledits för att inte gå in i denna if igen
 	}
 	
-	else if(ongoing_turn && !turning){					//Gyrot singnalerar att svängen är klar och det är klart att börja köra ur den
+	else if(ongoing_turn && !turn_done){					//Gyrot singnalerar att svängen är klar och det är klart att börja köra ur den
 		turn_done = true;
 		//count_waypoint = 0; //oneway_turn
 		//gyro_turn = 0;
