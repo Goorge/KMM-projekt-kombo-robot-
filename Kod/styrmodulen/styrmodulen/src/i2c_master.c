@@ -221,7 +221,10 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 			case 0x06 : // gyro klart
 				gyro_90 = true;
 				turning = false;
-				start = 0;
+				motor_right = 0;
+				motor_left = 0;
+				_delay_ms(500);
+				//start = 0;
 				break;
 			case 0x07 :// gyro data
 				// Kod vi skickar till sensor
