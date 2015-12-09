@@ -7,14 +7,7 @@
 
 #include "mainsensor.h"
 
-void avstand_init()
-{
-	DDRD |= 0x1B;
-	PORTD |= 0x03;
-	_delay_ms(40);
-}
-
-void read_avstand_sensor(uint8_t *counter)
+void read_avstand_sensor(uint8_t do_avstand_counter)
 {
 	/*11 är rakt fram
 	12 är vänster lång
@@ -28,6 +21,11 @@ void read_avstand_sensor(uint8_t *counter)
 	//DDRD |= 0x60;
 	//skicka hoger, vanster och rakt via I2C 
 	
+	if(do_avstand_counter == 5)
+	{
+		return;
+	}
+	
 	uint8_t rakt = mux_sensors(11);		//rakt fram, lång sensor
 	uint8_t vanster = mux_sensors(14);	//vänster, mellansensor
 	uint8_t hoger = mux_sensors(15);	//höger, mellansensor
@@ -36,32 +34,8 @@ void read_avstand_sensor(uint8_t *counter)
 	vanster = look_up_mellan(vanster);
 	hoger = look_up_mellan(hoger);
 
-	if(*counter > 9 && (vanster < 25 || hoger < 25))	//Under 25cm för att säkerställa att vi har en vägg i labyrinten
-	{
-		*counter = 0;
-		_delay_ms(10);	//Med anledning av I2C:ns hastighetsbegränsning
-	}
-	else if (vanster > 34 || hoger > 34)	//Över 34cm och vi ska använda lång sensor för att få bättre precision
-	{
-		++*counter;
-		long_init();
-		if(vanster > 34)					//Över 34 cm får vi högre precision med långa sensorn
-		{
-			vanster = mux_sensors(12);		//Hämtar nytt värde från långa sensorn till vänster
-			vanster = look_up_long(vanster);
-		}
-		if(hoger > 34)						//Över 34 cm får vi högre precision med långa sensorn
-		{
-			hoger = mux_sensors(13);		//Hämtar nytt värde från långa sensorn till höger
-			hoger = look_up_long(hoger);
-		}
-		clear_long();
-	}
-	else //Mellan 25 och 34 cm kan vi inte säkerställa att vi är i labyrinten, men vi vill ändå skicka mellansensorn
-	{
-		_delay_ms(10);	//Pga I2Cs hastighetsbegränsning
-	}
-	
+	_delay_ms(10);	//Pga I2Cs hastighetsbegränsning
+
 	uint8_t data_to_send [4];
 	data_to_send[0] = 0x31;
 	data_to_send[1] = vanster;
@@ -90,7 +64,7 @@ uint8_t look_up_mellan (uint8_t value)
 	}
 	else if(value>57)
 	{
-		return 17;	
+		return 17;
 	}
 	else if(value > 55)
 	{
@@ -131,7 +105,7 @@ uint8_t look_up_mellan (uint8_t value)
 	else if(value>37)
 	{
 		return 30;
-	}	
+	}
 	else if(value>32)
 	{
 		return 35;
@@ -208,7 +182,7 @@ uint8_t look_up_long(uint8_t value)
 
 void long_init()
 {
-	PORTD &= ~(0x03);
+	PORTD &= ~(0x1B);
 	_delay_ms(1);
 	PORTD |= 0x18;
 	_delay_ms(50);
@@ -218,5 +192,5 @@ void clear_long()
 {
 	PORTD &= ~(0x1B);
 	PORTD |= 0x03;
-	_delay_ms(30);
+	_delay_ms(40);
 }

@@ -33,15 +33,13 @@ ISR(BADISR_vect){
 
 int main(void){	
 	DDRD |= 0x60;
-	avstand_init();
 	mux_init();		
 	adc_init();
 	i2c_setup(0x06);
 	interrupt_init();
-	const uint8_t gyro_null = read_adc(6);
 	
-	/*static uint16_t cntr = 0;
-	static uint8_t avstand_counter = 0;*/
+	const uint8_t gyro_null = read_adc(6);
+	static uint8_t do_avstand_counter = 0;
 	
 	while(1)
 	{
@@ -52,19 +50,18 @@ int main(void){
 		}
 
 		read_reflex_sensors();	//kör reflexsensorer. Muxar hela längan
-		//read_avstand_sensor(&avstand_counter);	//läser avståndssensorer
-		//read_rgb();			//läs RGB
+		read_avstand_sensor(do_avstand_counter);	//läser avståndssensorer
+		read_rgb();			//läs RGB
 		i2c_handle_data(gyro_null);	//för att köra gyrot när vi tar emot att vi ska göra något så roligt! Snurr snurr
 		
-		/*if(cntr == 1000)
+		if(do_avstand_counter == 5)
 		{
-			//read_battery_voltage();
-			cntr = 0;
+			do_avstand_counter = 0;	
 		}
 		else
 		{
-			++cntr;	
-		}*/
+			++do_avstand_counter;
+		}
     }
 }
 
@@ -74,14 +71,3 @@ void interrupt_init()
   FALLING_EDGE_TRIGGER;
   sei();
 }
-
-/*void variable_init()
-{
-	do_sensor.counter = 0;
-	do_sensor.long_counter = 0;
-	do_sensor.avstand = TRUE;
-	do_sensor.reflex = TRUE;
-	do_sensor.battery = TRUE;
-	do_sensor.kalib = FALSE;
-	do_sensor.gyro_null = read_adc(6);
-}*/
