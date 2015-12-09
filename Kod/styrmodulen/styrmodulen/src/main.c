@@ -23,7 +23,7 @@ byte distans_left;			// data avstånd vänster
 byte RGB_data;				// vilken färg som är detekterad
 int Reflex_data;			// reflexsensor data
 int Reflex_data2;
-int regulator_mode = 1;		//1=linje, 0=labyrint
+int regulator_mode = 0;		//1=linje, 0=labyrint
 int regler_ready_linje=0;
 
 bool updaterad_labyrint = false;
@@ -50,8 +50,8 @@ int main(void)
 	i2c_setup(1);
 	sei();
 	//***********Set motors speed value here *****************
-	left=130*0;				// kanske räcker med en variable för båda om båda kör exakt lika fort
-	right=120*0;
+	left=130*1;				// kanske räcker med en variable för båda om båda kör exakt lika fort
+	right=120*1;
 	//********************************************************
 	motor_left=left;
 	motor_right=right;
@@ -61,17 +61,17 @@ int main(void)
 			;
 		else if(drive_mode == 1){						// Drivemode is auto    // (drive_mode == 1 && start == 1)
 			//current_position = arre[count_arre];	// används för att simulera linjeföljning, arrayen ändras i globala
-			if((gyro_left == 1)|| (gyro_right == 1)){
-				drive_mode = 0;
-			}
-			else if(start == 1){
+			//if((gyro_left == 1)|| (gyro_right == 1)){
+			//	drive_mode = 0;
+			//}
+			if(start == 1){
 				regulator();	
 			}
 			else if(start == 0){					// if start is zero then turn off the auto, stops motors
 				motor_left=0;
 				motor_right=0;
-				}
 			}
+		}
 		else if(drive_mode==0){										// Drivemode is manual
 			PORTD |= (1 << PD1);
 			manual_drive();

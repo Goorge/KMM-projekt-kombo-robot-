@@ -11,9 +11,9 @@ int output_right;
 int output_left;
 float derivate;
 int distance_wall_desired = 20;
-int number_of_errors = 1;
-int previous_errors_left[1];
-int previous_errors_right[1];
+int number_of_errors = 2;
+int previous_errors_left[5];
+int previous_errors_right[5];
 int error_count = 0;
 
 void PD_for_lab(int distance_left, int distance_right, int distance_front){
@@ -59,27 +59,11 @@ void PD_for_lab(int distance_left, int distance_right, int distance_front){
 		return;
 	}
 	
-	if(previous_errors_left[error_count] <= -10){ // testgrej
+	/*if(previous_errors_left[error_count] <= -10){ // testgrej
 		output_right = -motor_right;
 		output_left = -motor_left;
-	}
+	}*/
 
 	motor_left = left + output_left;
 	motor_right = right + output_right;
-	
-	/*if(output_tmp > 0){
-		motor_left = left - output_tmp;
-		motor_right = right;
-	}
-
-	else if(output_tmp < 0){
-		motor_left = left;
-		motor_right = right + output_tmp;
-	}
-
-	else if(output_tmp == 0)
-	{
-		motor_left = left;
-		motor_right = right;
-	}*/
 }
