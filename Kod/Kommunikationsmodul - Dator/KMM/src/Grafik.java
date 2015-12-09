@@ -143,6 +143,7 @@ public class Grafik {
 		switch (data[0] & 0x0f){
 		case (byte)0x00: // Batteri
 			// Värdet / 51.2
+			/*
 			double b1 = (data[1] & 0xff) / 51.0;
 			double b2 = (data[2] & 0xff) / 51.0;
 			
@@ -156,7 +157,7 @@ public class Grafik {
 			if(b2 <= 3.7)
 				battery2_label.setBackground(Color.red);
 			else
-				battery2_label.setBackground(Color.green);
+				battery2_label.setBackground(Color.green);*/
 			break;
 		case (byte)0x01: // Avståndssensorer
 			// vänster, rakt fram, höger
@@ -723,6 +724,7 @@ public class Grafik {
 			frame.getContentPane().add(line_labels[i]);	
 		}
 		
+		/*
 		battery1_label = new JLabel("");
 		battery1_label.setBounds(750, 15, 36, 25);
 		battery1_label.setBackground(Color.green);
@@ -746,7 +748,7 @@ public class Grafik {
 		battery_text_label = new JLabel("Batteri");
 		battery_text_label.setBounds(765, 0, 50, 15);
 		frame.getContentPane().add(battery_text_label);
-		
+		*/
 		rgb_label = new JLabel();
 		rgb_label.setBounds(350, 126, 70, 22);
 		rgb_label.setBackground(Color.darkGray);
@@ -789,13 +791,13 @@ public class Grafik {
 		refresh_com_btn.setBounds(300, 575, 200, 22);
 		frame.getContentPane().add(refresh_com_btn);
 		
-		//image_label = new JLabel("");
-		//URL url = Grafik.class.getResource("/images/robot.png");
-		//ImageIcon img = new ImageIcon(url);
+		image_label = new JLabel("");
+		URL url = Grafik.class.getResource("/images/robot.png");
+		ImageIcon img = new ImageIcon(url);
 
-		//image_label.setIcon(img);
-		//image_label.setBounds(300, 10, 456, 567);
-		//frame.getContentPane().add(image_label);	
+		image_label.setIcon(img);
+		image_label.setBounds(300, 10, 456, 567);
+		frame.getContentPane().add(image_label);	
 	}
 }
 

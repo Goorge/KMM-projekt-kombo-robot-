@@ -90,7 +90,7 @@ public class COMunication {
         }
 		
 		//merge first byte with the possible rest of data to get it all in one array
-		dataOut = new byte[data1.length + data2.length];//data1.length + data2.length];
+		dataOut = new byte[16];//data1.length + data2.length];
         dataOut[0] = data1[0];
         for (int i = 0; i < data2.length; i++){
         	dataOut[i+1] = data2[i];
