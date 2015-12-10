@@ -33,8 +33,7 @@ void read_gyro(const uint8_t wanted_degrees, const uint8_t gyro_null)
 	int degrees_rotated_34 = 0;
 	PORTD |= 0x60;
 	
-	while(abs(degrees_rotated_34) <= wanted_degrees_34)
-	{			
+	while(abs(degrees_rotated_34) <= wanted_degrees_34){			
 		degrees_rotated_34 += read_adc(6) - gyro_null;
 		_delay_ms(10);
 	}

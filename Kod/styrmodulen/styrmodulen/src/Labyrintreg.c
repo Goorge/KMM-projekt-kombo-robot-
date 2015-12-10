@@ -2,10 +2,12 @@
 #include <avr/io.h>
 #include <stdbool.h>
 #include "asf.h"
+
 bool waypoint = false;
 bool oneway_turn = false;
 bool twoway_turn_left = false;
 bool twoway_turn_right = false;
+
 int sensor_front;
 int sensor_left;
 int sensor_right;
@@ -34,12 +36,17 @@ void labyreg(){
 	else if(twoway_turn_right){
 		twoway_turn_right_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
 		return;
-	}
-	
+	}	
 	
 	// Normalfall
 	else if(sensor_left_tmp < st_value &&/* sensor_front_tmp > st_value && */sensor_right_tmp < st_value)
 		PD_for_lab(sensor_left_tmp, sensor_right_tmp, sensor_front_tmp);
+	
+	// förbered specialfall
+	else if((sensor_left_tmp > st_value || sensor_left_tmp > st_value) && !prepare_special_case && sensor_front_tmp >= 50){
+		prepare_special_case = true;
+		drive_forward();
+	}
 	//Enkelsväng	
 	else if(((sensor_left_tmp < st_value && sensor_front_tmp < 60 && sensor_right_tmp > st_value) 
 		|| (sensor_left_tmp > st_value && sensor_front_tmp < 60 && sensor_right_tmp < st_value)))	{
@@ -61,13 +68,18 @@ void labyreg(){
 		twoway_turn_right_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
 		twoway_turn_right = true;
 	}
-	else{
+	/*if(sensor_front_tmp > 35)
+		drive_forward_right(sensor_right_tmp, sensor_front_tmp);*/
+	else{/*
 		turn_left();
-		_delay_ms(1);
+		_delay_ms(50);
 		motor_left = 0;
 		motor_right = 0;
 		//PORTD ^= (1 << PD1);
+		*/
+		stand_still();
 	}
+	
 }
 
 

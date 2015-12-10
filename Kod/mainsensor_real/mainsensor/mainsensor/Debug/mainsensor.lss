@@ -391,7 +391,7 @@ Disassembly of section .text:
  2c2:	2c df       	rcall	.-424    	; 0x11c <i2c_requestToSend>
  2c4:	83 e0       	ldi	r24, 0x03	; 3
  2c6:	02 df       	rcall	.-508    	; 0xcc <read_adc>
- 2c8:	87 34       	cpi	r24, 0x47	; 71
+ 2c8:	8f 36       	cpi	r24, 0x6F	; 111
  2ca:	98 f0       	brcs	.+38     	; 0x2f2 <read_rgb+0x8a>
  2cc:	8b b1       	in	r24, 0x0b	; 11
  2ce:	80 66       	ori	r24, 0x60	; 96

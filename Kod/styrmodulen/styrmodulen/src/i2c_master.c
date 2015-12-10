@@ -279,16 +279,16 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 					}
 				}
 				else if(i2c_data[1]==0x00){			// Ändra P och D konstant för linje
-					d_constant = i2c_data[2];
-					p_constant = i2c_data[3];
+					d_constant = i2c_data[2] & 0xff;
+					p_constant = i2c_data[3] & 0xff;
 				}
 				else if(i2c_data[1]==0x01){			// Ändra P och D konstant för labyrint
-					d_constant_lab = i2c_data[2];
-					p_constant_lab = i2c_data[3];
+					d_constant_lab = i2c_data[2] & 0xff;
+					p_constant_lab = i2c_data[3] & 0xff;
 				}
 				else if(i2c_data[1]==0x02){
-					left = i2c_data[2];
-					right = i2c_data[3];
+					left = i2c_data[2] & 0xff;
+					right = i2c_data[3] & 0xff;
 					/*if((left < 0) || (right < 0)){		// safe för att inte användaren kan mata in negativa värden
 						left = abs(left);
 						right = abs(right);
