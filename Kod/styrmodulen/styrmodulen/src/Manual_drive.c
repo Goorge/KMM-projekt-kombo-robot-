@@ -75,10 +75,9 @@ void manual_drive(){
 				turn_right();												// Turn motors on for left spin	
 				gyro_right = 1; 
 			}
-			else if((gyro_right == 1) && (gyro_90 == true)){				// 90 turn done
+			else if(gyro_right == 1){				// 90 turn done
 				manual_function = 0;										// kan behövas nollställning av funktion (probably not)
 				gyro_right = 0;												
-				gyro_90 = false;											// Kanske behövs? Mr pont and Ohana? :D
 			}
 		}
 		else if(manual_function == 6){										// Spin left
@@ -87,10 +86,9 @@ void manual_drive(){
 				turn_left();												// Turn motors on for left spin						
 				gyro_left = 1;												
 			}
-			else if((gyro_left == 1) && (gyro_90 == true)){					// 90 turn done
+			else if(gyro_left == 1){					// 90 turn done
 				manual_function = 0;										//kanske behövs nollställa funktion  (probably not monsieur)
 				gyro_left = 0;
-				gyro_90 = false;											// Kanske behövs? Mr pont and Ohana? :D
 			}
 		}
 		else{

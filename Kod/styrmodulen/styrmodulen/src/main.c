@@ -23,7 +23,7 @@ byte distans_left;			// data avstånd vänster
 byte RGB_data;				// vilken färg som är detekterad
 int Reflex_data;			// reflexsensor data
 int Reflex_data2;
-int regulator_mode = 0;		//1=linje, 0=labyrint
+int regulator_mode = 1;		//1=linje, 0=labyrint
 int regler_ready_linje=0;
 
 bool updaterad_labyrint = false;
@@ -50,8 +50,8 @@ int main(void)
 	i2c_setup(1);
 	sei();
 	//***********Set motors speed value here *****************
-	left=130*1;				// kanske räcker med en variable för båda om båda kör exakt lika fort
-	right=120*1;
+	left=180;				// kanske räcker med en variable för båda om båda kör exakt lika fort
+	right=170;
 	//********************************************************
 	motor_left=left;
 	motor_right=right;

@@ -8,9 +8,13 @@ bool sekvens_goal_detekted();
 int fel_antal=0;
 int RGB_reset_timer = 0;
 int Lab_reset_timer = 0;
+int Goal_reset_timer = 0;
+int RGB_slow = 1;
+int RGB_force = 0;
 
 void linje_main() //funktion so  sköter linjeföjlning och hantering av specialfall
 {
+	RGB_slow = 1;
 	/*if(distans_fram<34){
 		start=0; // kör inte in i väggar (värkar som sensor fram ger minimum 30)
 		PORTD |= (1 << PD1);
@@ -18,21 +22,24 @@ void linje_main() //funktion so  sköter linjeföjlning och hantering av specialfa
 	}
 	else*/ if((RGB_data==1) | (RGB_data==2) | (RGB_data==3)){ // == röd,grön,blå
 		current_position=linje_RGBsveng();
-		//linje();
+		RGB_slow = 2;
+		linje();
 	}
 	else if(detect_goal()==true){
+		
+		_delay_ms(2500);
 		start=0;
 		PORTD |= (1 << PD1);
 		//signalera i mål och stanna
 	}
-	/*else if(detect_labyrint()==true){
+	else if(detect_labyrint()==true){
 		PORTD |= (1 << PD0);
 		start = 0;
 		//regulator_mode=0; //byt till kör i labyrintmode(är 2 rätt eller ska det vara 0)
-	}*/
+	}
 	else{
 		current_position=linje_get_error();
-		//linje();
+		linje();
 	}
 	
 }
@@ -55,11 +62,12 @@ signed char linje_RGBsveng() //om RGB ger utslag
 	else // fortsätt med RGB sväng
 		time++;*/
 	
-	if((RGB_data > 0) && (RGB_reset_timer == 0)){  // Detta kommer bara göras en gång då vi fått någon RGB data , röd/blå/grön
+	if((RGB_data > 0) && (RGB_reset_timer == 0) && (RGB_force == 0)){  // Detta kommer bara göras en gång då vi fått någon RGB data , röd/blå/grön
 		counter_timer_line_RGB = 0;
 		RGB_reset_timer = 1;
+		RGB_force = 1;
 	}
-	else if(counter_timer_line_RGB <= 15){  // 2sekunder ish
+	else if(counter_timer_line_RGB <= 3){  // 2sekunder ish
 		
 		if(RGB_data==3){ //sväng höger reglera bara på sensor mest till höger
 			
@@ -74,6 +82,7 @@ signed char linje_RGBsveng() //om RGB ger utslag
 					}
 				}
 			}
+		styr_fel = -3;
 		}
 		else if(RGB_data==2){ //raktfram
 			
@@ -92,6 +101,7 @@ signed char linje_RGBsveng() //om RGB ger utslag
 					}
 				}
 			}
+			styr_fel = 3;
 		}
 		else{
 			return 0x00; //något har blivit fel hoppas på att det löser sig
@@ -100,6 +110,7 @@ signed char linje_RGBsveng() //om RGB ger utslag
 	else{
 		RGB_data=0;
 		RGB_reset_timer = 0;
+		RGB_force = 0;
 		
 	}
 	 
@@ -139,23 +150,28 @@ bool detect_goal(){// brettar om robotten är i mål eller inte
 			static int time;
 			static int count;
 		#endif
-	// ***************************************Ny mål algorithm, kan funka mabe***********************************************'	
+		
+	int goal_timer = 20;
 	
-	if(sekvens_goal_detekted() == true && (count == 0)){			// Kollar om counter är 0, alltså första indikeringen
-		counter_timer_line_goal = 0;										// Nollar timern som sitter i timerintrerruptet, ISR för timern sker 10ggr per sekund
-		count++;						
-		return false;
+	if((Goal_reset_timer == 0) && (sekvens_goal_detekted() == true)){		
+		Goal_reset_timer = 1;	
+		counter_timer_line_goal = 0;																						// Nollar timern som sitter i timerintrerruptet, ISR för timern sker 10ggr per sekund						
 	}	
-	else if(sekvens_goal_detekted() == true && (count == 1)&& (counter_timer_line_goal < 20)){	// Kontroll görs att timer countern inte passerat tiden X (just nu inom 2sekunder) innan nästa indikering
+	if((sekvens_goal_detekted() == true) && ((count == 0) | (count == 2)) && (counter_timer_line_goal < goal_timer)){		//linje 1(count=0) eller 2(count=2) upptäkt procid
 		count++;
 		return false;
 	}
-	else if(sekvens_goal_detekted() == true && (count == 2)&& (counter_timer_line_goal < 20)){	// Kontroll görs att timer countern inte passerat tiden X (just nu inom 2sekunder) innan nästa indikering
-		count = 0;
-		return true;																		// Om tre korsningar har passerats inom tiden av X kommer mål indikeras
+	else if((sekvens_goal_detekted() == false) && ((count == 1) | (count == 3)) && (counter_timer_line_goal < goal_timer)){	// mellanrum mellan linje 1-2(count=1) eller 2-3(count=3) upptäkt
+		count++;
+		return false;																		
 	}
-	else if(counter_timer_line_goal >= 20){								// Timeout, tiden har passerat. Alltså inget mål utan bara en T korsning
+	else if((sekvens_goal_detekted() == true) && (count == 4)  && (counter_timer_line_goal < goal_timer)){					//linje 3 upptäkt indikerar mål
+		Goal_reset_timer = 0;
+		return true;
+	}
+	else if(counter_timer_line_goal >= goal_timer){																			// Timeout, tiden har passerat. Alltså inget mål utan bara en T korsning
 		count = 0;
+		Goal_reset_timer = 0;
 		return false;
 	}
 	// ************************************************************************************************************************'
@@ -188,12 +204,22 @@ bool detect_goal(){// brettar om robotten är i mål eller inte
 
 bool sekvens_goal_detekted(){
 	//int fel_antal=0;
+	#ifndef time
+		static int prew_fel_antal=0;
+	#endif
 	linje_get_error();		// Borde uppdatera fel_antal
 	if(fel_antal>28){		// om robbot paserar tejp på tvären 
 		PORTD |= (1 << PD1);
+		prew_fel_antal=fel_antal;
+		return true;
+	}
+	else if(prew_fel_antal+fel_antal>36 && prew_fel_antal <=28 && RGB_data==0){
+		PORTD |= (1 << PD1);
+		prew_fel_antal=fel_antal;
 		return true;
 	}
 	else{
+		prew_fel_antal=fel_antal;
 		return false;
 	}
 	//orginal mål tre paralela linjer
@@ -223,7 +249,7 @@ bool detect_labyrint(){ //om robboten har kommmit in i en labyrint
 			Lab_reset_timer = 1;
 			counter_timer_line_lab = 0;
 		}
-		else if(counter_timer_line_lab >=10){  // 1 sekund borde vara lagom
+		else if(counter_timer_line_lab >=30){  // 1 sekund borde vara lagom
 			Lab_reset_timer = 0;
 			return true;
 		}
