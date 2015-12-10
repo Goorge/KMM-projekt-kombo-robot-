@@ -29,7 +29,7 @@ void read_gyro(const uint8_t wanted_degrees, const uint8_t gyro_null)
 	Är absolutbeloppet på grader totalt större eller lika med rotera*34 så har man roterat 90 grader		
 	*/
 
-	const int wanted_degrees_34 = (wanted_degrees-12)*34;
+	const int wanted_degrees_34 = (wanted_degrees-9)*34;
 	int degrees_rotated_34 = 0;
 	PORTD |= 0x60;
 	

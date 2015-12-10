@@ -18,15 +18,13 @@ void turn_left(void){
 	PORTB |= (1 << motor_dir_left);
 	motor_left = 60;//left;
 	motor_right = 55;//right;
-	turning = true;
 }
 
 void turn_right(void){
 	PORTB |= (1 << motor_dir_right);
 	PORTB &= ~(1 << motor_dir_left);
-	motor_left = 60;//left;
-	motor_right = 55;//right;
-	turning = true;
+	motor_left = 57;//left;
+	motor_right = 52;//right;
 }
 
 //--------------------------------------------------------------

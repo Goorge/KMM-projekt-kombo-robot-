@@ -34,6 +34,8 @@ public class Grafik {
 	// The frame that everything gets drawn into.
 	private JFrame frame;
 	
+	private static  boolean save_data = false;
+	
 	// buttons 4 distance sensors
 	private static Button sensor_front_btn;
 	private static Button sensor_left_btn;
@@ -140,9 +142,10 @@ public class Grafik {
 	
 	// Tar hand om data som kommer ifrån bt, Behöver göras mer. 
 	private static void handleData(byte[] data){
-		switch (data[0] & 0x0f){
-		case (byte)0x00: // Batteri
-			// Värdet / 51.2
+		if(save_data){
+			switch (data[0] & 0x0f){
+			case (byte)0x00: // Batteri
+				// Värdet / 51.2
 			/*
 			double b1 = (data[1] & 0xff) / 51.0;
 			double b2 = (data[2] & 0xff) / 51.0;
@@ -204,11 +207,12 @@ public class Grafik {
 		default: // If we dont get any real data, we still have a list where we write it so we know if it got wrong
 			String text2 = ""; 
 			for(int i = 0; i < data.length; i++){
-				text2 += data[i];
+					text2 += data[i];
 				//System.out.println(" " + data[i]);
+				}
+				addToList(listEnum.garbage, getCurrentTime() + " " + text2);
+				break; 
 			}
-			addToList(listEnum.garbage, getCurrentTime() + " " + text2);
-			break; 
 		}
 		com.clearDataAvailable();
 	}
@@ -268,6 +272,10 @@ public class Grafik {
 			toSend[0] = (byte)0x08; //00001000
 			break;
 		case start:
+			if(save_data)
+				save_data = false;
+			else
+				save_data = true;
 			toSend = new byte[2];
 			toSend[0] = 0x1F;
 			toSend[1] = (byte) 0xF0;
@@ -791,13 +799,13 @@ public class Grafik {
 		refresh_com_btn.setBounds(300, 575, 200, 22);
 		frame.getContentPane().add(refresh_com_btn);
 		
-		image_label = new JLabel("");
-		URL url = Grafik.class.getResource("/images/robot.png");
-		ImageIcon img = new ImageIcon(url);
+		//image_label = new JLabel("");
+		//URL url = Grafik.class.getResource("/images/robot.png");
+		//ImageIcon img = new ImageIcon(url);
 
-		image_label.setIcon(img);
-		image_label.setBounds(300, 10, 456, 567);
-		frame.getContentPane().add(image_label);	
+	//	image_label.setIcon(img);
+	//	image_label.setBounds(300, 10, 456, 567);
+	//	frame.getContentPane().add(image_label);	
 	}
 }
 

@@ -502,10 +502,10 @@ END GROUP
  *(.debug_frame)
  .debug_frame   0x00000000      0x2d0 mainsensor.o
 
-.debug_str      0x00000000      0x4f3
+.debug_str      0x00000000      0x4e8
  *(.debug_str)
- .debug_str     0x00000000      0x4f3 mainsensor.o
-                                0x53e (size before relaxing)
+ .debug_str     0x00000000      0x4e8 mainsensor.o
+                                0x533 (size before relaxing)
 
 .debug_loc      0x00000000      0xdc3
  *(.debug_loc)

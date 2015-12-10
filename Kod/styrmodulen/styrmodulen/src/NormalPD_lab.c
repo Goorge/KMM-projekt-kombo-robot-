@@ -4,14 +4,14 @@
 
 int previous_error_lab_right = 0;
 int previous_error_lab_left = 0;
-int p_constant_lab = 150;
-int d_constant_lab = 35;
+int p_constant_lab = 130;
+int d_constant_lab = 15;
 int current_error_lab;
 int output_right;
 int output_left;
 float derivate;
 int distance_wall_desired = 22;
-int number_of_errors = 2;
+int number_of_errors = 3;
 int previous_errors_left[5];
 int previous_errors_right[5];
 int error_count = 0;
@@ -29,9 +29,6 @@ void PD_for_lab(int distance_left, int distance_right, int distance_front){
 	output_left = (p_constant_lab * current_error_lab + d_constant_lab * derivate)/10;
 	previous_errors_left[error_count] = current_error_lab;
 
-	
-	
-	
 	if(++error_count >= number_of_errors)
 		error_count=0;
 		

@@ -223,6 +223,7 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 				turning = false;
 				motor_right = 0;
 				motor_left = 0;
+				updaterad_labyrint = false;
 				_delay_ms(500);
 				//start = 0;
 				break;
@@ -256,6 +257,10 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 						start=0;
 					}
 					else{
+						for(int i = 0; i < 5; i++){						
+							previous_errors_right[i] = 0;
+							previous_errors_left[i] = 0;
+						}
 						start=1;
 					}
 				}

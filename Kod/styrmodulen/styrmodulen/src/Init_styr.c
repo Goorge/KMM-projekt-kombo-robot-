@@ -42,7 +42,7 @@ ISR(TIMER1_COMPA_vect){
 	if(counter_timer_line_goal >= 50)
 		counter_timer_line_goal = 50;
 		
-	count_waypoint++;			//räknare för att köra ur svängar i labyrinter
+	//count_waypoint++;			//räknare för att köra ur svängar i labyrinter
 }
 // ------------------------------------------------------------------------------------------------------
 // -- External interrupt for INT1 and INT2
