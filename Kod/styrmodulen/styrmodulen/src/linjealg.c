@@ -204,12 +204,22 @@ bool detect_goal(){// brettar om robotten är i mål eller inte
 
 bool sekvens_goal_detekted(){
 	//int fel_antal=0;
+	#ifndef time
+		static int prew_fel_antal=0;
+	#endif
 	linje_get_error();		// Borde uppdatera fel_antal
 	if(fel_antal>28){		// om robbot paserar tejp på tvären 
 		PORTD |= (1 << PD1);
+		prew_fel_antal=fel_antal;
+		return true;
+	}
+	else if(prew_fel_antal+fel_antal>36 && prew_fel_antal <=28 && RGB_data==0){
+		PORTD |= (1 << PD1);
+		prew_fel_antal=fel_antal;
 		return true;
 	}
 	else{
+		prew_fel_antal=fel_antal;
 		return false;
 	}
 	//orginal mål tre paralela linjer
