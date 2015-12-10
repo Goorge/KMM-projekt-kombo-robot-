@@ -39,7 +39,7 @@ void read_rgb()
 	}
 	
 	color_value = read_adc(3); //blå
-	if(color_value > 70)
+	if(color_value > 110)
 	{
 		PORTD |= 0x60;
 		_delay_ms(time_delay);
