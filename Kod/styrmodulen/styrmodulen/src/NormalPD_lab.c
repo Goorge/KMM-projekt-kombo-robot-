@@ -4,7 +4,7 @@
 
 int previous_error_lab_right = 0;
 int previous_error_lab_left = 0;
-int p_constant_lab = 170;
+int p_constant_lab = 70;
 int d_constant_lab = 12;
 int current_error_lab;
 int output_right;
@@ -90,8 +90,8 @@ void PD_for_lab(int distance_left, int distance_right, int distance_front){
 		output_right = -motor_right;
 		output_left = -motor_left;
 	}*/
-	if(error_count == 0)
-		PORTD ^= (1 << PD0);
+	//if(error_count == 0)
+	//	PORTD ^= (1 << PD0);
 	
 	//motor_left = left + output_left;
 	//motor_right = right + output_right;

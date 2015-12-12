@@ -82,7 +82,7 @@ byte i2c_recive(void){
 
 void i2c_handle_data(void){
 	if(i2c_new_data == true){
-		//if(((i2c_data[0] >> 4) & 0x0f) == 3)
+		//if(((i2c_data[0] >> 4) & 0x0f) == 3) 
 		bluetooth_add_to_send_queue(i2c_data);
 		i2c_new_data = false;
 		bytefrom_i2c = 0;

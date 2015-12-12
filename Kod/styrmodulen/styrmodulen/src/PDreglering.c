@@ -12,6 +12,7 @@ void regulator(){
 		//PORTB &= ~(1 << motor_dir_right);								// Set motor direction to forward
 		//PORTB |= (1 << motor_dir_left);									// Set motor direction to backward
 //	}
+
 	if((regulator_mode == 1) && (regler_ready_linje == 1)){
 		linje_main();
 		regler_ready_linje = 0;

@@ -40,9 +40,11 @@ int main(void){
 	
 	const uint8_t gyro_null = read_adc(6);
 	static uint8_t do_avstand_counter = 0;
-	
+	int ctr = 0;	
 	while(1)
 	{
+		if(++ctr == 1000)
+			read_battery_voltage();
 		if(kalibrate == TRUE)
 		{
 			kalibrering();

@@ -10,24 +10,19 @@
 void read_battery_voltage()
 {
 
-uint8_t battery_cell_1;
-uint8_t battery_cell_2;
+uint8_t battery_in;
+uint8_t battery_voltage;
 
 	DDRD |= 0x60;
 	
-	battery_cell_1 = read_adc(4); 
-	if(battery_cell_1 < 170)
+	battery_in = read_adc(4); 
+	if(battery_in < 180)
 	{
 		PORTD = 0x60;
 	}
 	
-	battery_cell_2 = read_adc(5);
- 	battery_cell_2 = battery_cell_2 + battery_cell_2 - battery_cell_1;
-	if(battery_cell_2 < 170)
-	{
-		PORTD = 0x60;
-	}
+ 	battery_voltage = battery_in + battery_in;
 	
-	uint8_t data_to_send [3] = {0x20, battery_cell_1, battery_cell_2}; 
+	uint8_t data_to_send [2] = {0x20, battery_voltage}; 
 	//skicka helvetet
 }

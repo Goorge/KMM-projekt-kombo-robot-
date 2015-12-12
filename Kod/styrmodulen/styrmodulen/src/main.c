@@ -3,6 +3,8 @@
 #include <asf.h>
 #include <compat/twi.h>
 
+#define F_CPU 14745600UL
+
 // Global variables
 int drive_mode = 0;			// Manual or auto mode
 int start = 0;				// Start and stop

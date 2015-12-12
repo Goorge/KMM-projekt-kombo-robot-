@@ -1,6 +1,6 @@
 #ifndef bt
 #define bt
-
+extern void doLCD(char* s1, char* s2);
 #include "asf.h"
 #include "definitions.h"
 #include "i2c_slave.h"

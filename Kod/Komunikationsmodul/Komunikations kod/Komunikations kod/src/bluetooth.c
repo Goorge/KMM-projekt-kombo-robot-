@@ -95,6 +95,15 @@ void bluetooth_handle_data( void ){
 		//byte data[nr_of_bytes];
 		//for(int i = 0; i < nr_of_bytes; i++)
 		//	data[i] = data_from_bt[i];
+		if(data_from_bt[0] == 0x3f){
+			if(data_from_bt[1] == 0x01){
+				//int a1 =  data_from_bt[2];// + '0';
+				//int a2 =  data_from_bt[3];// + '0';
+				//char* s1 = { a1 };
+				//char* s2 = { a2 };
+				//doLCD(s1, s2);	
+			}
+		}
 		i2c_requestToSend(0x04, data_from_bt);
 		bluetooth_add_to_send_queue(data_from_bt); // Ta bort när den skickar över i2c. 
 		new_data_bt = false;
