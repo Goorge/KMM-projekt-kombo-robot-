@@ -97,11 +97,11 @@ void bluetooth_handle_data( void ){
 		//	data[i] = data_from_bt[i];
 		if(data_from_bt[0] == 0x3f){
 			if(data_from_bt[1] == 0x01){
-				//int a1 =  data_from_bt[2];// + '0';
-				//int a2 =  data_from_bt[3];// + '0';
-				//char* s1 = { a1 };
-				//char* s2 = { a2 };
-				//doLCD(s1, s2);	
+				int a1 =  data_from_bt[2];// + '0';
+				int a2 =  data_from_bt[3];// + '0';
+				char* s1 = { (a1 / 100) % 10 +'0', (a1 / 10) % 10 +'0', (a1 / 1) % 10 +'0'};
+				char* s2 = { (a2 / 100) % 10 +'0', (a2 / 10) % 10 +'0', (a2 / 1) % 10 +'0'};
+				doLCD(s1, s2);	
 			}
 		}
 		i2c_requestToSend(0x04, data_from_bt);
