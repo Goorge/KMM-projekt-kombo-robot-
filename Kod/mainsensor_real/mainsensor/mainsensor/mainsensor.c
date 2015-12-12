@@ -52,8 +52,11 @@ int main(void)
 		}
 
 		read_reflex_sensors();	//kör reflexsensorer. Muxar hela längan
+		_delay_ms(10);
 		read_avstand_sensor(do_avstand_counter);	//läser avståndssensorer
+		_delay_ms(10);
 		read_rgb();			//läs RGB
+		_delay_ms(10);
 		i2c_handle_data(gyro_null);	//för att köra gyrot när vi tar emot att vi ska göra något så roligt! Snurr snurr
 		
 		/*if(battery_counter == 1000)
