@@ -4,6 +4,9 @@ byte i2c_recive(byte prossesor);
 void i2c_store_data(byte data);
 void i2c_handel_data();
 
+byte distans_right_median[3];
+byte distans_fram_median[3];
+byte distans_left_median[3];
 byte i2c_data[15];
 bool i2c_newdata=false;
 int Reflex_data;
@@ -197,10 +200,38 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 			case 0x00 ://batteri nivå
 				batteri=i2c_data[1],i2c_data[2];
 				break;
-			case 0x01 ://avståndssensorer
-				distans_right = i2c_data[3];
-				distans_fram = i2c_data[2];;
-				distans_left = i2c_data[1];
+			case 0x01 ://avståndssensorer  plockar fram medianen av dom senaste 3 värdena ser krongligt ut men är bara hitta mittenvärdet och lägg det i distans_xxx
+				distans_right_median[0] = i2c_data[3];
+				if((distans_right_median[0]<distans_right_median[1] && distans_right_median[0]>distans_right_median[2])||(distans_right_median[0]>distans_right_median[1] && distans_right_median[0]<distans_right_median[2]))
+					distans_right=distans_right_median[0];
+				else if((distans_right_median[1]<distans_right_median[0] && distans_right_median[1]>distans_right_median[2])||(distans_right_median[1]>distans_right_median[0] && distans_right_median[1]<distans_right_median[2]))
+					distans_right=distans_right_median[1];
+				else
+					distans_right=distans_right_median[2];
+				distans_right_median[2]=distans_right_median[1];
+				distans_right_median[1]=distans_right_median[0];
+				
+				
+				distans_fram_median[0] = i2c_data[3];
+				if((distans_fram_median[0]<distans_fram_median[1] && distans_fram_median[0]>distans_fram_median[2])||(distans_fram_median[0]>distans_fram_median[1] && distans_fram_median[0]<distans_fram_median[2]))
+					distans_fram=distans_fram_median[0];
+				else if((distans_fram_median[1]<distans_fram_median[0] && distans_fram_median[1]>distans_fram_median[2])||(distans_fram_median[1]>distans_fram_median[0] && distans_fram_median[1]<distans_fram_median[2]))
+					distans_fram=distans_fram_median[1];
+				else
+					distans_fram=distans_fram_median[2];
+				distans_fram_median[2]=distans_fram_median[1];
+				distans_fram_median[1]=distans_fram_median[0];
+				
+				static byte distans_left_median[3];
+				distans_left_median[0] = i2c_data[3];
+				if((distans_left_median[0]<distans_left_median[1] && distans_left_median[0]>distans_left_median[2])||(distans_left_median[0]>distans_left_median[1] && distans_left_median[0]<distans_left_median[2]))
+					distans_left=distans_left_median[0];
+				else if((distans_left_median[1]<distans_left_median[0] && distans_left_median[1]>distans_left_median[2])||(distans_left_median[1]>distans_left_median[0] && distans_left_median[1]<distans_left_median[2]))
+					distans_left=distans_left_median[1];
+				else
+					distans_left=distans_left_median[2];
+				distans_left_median[2]=distans_left_median[1];
+				distans_left_median[1]=distans_left_median[0];
 				//updaterad_labyrint = true;
 				break;
 			case 0x02 :// refelxsensor data
