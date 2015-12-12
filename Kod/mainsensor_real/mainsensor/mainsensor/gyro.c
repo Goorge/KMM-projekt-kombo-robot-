@@ -8,7 +8,27 @@
 #include "gyro.h"
 #include <stdlib.h>
 
-void read_gyro(const uint8_t wanted_degrees, const uint8_t gyro_null)
+void read_gyro(const uint8_t wanted_degrees, const uint16_t gyro_null)
+{
+	const uint32_t wanted_degrees_137 = (wanted_degrees-2)*137;
+	int32_t degrees_rotated_137 = 0;
+	PORTD |= 0x60;	//Sätter på lysdioder för indikering av 90-graderssväng
+	
+	while(abs(degrees_rotated_137) <= wanted_degrees_137)
+	{
+		_delay_ms(10);			
+		degrees_rotated_137 += read_adc_gyro() - gyro_null;
+	}
+
+	uint8_t data_to_send[1];
+	data_to_send[0] = 0x06;	
+	i2c_requestToSend(0x04, data_to_send);
+	PORTD &= ~(0x60);	//Stänger av lysdioder
+}
+
+//UNDER ÄR EN GAMMAL VERSION MED 8-bitars AD-omvandling
+
+/*void read_gyro(const uint8_t wanted_degrees, const uint8_t gyro_null)
 {
 	/*
 	Gyrots känslighet är 300 dgs/s
@@ -29,7 +49,7 @@ void read_gyro(const uint8_t wanted_degrees, const uint8_t gyro_null)
 	Är absolutbeloppet på grader totalt större eller lika med rotera*34 så har man roterat 90 grader		
 	*/
 
-	const int wanted_degrees_34 = (wanted_degrees-9)*34;
+	/*const int wanted_degrees_34 = (wanted_degrees-9)*34;
 	int degrees_rotated_34 = 0;
 	PORTD |= 0x60;
 	
@@ -43,4 +63,4 @@ void read_gyro(const uint8_t wanted_degrees, const uint8_t gyro_null)
 	i2c_requestToSend(0x04, data_to_send);
 	degrees_rotated_34 = 0;
 	PORTD &= ~(0x60);
-}
+}*/

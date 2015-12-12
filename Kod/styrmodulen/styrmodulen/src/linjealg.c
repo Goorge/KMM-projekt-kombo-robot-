@@ -25,14 +25,14 @@ void linje_main() //funktion so  sköter linjeföjlning och hantering av specialfa
 		RGB_slow = 2;
 		linje();
 	}
-	else if(detect_goal()==true){
+	else if(detect_goal()){
 		
-		_delay_ms(2500);
+		_delay_ms(1000);
 		start=0;
 		PORTD |= (1 << PD1);
 		//signalera i mål och stanna
 	}
-	else if(detect_labyrint()==true){
+	else if(detect_labyrint()){
 		PORTD |= (1 << PD0);
 		start = 0;
 		//regulator_mode=0; //byt till kör i labyrintmode(är 2 rätt eller ska det vara 0)
@@ -243,9 +243,9 @@ bool detect_labyrint(){ //om robboten har kommmit in i en labyrint
 			static int time;
 		#endif
 		
-	if(distans_left<25 && distans_right<25){ // om det finns väggar på båda sidor     
-		
-		if(Lab_reset_timer == 0){
+	if(distans_left<30 && distans_right<30 && fel_antal==0){ // om det finns väggar på båda sidor     
+		return true;
+		/*if(Lab_reset_timer == 0){
 			Lab_reset_timer = 1;
 			counter_timer_line_lab = 0;
 		}
@@ -255,17 +255,11 @@ bool detect_labyrint(){ //om robboten har kommmit in i en labyrint
 		}
 		else{
 			return false;
-		}
-		/*
-		if(time>20)//har väntat slutsats det här är en labyrint 			
-			return true;
-		else{// vänta så det inte bara var något litet 
-			time++;
-			return false;
 		}*/
+		
 	}
 	else{ // det var ingen labyrint
-		time = 0;
+		//time = 0;
 		return false;
 	}
 }

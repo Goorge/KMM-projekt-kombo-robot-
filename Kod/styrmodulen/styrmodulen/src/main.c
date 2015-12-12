@@ -5,6 +5,9 @@
 #include <asf.h>
 #include <compat/twi.h>
 
+typedef uint8_t byte;
+
+
 // Global variables
 int drive_mode = 0;			// Manual or auto mode
 int start = 0;				// Start and stop

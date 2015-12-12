@@ -41,9 +41,9 @@ void run(void){
 
 void doLCD(char* s1, char* s2){
 	lcd_clrscr();             /* clear screen of lcd */
-	lcd_home();               /* bring cursor to 0,0 */
+	lcd_gotoxy(0,0);              /* bring cursor to 0,0 */
 	lcd_puts(s1);        /* type something random */
-	lcd_gotoxy(1,1);          /* go to 2nd col, 2nd row*/
+	lcd_gotoxy(0,1);          /* go to 2nd col, 2nd row*/
 	lcd_puts(s2);  /* type something random */
 }
 /*
