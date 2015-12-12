@@ -261,7 +261,8 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 							previous_errors_left[i] = 0;
 						}
 						start=1;
-						RGB_data = 0;
+						//RGB_data = 0;
+						RGB_data = 3;  
 					}
 				}
 				else if(i2c_data[1]==0x0f){
@@ -279,12 +280,15 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 					}
 				}
 				else if(i2c_data[1]==0x00){			// Ändra P och D konstant för linje
-					d_constant = i2c_data[2] & 0xff;
-					p_constant = i2c_data[3] & 0xff;
+					_delay_us(10);
+					d_constant = i2c_data[2] ;
+					p_constant = i2c_data[3] ;
 				}
 				else if(i2c_data[1]==0x01){			// Ändra P och D konstant för labyrint
-					d_constant_lab = i2c_data[2] & 0xff;
-					p_constant_lab = i2c_data[3] & 0xff;
+					_delay_us(10);
+					d_constant_lab = i2c_data[2] ;
+					p_constant_lab = i2c_data[3] ;
+					_delay_us(10);
 				}
 				else if(i2c_data[1]==0x02){
 					left = i2c_data[2] & 0xff;

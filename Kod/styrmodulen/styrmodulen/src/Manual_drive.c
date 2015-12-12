@@ -4,6 +4,8 @@
 int manual_function=0;
 int gyro_left = 0;
 int gyro_right = 0;
+int laby_left_speed = 100;
+int laby_right_speed = 93;
 
 void req_gyro_turn(void){ // fuktion man kallar på för att starta Gyro inför 90 graders sväng
 	byte data[1] = { 0x07 };
@@ -12,6 +14,19 @@ void req_gyro_turn(void){ // fuktion man kallar på för att starta Gyro inför 
 	_delay_ms(100);
 }
 
+void stand_still(void){
+	PORTB &= ~(1 << motor_dir_left);
+	PORTB &= ~(1 << motor_dir_right);
+	motor_left = 0;
+	motor_right = 0;
+}
+
+void drive_forward(void){
+	PORTB &= ~(1 << motor_dir_left);
+	PORTB &= ~(1 << motor_dir_right);
+	motor_left = laby_left_speed;
+	motor_right = laby_right_speed;
+}
 
 void turn_left(void){
 	PORTB &= ~(1 << motor_dir_right);
