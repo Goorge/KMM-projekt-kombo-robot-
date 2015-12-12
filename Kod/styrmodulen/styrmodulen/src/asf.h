@@ -84,7 +84,6 @@ extern int start;
 extern float current_position;
 extern int left;
 extern int right;
-extern int count_waypoint;
 extern bool waypoint;
 extern bool oneway_turn;
 extern bool twoway_turn_left;

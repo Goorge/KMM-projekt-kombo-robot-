@@ -1,9 +1,12 @@
+#define F_CPU 14745600UL
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <asf.h>
 #include <compat/twi.h>
+
 typedef uint8_t byte;
-#define F_CPU 14745600UL
+
 
 // Global variables
 int drive_mode = 0;			// Manual or auto mode
@@ -11,7 +14,7 @@ int start = 0;				// Start and stop
 int left = 0;					// Set speed for left motor
 int right = 0;				// Set speed for right motor
 int regler_ready = 0;			// Ready for new values from sensors if 1
-int count_waypoint = 0;		// Time to move away from waypoint
+int count_waypoint = 10;		// Time to move away from waypoint
 int counter_timer = 0;		// Counter for how long time a manual function going to run
 int counter_timer_line_RGB = 0;
 int counter_timer_line_lab = 0;

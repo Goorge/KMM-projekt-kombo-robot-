@@ -4,36 +4,38 @@
 
 int previous_error_lab_right = 0;
 int previous_error_lab_left = 0;
-int p_constant_lab = 70;
-int d_constant_lab = 12;
+int p_constant_lab = 55;
+int d_constant_lab = 3;
 int current_error_lab;
 int output_right;
 int output_left;
 float derivate;
 int distance_wall_desired = 22;
 int number_of_errors = 4;
-int previous_errors_left[5];
-int previous_errors_right[5];
+int previous_errors_left[10];
+int previous_errors_right[10];
 int error_count = 0;
 
 void PD_for_lab(int distance_left, int distance_right, int distance_front){
 	//räkna ut fel höger
 	current_error_lab = distance_left - distance_right; //-sensor_left_tmp
 	derivate = current_error_lab - previous_errors_right[error_count];///10; //
+	if (derivate < 3 && derivate > -3)
+		derivate = 0;
 	output_right = (p_constant_lab * current_error_lab + d_constant_lab * derivate)/10;
 	previous_errors_right[error_count] = current_error_lab;
 	
 	if(output_right >= 0){
-		motor_right = right;
-		if(output_right > left)
-			output_right = left;
-		motor_left = left - output_right;	
+		motor_right = laby_right_speed;
+		if(output_right > laby_left_speed)
+			output_right = laby_left_speed;
+		motor_left = laby_left_speed - output_right;	
 	}
 	else if(output_right < 0){
-		motor_left = left;
-		if(output_right < -right)
-			output_right = -right;
-		motor_right = right + output_right;	
+		motor_left = laby_left_speed;
+		if(output_right < -laby_right_speed)
+			output_right = -laby_right_speed;
+		motor_right = laby_right_speed + output_right;	
 	}
 		
 	//else if(output_right <= (-right))
@@ -73,7 +75,32 @@ void PD_for_lab(int distance_left, int distance_right, int distance_front){
 		
 	else if(output_right <= (-right))
 		output_right = -right;
+		
 	*/
+	/*
+		if(distance_front <= 50 && current_error_lab > 6 ){
+			turn_left();
+			_delay_ms(95);
+			stand_still();
+			for(int i = 0; i < number_of_errors ; i++){
+				previous_errors_right[i] = 0;
+				
+			}
+			
+		}
+		else if (distance_front <= 50 && current_error_lab < -6 ){
+			//turn_right;
+			PORTD ^= (1 << PD0);
+			PORTB |= (1 << motor_dir_right);
+			PORTB &= ~(1 << motor_dir_left);
+			motor_left = 57;//80;//57left;
+			motor_right = 52;//52right;
+			_delay_ms(95);
+			stand_still();
+			for(int i = 0; i < number_of_errors ; i++){
+				previous_errors_right[i] = 0;
+		}
+		}*/
 	if(distance_front <= 35){
 		motor_left = 0; //output_left = -left;// = 0; 
 		motor_right = 0;//	output_right = -right;//motor_right = 0;
@@ -86,7 +113,7 @@ void PD_for_lab(int distance_left, int distance_right, int distance_front){
 		//return;
 	}
 	
-	/*if(previous_errors_left[error_count] <= -10){ // testgrej
+	/*if(previous_errors_left[er								<  ror_count] <= -10){ // testgrej
 		output_right = -motor_right;
 		output_left = -motor_left;
 	}*/
