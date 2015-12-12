@@ -31,22 +31,22 @@ ISR(BADISR_vect){
   TWCR = (1 << TWIE) | (1 << TWEN)| (1<<TWEA) | (1<<TWINT);//TWCR |= (1<<TWEA) | (1<<TWINT);
 }
 
-int main(void){	
+int main(void)
+{	
 	DDRD |= 0x60;
-	mux_init();		
 	adc_init();
+	uint16_t gyro_null = read_adc_gyro();
+	static uint8_t do_avstand_counter = 0;
+	//static uint16_t battery_counter = 0;	
+	mux_init();		
 	i2c_setup(0x06);
 	interrupt_init();
 	
-	const uint8_t gyro_null = read_adc(6);
-	static uint8_t do_avstand_counter = 0;
-	int ctr = 0;	
 	while(1)
 	{
-		if(++ctr == 1000)
-			read_battery_voltage();
 		if(kalibrate == TRUE)
 		{
+			gyro_null = read_adc_gyro();
 			kalibrering();
 			kalibrate = FALSE;
 		}
@@ -55,6 +55,16 @@ int main(void){
 		read_avstand_sensor(do_avstand_counter);	//läser avståndssensorer
 		read_rgb();			//läs RGB
 		i2c_handle_data(gyro_null);	//för att köra gyrot när vi tar emot att vi ska göra något så roligt! Snurr snurr
+		
+		/*if(battery_counter == 1000)
+		{
+			read_battery_voltage();
+			battery_counter = 0;
+		}
+		else
+		{
+			++battery_counter;
+		}*/
 		
 		if(do_avstand_counter == 5)
 		{

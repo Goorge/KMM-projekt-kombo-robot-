@@ -14,6 +14,6 @@ void i2c_requestToSend(byte adress, byte data[]);
 byte incomingData();
 void i2c_send(byte prossesor,byte data);
 byte i2c_recive();
-void i2c_handel_data(const uint8_t gyro_null);
+void i2c_handel_data(const uint16_t gyro_null);
 
 #endif

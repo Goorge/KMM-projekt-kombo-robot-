@@ -87,7 +87,7 @@ byte i2c_recive(void){
 	return test;
 }
 
-void i2c_handle_data(const uint8_t gyro_null){
+void i2c_handle_data(const uint16_t gyro_null){
 	if(i2c_new_data == true){
 		//if(((i2c_data[0] >> 4) & 0x0f) == 3)
 		read_gyro(90, gyro_null);
