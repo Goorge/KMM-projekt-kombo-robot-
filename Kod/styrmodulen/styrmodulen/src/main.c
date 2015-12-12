@@ -2,7 +2,7 @@
 #include <avr/interrupt.h>
 #include <asf.h>
 #include <compat/twi.h>
-
+typedef uint8_t byte;
 #define F_CPU 14745600UL
 
 // Global variables

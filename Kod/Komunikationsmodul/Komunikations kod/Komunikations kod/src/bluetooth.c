@@ -99,11 +99,11 @@ void bluetooth_handle_data( void ){
 			if(data_from_bt[1] == 0x01){
 				int a1 = data_from_bt[2];// + '0';
 				int a2 = data_from_bt[3];// + '0';
-				char s1[2];
+				char s1[16];
 				s1[0] = (a1 / 100) % 10 +'0';
 				s1[1] = (a1 / 10) % 10 +'0';
 				s1[2] = (a1 / 1) % 10 +'0';
-				char s2[2];
+				char s2[16];
 				s2[0] = (a2 / 100) % 10 +'0';
 				s2[1] = (a2 / 10) % 10 +'0';
 				s2[2] = (a2 / 1) % 10 +'0';
