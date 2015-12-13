@@ -27,6 +27,7 @@ void regulator(){
 		
 		PORTB &= ~(1 << motor_dir_right);								// Set motor direction to forward
 		PORTB &= ~(1 << motor_dir_left);	
+
 		if(updaterad_labyrint == true){
 		
 			updaterad_labyrint = false;
