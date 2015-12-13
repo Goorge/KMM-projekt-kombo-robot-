@@ -10,7 +10,7 @@
 
 void read_gyro(const uint8_t wanted_degrees, const uint16_t gyro_null)
 {
-	const uint32_t wanted_degrees_137 = (wanted_degrees-2)*137;
+	const uint32_t wanted_degrees_137 = (wanted_degrees-6)*137;
 	int32_t degrees_rotated_137 = 0;
 	PORTD |= 0x60;	//Sätter på lysdioder för indikering av 90-graderssväng
 	

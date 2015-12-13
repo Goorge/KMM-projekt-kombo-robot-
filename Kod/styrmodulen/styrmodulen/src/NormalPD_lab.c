@@ -4,7 +4,7 @@
 
 int previous_error_lab_right = 0;
 int previous_error_lab_left = 0;
-int p_constant_lab = 20;
+int p_constant_lab = 15;
 int d_constant_lab = 225;
 int current_error_lab;
 int output_right;
@@ -101,7 +101,7 @@ void PD_for_lab(int distance_left, int distance_right, int distance_front){
 				previous_errors_right[i] = 0;
 		}
 		}*/
-	if(distance_front <= 30){
+	if(distance_front <= 35){
 		req_gyro_turn();
 		turn_right();//	output_right = -right;//motor_right = 0;
 		/*byte data[1] = { 0x07 };

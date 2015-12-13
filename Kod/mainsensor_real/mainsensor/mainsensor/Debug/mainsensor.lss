@@ -3,31 +3,31 @@ mainsensor.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  00000976  2**0
+  0 .data         00000000  00800100  00800100  0000096a  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000902  00000000  00000000  00000074  2**1
+  1 .text         000008f6  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          0000004c  00800100  00800100  00000976  2**0
+  2 .bss          0000004c  00800100  00800100  0000096a  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000976  2**0
+  3 .comment      00000030  00000000  00000000  0000096a  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000009a8  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  0000099c  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000000f8  00000000  00000000  000009e8  2**0
+  5 .debug_aranges 000000f8  00000000  00000000  000009dc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000f7a  00000000  00000000  00000ae0  2**0
+  6 .debug_info   00000f74  00000000  00000000  00000ad4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000002d3  00000000  00000000  00001a5a  2**0
+  7 .debug_abbrev 000002d3  00000000  00000000  00001a48  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000ae2  00000000  00000000  00001d2d  2**0
+  8 .debug_line   00000ae2  00000000  00000000  00001d1b  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000002ec  00000000  00000000  00002810  2**2
+  9 .debug_frame  000002ec  00000000  00000000  00002800  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000004ee  00000000  00000000  00002afc  2**0
+ 10 .debug_str    000004f2  00000000  00000000  00002aec  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000dd9  00000000  00000000  00002fea  2**0
+ 11 .debug_loc    00000dd9  00000000  00000000  00002fde  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000e8  00000000  00000000  00003dc3  2**0
+ 12 .debug_ranges 000000e8  00000000  00000000  00003db7  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -126,7 +126,7 @@ Disassembly of section .text:
   a4:	b2 07       	cpc	r27, r18
   a6:	e1 f7       	brne	.-8      	; 0xa0 <.do_clear_bss_loop>
   a8:	f3 d3       	rcall	.+2022   	; 0x890 <main>
-  aa:	29 c4       	rjmp	.+2130   	; 0x8fe <_exit>
+  aa:	23 c4       	rjmp	.+2118   	; 0x8f2 <_exit>
 
 000000ac <__bad_interrupt>:
   ac:	bf c3       	rjmp	.+1918   	; 0x82c <__vector_default>
@@ -460,7 +460,7 @@ Disassembly of section .text:
  348:	de b7       	in	r29, 0x3e	; 62
  34a:	8b 01       	movw	r16, r22
  34c:	90 e0       	ldi	r25, 0x00	; 0
- 34e:	02 97       	sbiw	r24, 0x02	; 2
+ 34e:	06 97       	sbiw	r24, 0x06	; 6
  350:	29 e8       	ldi	r18, 0x89	; 137
  352:	28 9f       	mul	r18, r24
  354:	40 01       	movw	r8, r0
@@ -1192,58 +1192,52 @@ int main(void)
 
 		read_reflex_sensors();	//kör reflexsensorer. Muxar hela längan
  8b6:	d7 de       	rcall	.-594    	; 0x666 <read_reflex_sensors>
- 8b8:	8f ef       	ldi	r24, 0xFF	; 255
- 8ba:	9f e8       	ldi	r25, 0x8F	; 143
+ 8b8:	83 e3       	ldi	r24, 0x33	; 51
+ 8ba:	9b e2       	ldi	r25, 0x2B	; 43
  8bc:	01 97       	sbiw	r24, 0x01	; 1
  8be:	f1 f7       	brne	.-4      	; 0x8bc <main+0x2c>
- 8c0:	00 c0       	rjmp	.+0      	; 0x8c2 <main+0x32>
- 8c2:	00 00       	nop
-		_delay_ms(10);
+		_delay_ms(3);
 		read_avstand_sensor(do_avstand_counter);	//läser avståndssensorer
- 8c4:	80 91 00 01 	lds	r24, 0x0100
- 8c8:	57 df       	rcall	.-338    	; 0x778 <read_avstand_sensor>
- 8ca:	8f ef       	ldi	r24, 0xFF	; 255
- 8cc:	9f e8       	ldi	r25, 0x8F	; 143
- 8ce:	01 97       	sbiw	r24, 0x01	; 1
- 8d0:	f1 f7       	brne	.-4      	; 0x8ce <main+0x3e>
- 8d2:	00 c0       	rjmp	.+0      	; 0x8d4 <main+0x44>
- 8d4:	00 00       	nop
-		_delay_ms(10);
+ 8c0:	80 91 00 01 	lds	r24, 0x0100
+ 8c4:	59 df       	rcall	.-334    	; 0x778 <read_avstand_sensor>
+ 8c6:	83 e3       	ldi	r24, 0x33	; 51
+ 8c8:	9b e2       	ldi	r25, 0x2B	; 43
+ 8ca:	01 97       	sbiw	r24, 0x01	; 1
+ 8cc:	f1 f7       	brne	.-4      	; 0x8ca <main+0x3a>
+		_delay_ms(3);
 		read_rgb();			//läs RGB
- 8d6:	e1 dc       	rcall	.-1598   	; 0x29a <read_rgb>
- 8d8:	8f ef       	ldi	r24, 0xFF	; 255
- 8da:	9f e8       	ldi	r25, 0x8F	; 143
- 8dc:	01 97       	sbiw	r24, 0x01	; 1
- 8de:	f1 f7       	brne	.-4      	; 0x8dc <main+0x4c>
- 8e0:	00 c0       	rjmp	.+0      	; 0x8e2 <main+0x52>
- 8e2:	00 00       	nop
-		_delay_ms(10);
+ 8ce:	e5 dc       	rcall	.-1590   	; 0x29a <read_rgb>
+ 8d0:	83 e3       	ldi	r24, 0x33	; 51
+ 8d2:	9b e2       	ldi	r25, 0x2B	; 43
+ 8d4:	01 97       	sbiw	r24, 0x01	; 1
+ 8d6:	f1 f7       	brne	.-4      	; 0x8d4 <main+0x44>
+		_delay_ms(3);
 		i2c_handle_data(gyro_null);	//för att köra gyrot när vi tar emot att vi ska göra något så roligt! Snurr snurr
- 8e4:	ce 01       	movw	r24, r28
- 8e6:	79 dd       	rcall	.-1294   	; 0x3da <i2c_handle_data>
+ 8d8:	ce 01       	movw	r24, r28
+ 8da:	7f dd       	rcall	.-1282   	; 0x3da <i2c_handle_data>
 		else
 		{
 			++battery_counter;
 		}*/
 		
 		if(do_avstand_counter == 5)
- 8e8:	90 91 00 01 	lds	r25, 0x0100
- 8ec:	95 30       	cpi	r25, 0x05	; 5
- 8ee:	19 f4       	brne	.+6      	; 0x8f6 <main+0x66>
+ 8dc:	90 91 00 01 	lds	r25, 0x0100
+ 8e0:	95 30       	cpi	r25, 0x05	; 5
+ 8e2:	19 f4       	brne	.+6      	; 0x8ea <main+0x5a>
 		{
 			do_avstand_counter = 0;	
- 8f0:	10 92 00 01 	sts	0x0100, r1
- 8f4:	d7 cf       	rjmp	.-82     	; 0x8a4 <main+0x14>
+ 8e4:	10 92 00 01 	sts	0x0100, r1
+ 8e8:	dd cf       	rjmp	.-70     	; 0x8a4 <main+0x14>
 		}
 		else
 		{
 			++do_avstand_counter;
- 8f6:	9f 5f       	subi	r25, 0xFF	; 255
- 8f8:	90 93 00 01 	sts	0x0100, r25
- 8fc:	d3 cf       	rjmp	.-90     	; 0x8a4 <main+0x14>
+ 8ea:	9f 5f       	subi	r25, 0xFF	; 255
+ 8ec:	90 93 00 01 	sts	0x0100, r25
+ 8f0:	d9 cf       	rjmp	.-78     	; 0x8a4 <main+0x14>
 
-000008fe <_exit>:
- 8fe:	f8 94       	cli
+000008f2 <_exit>:
+ 8f2:	f8 94       	cli
 
-00000900 <__stop_program>:
- 900:	ff cf       	rjmp	.-2      	; 0x900 <__stop_program>
+000008f4 <__stop_program>:
+ 8f4:	ff cf       	rjmp	.-2      	; 0x8f4 <__stop_program>

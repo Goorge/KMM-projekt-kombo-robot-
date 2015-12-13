@@ -33,7 +33,7 @@ void linje_main() //funktion so  sköter linjeföjlning och hantering av specialfa
 		motor_right = right;
 		_delay_ms(400);
 		start=0;
-		PORTD |= (1 << PD1);
+		//PORTD |= (1 << PD1);
 		//signalera i mål och stanna
 	}
 	else if(detect_labyrint()){
@@ -154,8 +154,8 @@ bool detect_goal(){// brettar om robotten är i mål eller inte
 			static int time;
 			static int count;
 		#endif
-		
-	int goal_timer = 10;
+		linje_get_error();		// Borde uppdatera fel_antal
+	int goal_timer = 5;  //10 funkar 8/10
 	
 	if((Goal_reset_timer == 0) && (sekvens_goal_detekted() == true)){		
 		Goal_reset_timer = 1;	
@@ -163,14 +163,24 @@ bool detect_goal(){// brettar om robotten är i mål eller inte
 	}	
 	if((sekvens_goal_detekted() == true) && ((count == 0) | (count == 2)) && (counter_timer_line_goal < goal_timer)){		//linje 1(count=0) eller 2(count=2) upptäkt procid
 		count++;
+		PORTD ^= (1 << PD1);
 		return false;
 	}
 	else if((sekvens_goal_detekted() == false) && ((count == 1) | (count == 3)) && (counter_timer_line_goal < goal_timer)){	// mellanrum mellan linje 1-2(count=1) eller 2-3(count=3) upptäkt
 		count++;
+		PORTD ^= (1 << PD1);
 		return false;																		
 	}
 	else if((sekvens_goal_detekted() == true) && (count == 4)  && (counter_timer_line_goal < goal_timer)){					//linje 3 upptäkt indikerar mål
+		//Goal_reset_timer = 0;
+		//return true;
+		PORTD ^= (1 << PD1);
+		count++;
+		return false;
+	}
+	else if((Reflex_data == 0 && Reflex_data2==0) && (count == 5)  && (counter_timer_line_goal < goal_timer)){
 		Goal_reset_timer = 0;
+		PORTD |= (1 << PD1);
 		return true;
 	}
 	else if(counter_timer_line_goal >= goal_timer){																			// Timeout, tiden har passerat. Alltså inget mål utan bara en T korsning

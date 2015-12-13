@@ -12,25 +12,24 @@ bool prepare_special_case = false;
 
 int previous_right = 0;
 int previous_left = 0;
-int p_wall = 200;
-int d_wall = 10;
+int p_wall = 17;
+int d_wall = 150;
 int sensor_front_tmp; //används då man kommer till ett vägskäl där man kan svänga eller köra rakt fram för att kunna åka ut i mitte av kurvan innan svän inleds
 int min_distance_front = 30;
 int previous_errors[10];
-int number_of_errors_sc = 4;
+int number_of_errors_sc = 2;
 
 short regulate_side = 0;
 
 
 
-void drive_forward_left(int distance){
+void drive_forward_left(int distance , int distance_front){
 	int current_error = distance_wall_desired - distance; //-sensor_left_tmp
 	derivate = current_error - previous_errors[error_count];///10; //
-	if (derivate < 3)
-		derivate = 0;
-	int output = (p_constant_lab * current_error + d_constant_lab * derivate)/10;
+	int output = (p_wall * current_error + d_wall * derivate)/10;
 	previous_errors[error_count] = current_error;
-
+	
+	
 	if(++error_count >= number_of_errors_sc)
 		error_count=0;
 	
@@ -49,6 +48,8 @@ void drive_forward_left(int distance){
 		motor_right = laby_right_speed - output;	
 	}
 }
+
+
 
 void drive_forward_right(int distance, int distance_front){
 	int current_error = distance_wall_desired - distance; //-sensor_left_tmp
@@ -172,11 +173,12 @@ void oneway_turn_lab(int distance_left,int distance_right,int distance_front,int
 	else if(ongoing_turn && !turn_done && (distance_left > st_value || distance_right > st_value)){					//Gyrot singnalerar att svängen är klar och det är klart att börja köra ur den
 		//count_waypoint = 0; //oneway_turn
 		//gyro_turn = 0;
-		drive_forward();
-		/*if(regulate_side == 1)
+		//drive_forward();
+		//drive_forward();
+		if(regulate_side == 1)
 			drive_forward_right(distance_right, distance_front);
 		else 
-			drive_forward_left(distance_left);*/	
+			drive_forward_left(distance_left, distance_front);	
 		//drive_forward(); // Byt till left eller right beroende på riktning
 	}
 	
@@ -206,7 +208,8 @@ void twoway_turn_left_lab(int distance_left,int distance_right,int distance_fron
 	else if(start_turn){				//Robot är inne i kurva och kontrollerar vilket håll den ska svänga
 		start_turn = false;				// Signalerar att sväng har	inledits för att inte gå in i denna if igen
 		if(RGB_data != 3){			//RGB säger inte att roboten ska svänga höger så den kör rakt fram
-			drive_forward_right(distance_right, distance_front);
+			drive_forward();
+			//drive_forward_right(distance_right, distance_front);
 			turn_done = true;
 			regler_against_wall = true;
 			}
@@ -222,7 +225,8 @@ void twoway_turn_left_lab(int distance_left,int distance_right,int distance_fron
 	
 	// Rakt fram11
 	else if(regler_against_wall && (distance_left > st_value )){
-		drive_forward_right(distance_right, distance_front);
+		drive_forward();
+		//drive_forward_right(distance_right, distance_front);
 	}
 	
 	else if(RGB_data != 3 && distance_left <= st_value && distance_right <= st_value && previous_left < st_value && previous_right < st_value){// && distance_front > st_value){	//Roboten har kört igenom kurvan och återgår till vanlig reglering
@@ -272,7 +276,8 @@ void twoway_turn_right_lab(int distance_left,int distance_right,int distance_fro
 	}
 	else if(start_turn){				//Robot är inne i kurva och kontrollerar vilket håll den ska svänga
 		if(RGB_data == 2){			//RGB säger inte att roboten ska svänga höger så den kör rakt fram
-			drive_forward_left(distance_left);
+			//drive_forward_left(distance_left, distance_front);
+			drive_forward();
 			turn_done = true;
 			regler_against_wall = true;
 		}
@@ -288,7 +293,8 @@ void twoway_turn_right_lab(int distance_left,int distance_right,int distance_fro
 	
 	// Rakt fram
 	else if(regler_against_wall && (distance_right > st_value )){
-		drive_forward_left(distance_left);
+		drive_forward();
+		//drive_forward_left(distance_left, distance_front);
 	}
 	
 	else if(RGB_data == 2 && distance_left < st_value && distance_right < st_value && distance_front > st_value){	//Roboten har kört igenom kurvan och återgår till vanlig reglering

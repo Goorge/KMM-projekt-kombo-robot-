@@ -22,10 +22,10 @@ void labyreg(){
 	sei();
 	int st_value = 35;
 	int st_value_front = 40;
-	if(true)      //testplats för reglering
+	/*if(true)      //testplats för reglering
 		drive_forward_right(sensor_right_tmp, sensor_front_tmp);
 	
-	else if(Reflex_data != 0 || Reflex_data2 != 0)
+	else*/ if(Reflex_data != 0 || Reflex_data2 != 0)
 		regulator_mode = 1;
 	else if(waypoint){
 		waypoint_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
@@ -44,7 +44,7 @@ void labyreg(){
 		return;
 	}	
 	
-	else if(count_waypoint < 5){
+	else if(count_waypoint < 4){
 		count_waypoint++;
 		_delay_us(10);
 	}
