@@ -6,12 +6,18 @@ int gyro_left = 0;
 int gyro_right = 0;
 int laby_left_speed = 100;
 int laby_right_speed = 93;
+int turn_delay = 2;
 
 void req_gyro_turn(void){ // fuktion man kallar på för att starta Gyro inför 90 graders sväng
 	byte data[1] = { 0x07 };
 	i2c_send(0x06, data);
 	turning = true;
-	_delay_ms(100);
+	turn_delay = 0;
+	while(turn_delay < 2){
+		PORTB |= (1 << PB1);
+	}
+	PORTB &= ~(1 << PB1);
+	
 }
 
 void stand_still(void){

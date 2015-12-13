@@ -20,11 +20,14 @@ void labyreg(){
 	int sensor_right_tmp = distans_right;
 	int sensor_left_tmp = distans_left;
 	sei();
-	int st_value = 40;
-	int st_value_front = 50;
-	/*if(true)      //testplats för reglering
+	int st_value = 35;
+	int st_value_front = 40;
+	if(true)      //testplats för reglering
 		drive_forward_right(sensor_right_tmp, sensor_front_tmp);
-	else*/ if(waypoint){
+	
+	else if(Reflex_data != 0 || Reflex_data2 != 0)
+		regulator_mode = 1;
+	else if(waypoint){
 		waypoint_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
 		return;	
 	}
@@ -41,16 +44,16 @@ void labyreg(){
 		return;
 	}	
 	
-	else if(count_waypoint < 3){
+	else if(count_waypoint < 5){
 		count_waypoint++;
 		_delay_us(10);
 	}
 	// Normalfall
-	else if(sensor_left_tmp < st_value &&/* sensor_front_tmp > st_value && */sensor_right_tmp < st_value)
+	else if(sensor_left_tmp < st_value &&/* sensor_front_tmp > st_value && */sensor_right_tmp < st_value){
 		PD_for_lab(sensor_left_tmp, sensor_right_tmp, sensor_front_tmp);
-	
+	}
 	// förbered specialfall
-	else if((sensor_left_tmp >= st_value || sensor_right_tmp >= st_value) && !prepare_special_case && sensor_front_tmp >= st_value_front){
+	else if((sensor_left_tmp >= st_value || sensor_right_tmp >= st_value) && !prepare_special_case /*sensor_front_tmp >= st_value_front*/){
 		prepare_special_case = true;
 		count_waypoint = 0;
 		drive_forward();
@@ -84,8 +87,9 @@ void labyreg(){
 		twoway_turn_right = true;
 	}
 	else{
-		req_gyro_turn();
-		turn_left();
+		stand_still();
+		//req_gyro_turn();
+		//turn_left();
 		//motor_left = 0;
 		//motor_right = 0;
 		//PORTD ^= (1 << PD1);

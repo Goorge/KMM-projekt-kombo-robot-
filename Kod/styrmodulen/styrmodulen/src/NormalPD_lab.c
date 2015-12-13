@@ -4,8 +4,8 @@
 
 int previous_error_lab_right = 0;
 int previous_error_lab_left = 0;
-int p_constant_lab = 55;
-int d_constant_lab = 3;
+int p_constant_lab = 20;
+int d_constant_lab = 225;
 int current_error_lab;
 int output_right;
 int output_left;
@@ -20,8 +20,8 @@ void PD_for_lab(int distance_left, int distance_right, int distance_front){
 	//räkna ut fel höger
 	current_error_lab = distance_left - distance_right; //-sensor_left_tmp
 	derivate = current_error_lab - previous_errors_right[error_count];///10; //
-	if (derivate < 3 && derivate > -3)
-		derivate = 0;
+	/*if (derivate < 3 && derivate > -3)
+		derivate = 0;*/
 	output_right = (p_constant_lab * current_error_lab + d_constant_lab * derivate)/10;
 	previous_errors_right[error_count] = current_error_lab;
 	
@@ -101,9 +101,9 @@ void PD_for_lab(int distance_left, int distance_right, int distance_front){
 				previous_errors_right[i] = 0;
 		}
 		}*/
-	if(distance_front <= 35){
-		motor_left = 0; //output_left = -left;// = 0; 
-		motor_right = 0;//	output_right = -right;//motor_right = 0;
+	if(distance_front <= 30){
+		req_gyro_turn();
+		turn_right();//	output_right = -right;//motor_right = 0;
 		/*byte data[1] = { 0x07 };
 		i2c_send(0x06, data);
 		turning = true;
