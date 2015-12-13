@@ -7,8 +7,8 @@ float current_error=0;
 float derivate=0;
 int output=0; //vad motorenrna ska regleras med
 float previous_error = 0;
-int p_constant=180;  
-int d_constant=40; 
+int p_constant=40;  
+int d_constant=180; 
 float current_position = 0;
 
 

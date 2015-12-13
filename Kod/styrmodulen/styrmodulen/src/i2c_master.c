@@ -311,10 +311,12 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 					}
 				}
 				else if(i2c_data[1]==0x00){			// Ändra P och D konstant för linje
-					_delay_us(10);
+					_delay_us(11);
 					d_constant = i2c_data[2] ;
 					p_constant = i2c_data[3] ;
-					_delay_us(10);
+					if(d_constant == 180)
+					PORTD |= (1 << PD1);
+					_delay_us(11);
 				}
 				else if(i2c_data[1]==0x01){			// Ändra P och D konstant för labyrint
 

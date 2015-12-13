@@ -28,7 +28,7 @@ byte distans_left;			// data avstånd vänster
 byte RGB_data;				// vilken färg som är detekterad
 int Reflex_data;			// reflexsensor data
 int Reflex_data2;
-int regulator_mode = 0;		//1=linje, 0=labyrint
+int regulator_mode = 1;		//1=linje, 0=labyrint
 int regler_ready_linje=0;
 
 bool updaterad_labyrint = false;

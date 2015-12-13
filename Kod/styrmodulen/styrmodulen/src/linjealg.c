@@ -26,16 +26,20 @@ void linje_main() //funktion so  sköter linjeföjlning och hantering av specialfa
 		linje();
 	}
 	else if(detect_goal()){
-		
-		_delay_ms(1000);
+		//kör rakt fram tills paserat mål förhoppnngsvis
+		PORTB &= ~(1 << motor_dir_left);		// Set motor direction to forward
+		PORTB &= ~(1 << motor_dir_right);		// Set motor direction to forward
+		motor_left = left;
+		motor_right = right;
+		_delay_ms(400);
 		start=0;
 		PORTD |= (1 << PD1);
 		//signalera i mål och stanna
 	}
 	else if(detect_labyrint()){
 		PORTD |= (1 << PD0);
-		start = 0;
-		//regulator_mode=0; //byt till kör i labyrintmode(är 2 rätt eller ska det vara 0)
+		//start = 0;
+		regulator_mode=0; //byt till kör i labyrintmode(är 2 rätt eller ska det vara 0)
 	}
 	else{
 		current_position=linje_get_error();
@@ -151,7 +155,7 @@ bool detect_goal(){// brettar om robotten är i mål eller inte
 			static int count;
 		#endif
 		
-	int goal_timer = 20;
+	int goal_timer = 10;
 	
 	if((Goal_reset_timer == 0) && (sekvens_goal_detekted() == true)){		
 		Goal_reset_timer = 1;	
