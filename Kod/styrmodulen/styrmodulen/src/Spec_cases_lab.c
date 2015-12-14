@@ -119,10 +119,12 @@ void waypoint_lab(int distance_left,int distance_right,int distance_front,int st
 		if(RGB_data == 3){					//RGB_data="blå" alltså sväng vänster vänster=blå
 			req_gyro_turn();
 			turn_left();
+			regulate_side = 1;
 		}
 		else {
 			req_gyro_turn();
-			turn_right();					//RGB_data="röd" alltså sväng höger
+			turn_right();
+			regulate_side = 2;					//RGB_data="röd" alltså sväng höger
 		}
 		start_turn = false;					//Säger att svängen har inledits för att inte gå in i den här if-satsen igen
 	}
@@ -130,7 +132,11 @@ void waypoint_lab(int distance_left,int distance_right,int distance_front,int st
 	else if(ongoing_turn && !turning && (distance_left > st_value || distance_right > st_value)){	//Gyrot singnalerar att svängen är klar och det är klart att börja köra ur den
 		turn_done = true;
 		//count_waypoint = 0;
-		drive_forward(); // Byt till att reglera mot vägg
+		//drive_forward(); // Byt till att reglera mot vägg
+			if(regulate_side == 1)
+				drive_forward_right(distance_right, distance_front);
+			else
+				drive_forward_left(distance_left, distance_front);
 	}
 	
 	else if(ongoing_turn && turn_done && distance_right < st_value && distance_left < st_value){	//sväng är klar och roboten har kört ur kurvan, återgå till vanlig PD-reglering
@@ -208,8 +214,8 @@ void twoway_turn_left_lab(int distance_left,int distance_right,int distance_fron
 	else if(start_turn){				//Robot är inne i kurva och kontrollerar vilket håll den ska svänga
 		start_turn = false;				// Signalerar att sväng har	inledits för att inte gå in i denna if igen
 		if(RGB_data != 3){			//RGB säger inte att roboten ska svänga höger så den kör rakt fram
-			drive_forward();
-			//drive_forward_right(distance_right, distance_front);
+			//drive_forward();
+			drive_forward_right(distance_right, distance_front);
 			turn_done = true;
 			regler_against_wall = true;
 			}
@@ -225,8 +231,8 @@ void twoway_turn_left_lab(int distance_left,int distance_right,int distance_fron
 	
 	// Rakt fram11
 	else if(regler_against_wall && (distance_left > st_value )){
-		drive_forward();
-		//drive_forward_right(distance_right, distance_front);
+		//drive_forward();
+		drive_forward_right(distance_right, distance_front);
 	}
 	
 	else if(RGB_data != 3 && distance_left <= st_value && distance_right <= st_value && previous_left < st_value && previous_right < st_value){// && distance_front > st_value){	//Roboten har kört igenom kurvan och återgår till vanlig reglering
@@ -276,8 +282,8 @@ void twoway_turn_right_lab(int distance_left,int distance_right,int distance_fro
 	}
 	else if(start_turn){				//Robot är inne i kurva och kontrollerar vilket håll den ska svänga
 		if(RGB_data == 2){			//RGB säger inte att roboten ska svänga höger så den kör rakt fram
-			//drive_forward_left(distance_left, distance_front);
-			drive_forward();
+			drive_forward_left(distance_left, distance_front);
+			//drive_forward();
 			turn_done = true;
 			regler_against_wall = true;
 		}
@@ -293,8 +299,8 @@ void twoway_turn_right_lab(int distance_left,int distance_right,int distance_fro
 	
 	// Rakt fram
 	else if(regler_against_wall && (distance_right > st_value )){
-		drive_forward();
-		//drive_forward_left(distance_left, distance_front);
+		//drive_forward();
+		drive_forward_left(distance_left, distance_front);
 	}
 	
 	else if(RGB_data == 2 && distance_left < st_value && distance_right < st_value && distance_front > st_value){	//Roboten har kört igenom kurvan och återgår till vanlig reglering

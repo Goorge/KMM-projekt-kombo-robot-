@@ -10,7 +10,7 @@ int current_error_lab;
 int output_right;
 int output_left;
 float derivate;
-int distance_wall_desired = 22;
+int distance_wall_desired = 20;
 int number_of_errors = 4;
 int previous_errors_left[10];
 int previous_errors_right[10];
