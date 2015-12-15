@@ -12,7 +12,7 @@ bool twoway_turn_right = false;
 int sensor_front;
 int sensor_left;
 int sensor_right;
-
+int tejp_counter = 0;
                  
 void labyreg(){
 	cli();
@@ -20,14 +20,22 @@ void labyreg(){
 	int sensor_right_tmp = distans_right;
 	int sensor_left_tmp = distans_left;
 	sei();
-	int st_value = 35;
+	int st_value = 40;
 	int st_value_front = 40;
 	/*if(true)      //testplats för reglering
 		drive_forward_right(sensor_right_tmp, sensor_front_tmp);
 	
-	else*/ if(Reflex_data != 0 || Reflex_data2 != 0)
-		regulator_mode = 1;
-	else if(waypoint){
+	else*/ 
+	if(Reflex_data != 0 || Reflex_data2 != 0){
+		tejp_counter++;
+		if(tejp_counter >= 3)
+			regulator_mode = 1;
+	}
+	
+	else if(Reflex_data == 0 && Reflex_data2 == 0)
+		tejp_counter = 0;
+
+	if(waypoint){
 		waypoint_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
 		return;	
 	}
@@ -46,17 +54,27 @@ void labyreg(){
 	
 	else if(count_waypoint < 4){
 		count_waypoint++;
+		if(sensor_front_tmp <= 35)
+			count_waypoint = 4;
 		_delay_us(10);
 	}
+	//återvändsgränd
+	else if(sensor_left_tmp < st_value && sensor_front_tmp <= 35 && sensor_right_tmp < st_value){
+		req_gyro_turn();
+		turn_right();//	output_right = -right;//motor_right = 0;
+		PORTD ^= (1 << PD0);
+	}
 	// Normalfall
-	else if(sensor_left_tmp < st_value &&/* sensor_front_tmp > st_value && */sensor_right_tmp < st_value){
+	else if(sensor_left_tmp < st_value/* && sensor_front_tmp > 30*/ && sensor_right_tmp < st_value){
 		PD_for_lab(sensor_left_tmp, sensor_right_tmp, sensor_front_tmp);
 	}
+	
 	// förbered specialfall
 	else if((sensor_left_tmp >= st_value || sensor_right_tmp >= st_value) && !prepare_special_case /*sensor_front_tmp >= st_value_front*/){
 		prepare_special_case = true;
 		count_waypoint = 0;
-		drive_forward();
+		if(!sensor_front_tmp <= 35)
+			drive_forward();
 	}
 	
 	//Enkelsväng	

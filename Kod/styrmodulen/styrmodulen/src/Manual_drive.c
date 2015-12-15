@@ -6,7 +6,6 @@ int gyro_left = 0;
 int gyro_right = 0;
 int laby_left_speed = 100;
 int laby_right_speed = 93;
-int turn_delay = 2;
 
 void req_gyro_turn(void){ // fuktion man kallar på för att starta Gyro inför 90 graders sväng
 	byte data[1] = { 0x07 };

@@ -19,6 +19,7 @@ int counter_timer = 0;		// Counter for how long time a manual function going to 
 int counter_timer_line_RGB = 0;
 int counter_timer_line_lab = 0;
 int counter_timer_line_goal = 0;
+int turn_delay = 5;
 
 bool gyro_90;				//om gyro har svängt 90 grader
 byte batteri;				//batteri nivå

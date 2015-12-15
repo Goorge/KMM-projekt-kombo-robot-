@@ -5,7 +5,6 @@
 
 
 void regulator(){
-	
 
 //	if(turning){ // Spinn vänster
 		//motor_left = 70;
@@ -28,7 +27,7 @@ void regulator(){
 		PORTB &= ~(1 << motor_dir_right);								// Set motor direction to forward
 		PORTB &= ~(1 << motor_dir_left);	
 
-		if(updaterad_labyrint == true){
+		if(updaterad_labyrint == true && turn_delay >= 10){
 		
 			updaterad_labyrint = false;
 			labyreg();//kalla på labyrint funktion

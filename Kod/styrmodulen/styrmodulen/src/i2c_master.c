@@ -201,10 +201,10 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 				batteri=i2c_data[1],i2c_data[2];
 				break;
 			case 0x01 ://avståndssensorer  plockar fram medianen av dom senaste 3 värdena ser krongligt ut men är bara hitta mittenvärdet och lägg det i distans_xxx
-				distans_right = i2c_data[3];
-				distans_fram = i2c_data[2];
-				distans_left = i2c_data[1];
-				/*distans_right_median[0] = i2c_data[3];
+				//distans_right = i2c_data[3];
+				//distans_fram = i2c_data[2];
+				//distans_left = i2c_data[1];
+				distans_right_median[0] = i2c_data[3];
 				if((distans_right_median[0]<distans_right_median[1] && distans_right_median[0]>distans_right_median[2])||(distans_right_median[0]>distans_right_median[1] && distans_right_median[0]<distans_right_median[2]))
 					distans_right=distans_right_median[0];
 				else if((distans_right_median[1]<distans_right_median[0] && distans_right_median[1]>distans_right_median[2])||(distans_right_median[1]>distans_right_median[0] && distans_right_median[1]<distans_right_median[2]))
@@ -213,9 +213,8 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 					distans_right=distans_right_median[2];
 				distans_right_median[2]=distans_right_median[1];
 				distans_right_median[1]=distans_right_median[0];
-				
-				
-				distans_fram_median[0] = i2c_data[3];
+		
+				distans_fram_median[0] = i2c_data[2];
 				if((distans_fram_median[0]<distans_fram_median[1] && distans_fram_median[0]>distans_fram_median[2])||(distans_fram_median[0]>distans_fram_median[1] && distans_fram_median[0]<distans_fram_median[2]))
 					distans_fram=distans_fram_median[0];
 				else if((distans_fram_median[1]<distans_fram_median[0] && distans_fram_median[1]>distans_fram_median[2])||(distans_fram_median[1]>distans_fram_median[0] && distans_fram_median[1]<distans_fram_median[2]))
@@ -225,8 +224,7 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 				distans_fram_median[2]=distans_fram_median[1];
 				distans_fram_median[1]=distans_fram_median[0];
 				
-				static byte distans_left_median[3];
-				distans_left_median[0] = i2c_data[3];
+				distans_left_median[0] = i2c_data[1];
 				if((distans_left_median[0]<distans_left_median[1] && distans_left_median[0]>distans_left_median[2])||(distans_left_median[0]>distans_left_median[1] && distans_left_median[0]<distans_left_median[2]))
 					distans_left=distans_left_median[0];
 				else if((distans_left_median[1]<distans_left_median[0] && distans_left_median[1]>distans_left_median[2])||(distans_left_median[1]>distans_left_median[0] && distans_left_median[1]<distans_left_median[2]))
@@ -235,7 +233,7 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 					distans_left=distans_left_median[2];
 				distans_left_median[2]=distans_left_median[1];
 				distans_left_median[1]=distans_left_median[0];
-				//updaterad_labyrint = true;*/
+				//updaterad_labyrint = true;
 				break;
 			case 0x02 :// refelxsensor data
 				regler_ready_linje = 1;					// Ny data har lästs in då uppdaterar vi regleringen
@@ -257,6 +255,7 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 				motor_right = 0;
 				motor_left = 0;
 				updaterad_labyrint = false;
+				turn_delay = 0;
 				_delay_ms(500);
 				//start = 0;
 				break;
@@ -326,8 +325,8 @@ void i2c_handel_data(void){ //hanterar den motagna datan och läger den på rätt p
 					_delay_us(10);
 					d_constant_lab = i2c_data[3] ;
 					p_constant_lab = i2c_data[2] ;
-					p_wall = i2c_data[2] ;
-					d_wall = i2c_data[3] ;
+					//p_wall = i2c_data[2] ;
+					//d_wall = i2c_data[3] ;
 					_delay_us(10);
 	}
 				else if(i2c_data[1]==0x02){

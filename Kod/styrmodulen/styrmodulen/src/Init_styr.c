@@ -27,7 +27,7 @@ void timerinit(void){
 // -- Interrupt
 ISR(TIMER1_COMPA_vect){
 	//regler_ready=1;
-	if(turn_delay < 2)
+	if(turn_delay < 10)
 		turn_delay++;
 	
 	updaterad_labyrint = true;
