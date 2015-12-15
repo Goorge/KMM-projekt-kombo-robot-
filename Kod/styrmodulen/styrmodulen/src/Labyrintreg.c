@@ -63,6 +63,7 @@ void labyreg(){
 		req_gyro_turn();
 		turn_right();//	output_right = -right;//motor_right = 0;
 		PORTD ^= (1 << PD0);
+		first_time_flag = true;
 	}
 	// Normalfall
 	else if(sensor_left_tmp < st_value/* && sensor_front_tmp > 30*/ && sensor_right_tmp < st_value){
@@ -75,6 +76,7 @@ void labyreg(){
 		count_waypoint = 0;
 		if(!sensor_front_tmp <= 35)
 			drive_forward();
+		first_time_flag = true;
 	}
 	
 	//Enkelsväng	
@@ -82,7 +84,7 @@ void labyreg(){
 		|| (sensor_left_tmp > st_value && sensor_front_tmp < st_value_front && sensor_right_tmp < st_value)))	{
 		oneway_turn_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
 		oneway_turn = true;
-		
+		first_time_flag = true;
 	}
 	
 	//t-korsning rakt framifrån
@@ -90,19 +92,21 @@ void labyreg(){
 		waypoint_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
 		waypoint = true;
 		//PORTD |= (1 << PD1);
-		
+		first_time_flag = true;
 	}
 	
 	// T-korsning där roboten kan köra framåt eller åt vänster
 	else if(sensor_left_tmp > st_value && sensor_front_tmp > st_value_front && sensor_right_tmp < st_value){
 		twoway_turn_left = true;
 		twoway_turn_left_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
+		first_time_flag = true;
 	}
 	
 	// T-korsning där roboten kan köra framåt eller åt höger	
 	else if(sensor_left_tmp < st_value && sensor_front_tmp > st_value_front && sensor_right_tmp > st_value){
 		twoway_turn_right_lab(sensor_left_tmp,sensor_right_tmp,sensor_front_tmp,st_value);
 		twoway_turn_right = true;
+		first_time_flag = true;
 	}
 	else{
 		stand_still();

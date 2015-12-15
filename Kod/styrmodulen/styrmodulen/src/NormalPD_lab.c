@@ -10,15 +10,26 @@ int current_error_lab;
 int output_right;
 int output_left;
 float derivate;
-int distance_wall_desired = 20;
+int distance_wall_desired = 18;
 int number_of_errors = 2;
 int previous_errors_left[10];
 int previous_errors_right[10];
 int error_count = 0;
 
+bool first_time_flag = false;
+
 void PD_for_lab(int distance_left, int distance_right, int distance_front){
 	//räkna ut fel höger
 	current_error_lab = distance_left - distance_right; //-sensor_left_tmp
+	
+	if (first_time_flag)
+	{
+		for(int i = 0; i < number_of_errors; i++)
+			previous_errors_right[i] = current_error_lab;
+	}
+	
+	first_time_flag = false;
+	
 	derivate = current_error_lab - previous_errors_right[error_count];///10; //
 	/*if (derivate < 3 && derivate > -3)
 		derivate = 0;*/

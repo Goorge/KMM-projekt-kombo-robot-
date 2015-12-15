@@ -25,6 +25,13 @@ short regulate_side = 0;
 
 void drive_forward_left(int distance , int distance_front){
 	int current_error = distance_wall_desired - distance; //-sensor_left_tmp
+	
+	if(first_time)
+		for(int i = 0 ; i < number_of_errors_sc; i++)
+			previous_errors[i] = current_error;
+	
+	first_time = false;
+	
 	derivate = current_error - previous_errors[error_count];///10; //
 	int output = (p_wall * current_error + d_wall * derivate)/10;
 	previous_errors[error_count] = current_error;
@@ -51,11 +58,18 @@ void drive_forward_left(int distance , int distance_front){
 
 
 void drive_forward_right(int distance, int distance_front){
+	
 	int current_error = distance_wall_desired - distance; //-sensor_left_tmp
+	
+	if(first_time)
+		for(int i = 0 ; i < number_of_errors_sc; i++)
+			previous_errors[i] = current_error;
+	
+	first_time = false;
+	
 	derivate = current_error - previous_errors[error_count];///10; //
 	int output = (p_wall * current_error + d_wall * derivate)/10;
 	previous_errors[error_count] = current_error;
-
 
 	if(++error_count >= number_of_errors_sc)
 		error_count = 0;
@@ -126,9 +140,8 @@ void waypoint_lab(int distance_left,int distance_right,int distance_front,int st
 			regulate_side = 2;					//RGB_data="röd" alltså sväng höger
 		}
 		start_turn = false;					//Säger att svängen har inledits för att inte gå in i den här if-satsen igen
-		
-		for(int i = 0 ; i < number_of_errors_sc; i++)
-			previous_errors[i] = 0;
+		first_time = true;
+
 	}
 	
 	else if(ongoing_turn && !turning && (distance_left > st_value || distance_right > st_value)){	//Gyrot singnalerar att svängen är klar och det är klart att börja köra ur den
@@ -173,9 +186,9 @@ void oneway_turn_lab(int distance_left,int distance_right,int distance_front,int
 			turn_right();
 			regulate_side = 2;
 		}
+		
+		first_time = true;						
 												// Signalerar att sväng har	inledits för att inte gå in i denna if igen
-		for(int i = 0 ; i < number_of_errors_sc; i++)
-			previous_errors[i] = 0;
 		
 		//previous_right = 0;
 		//previous_left = 0;
@@ -223,9 +236,7 @@ void twoway_turn_left_lab(int distance_left,int distance_right,int distance_fron
 		if(RGB_data != 3){			//RGB säger inte att roboten ska svänga höger så den kör rakt fram
 			//drive_forward();
 			
-			for(int i = 0 ; i < number_of_errors_sc; i++)
-			previous_errors[i] = 0;
-					
+			first_time = true;
 			drive_forward_right(distance_right, distance_front);
 			turn_done = true;
 			regler_against_wall = true;
@@ -278,24 +289,17 @@ void twoway_turn_left_lab(int distance_left,int distance_right,int distance_fron
 
 //INTE KLAR + måste testas
 void twoway_turn_right_lab(int distance_left,int distance_right,int distance_front,int st_value){// roboten kommer fram till ett vägskäl där den antingen kan svänga åt höger/vänster eller köra raktfram
-	++count_waypoint;
-	if(first_time){    //---kör fram i korsningen för att prepa sväng
-		drive_forward();
-		turn_done = false;
-		first_time = false;
-		count_waypoint = 0;
-		ongoing_turn = false;
-	}
-	else if(!ongoing_turn && count_waypoint>= 1){	// Roboten har kört ut i kurvan och signalerar att den är klar och svänga
+	if(!ongoing_turn /*&& ++count_waypoint <= 1*/){	// Roboten har kört ut i kurvan och signalerar att den är klar och svänga
 		ongoing_turn = true;
 		start_turn = true;
 		stand_still();
+		turn_done = false;
+		first_time = false;
+		//count_waypoint = 0;
 	}
 	else if(start_turn){				//Robot är inne i kurva och kontrollerar vilket håll den ska svänga
 		if(RGB_data == 2 || RGB_data == 3 ){			//RGB säger inte att roboten ska svänga höger så den kör rakt fram
-			for(int i = 0 ; i < number_of_errors_sc; i++)
-			previous_errors[i] = 0;
-		
+			first_time = true;
 			drive_forward_left(distance_left, distance_front);
 			//drive_forward();
 			turn_done = true;
