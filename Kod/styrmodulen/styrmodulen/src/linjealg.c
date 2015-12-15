@@ -37,7 +37,7 @@ void linje_main() //funktion so  sköter linjeföjlning och hantering av specialfa
 		//signalera i mål och stanna
 	}
 	else if(detect_labyrint()){
-		PORTD |= (1 << PD0);
+		//PORTD |= (1 << PD0);
 		//start = 0;
 		regulator_mode=0; //byt till kör i labyrintmode(är 2 rätt eller ska det vara 0)
 	}
@@ -155,37 +155,58 @@ bool detect_goal(){// brettar om robotten är i mål eller inte
 			static int count;
 		#endif
 		linje_get_error();		// Borde uppdatera fel_antal
-	int goal_timer = 5;  //10 funkar 8/10
+	int goal_timer = 3;  //10 funkar 8/10
+	/*if((fel_antal==0) && ((count == 5)|| (count == 3))  && (counter_timer_line_goal < goal_timer)){
+		Goal_reset_timer = 0;
+		PORTD |= (1 << PD1);
+		PORTD |= (1 << PD0);
+		return true;
+	}*/
 	
 	if((Goal_reset_timer == 0) && (sekvens_goal_detekted() == true)){		
 		Goal_reset_timer = 1;	
 		counter_timer_line_goal = 0;																						// Nollar timern som sitter i timerintrerruptet, ISR för timern sker 10ggr per sekund						
 	}	
-	if((sekvens_goal_detekted() == true) && ((count == 0) | (count == 2)) && (counter_timer_line_goal < goal_timer)){		//linje 1(count=0) eller 2(count=2) upptäkt procid
+	/*if((sekvens_goal_detekted() == true) && ((count == 0) || (count == 2) ||(count == 4)) && (counter_timer_line_goal < goal_timer)){		//linje 1(count=0) eller 2(count=2) upptäkt procid
 		count++;
-		PORTD ^= (1 << PD1);
+		PORTD &= ~(1 << PD1);
+		PORTD &= ~(1 << PD0);
 		return false;
 	}
-	else if((sekvens_goal_detekted() == false) && ((count == 1) | (count == 3)) && (counter_timer_line_goal < goal_timer)){	// mellanrum mellan linje 1-2(count=1) eller 2-3(count=3) upptäkt
+	else if((sekvens_goal_detekted() == false) && ((count == 1) || (count == 3)) && (counter_timer_line_goal < goal_timer)){	// mellanrum mellan linje 1-2(count=1) eller 2-3(count=3) upptäkt
 		count++;
-		PORTD ^= (1 << PD1);
+		PORTD |= (1 << PD0);
+		PORTD |= (1 << PD1);
 		return false;																		
 	}
 	else if((sekvens_goal_detekted() == true) && (count == 4)  && (counter_timer_line_goal < goal_timer)){					//linje 3 upptäkt indikerar mål
-		//Goal_reset_timer = 0;
-		//return true;
-		PORTD ^= (1 << PD1);
+		Goal_reset_timer = 0;
+		return true;
+		//count++;
+		//return false;
+	}*/
+	if((sekvens_goal_detekted() == true)){
 		count++;
 		return false;
 	}
-	else if((Reflex_data == 0 && Reflex_data2==0) && (count == 5)  && (counter_timer_line_goal < goal_timer)){
+	else if(count == 0){
 		Goal_reset_timer = 0;
-		PORTD |= (1 << PD1);
+		return false;
+	}
+
+	else if((count > 0) &&(fel_antal == 0)){
+		count = 0;
+		Goal_reset_timer = 0;
 		return true;
 	}
 	else if(counter_timer_line_goal >= goal_timer){																			// Timeout, tiden har passerat. Alltså inget mål utan bara en T korsning
 		count = 0;
+		//PORTD |= (1 << PD1);
+		//PORTD &= ~(1 << PD1);
 		Goal_reset_timer = 0;
+		return false;
+	}
+	else{
 		return false;
 	}
 	// ************************************************************************************************************************'
@@ -222,13 +243,14 @@ bool sekvens_goal_detekted(){
 		static int prew_fel_antal=0;
 	#endif
 	linje_get_error();		// Borde uppdatera fel_antal
-	if(fel_antal>28){		// om robbot paserar tejp på tvären 
-		PORTD |= (1 << PD1);
+	if(fel_antal>22){		// om robbot paserar tejp på tvären 
+		
 		prew_fel_antal=fel_antal;
 		return true;
 	}
-	else if(prew_fel_antal+fel_antal>36 && prew_fel_antal <=28 && RGB_data==0){
-		PORTD |= (1 << PD1);
+	else if(prew_fel_antal+fel_antal>34 && prew_fel_antal <=22 && RGB_data==0){
+		//PORTD &= ~(1 << PD1);
+		//PORTD &= ~(1 << PD0);
 		prew_fel_antal=fel_antal;
 		return true;
 	}
