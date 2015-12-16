@@ -14,8 +14,8 @@ void regulator(){
 //	}
 
 	if((regulator_mode == 1) && (regler_ready_linje == 1)){
-		left=180;				// kanske räcker med en variable för båda om båda kör exakt lika fort
-		right=170;
+		left=150;//180;				// kanske räcker med en variable för båda om båda kör exakt lika fort
+		right=140;//170;
 		motor_left=left;
 		motor_right=right;
 		linje_main();

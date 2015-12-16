@@ -156,7 +156,8 @@ void waypoint_lab(int distance_left,int distance_right,int distance_front,int st
 	}
 	
 	else if(ongoing_turn && turn_done && distance_right <= st_value && distance_left <= st_value){	//sväng är klar och roboten har kört ur kurvan, återgå till vanlig PD-reglering
-		waypoint = false;						
+		waypoint = false;	
+		RGB_data = 0;					
 		ongoing_turn = false;
 		prepare_special_case = false;
 	}

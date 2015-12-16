@@ -26,6 +26,7 @@ void PD_for_lab(int distance_left, int distance_right, int distance_front){
 	{
 		for(int i = 0; i < number_of_errors; i++)
 			previous_errors_right[i] = current_error_lab;
+			RGB_data = 0;
 	}
 	
 	first_time_flag = false;
