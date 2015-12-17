@@ -8,7 +8,7 @@ public class COMunication {
 	private boolean newData = false;
 	private boolean isSetup = false;
 	
-	//initialize the comstuff.
+	//initialize the comunication.
 	public void setup(String port, int baudRate_){
 		try {
 			if(isSetup)
@@ -28,6 +28,7 @@ public class COMunication {
 	    }
 	}
 	
+	// sets variable new data to false so we dont fetch the same data twice
 	public void clearDataAvailable(){ newData = false; }
 	
 	// returns true is the comunication is up and running
@@ -56,13 +57,13 @@ public class COMunication {
         }
 	}
 	
+	// Disconnects the comport. 
 	public void disconnect(){
 		if(isSetup){
 			if(serialPort.isOpened()){
 				try {
 					serialPort.closePort();
 				} catch (SerialPortException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -82,15 +83,14 @@ public class COMunication {
                     			SerialPort.PARITY_NONE);//Set parameters. 
             
             data1 = serialPort.readBytes(1);//Read 1 byte from serial port
-            //for(int i = 1; i < ((data1[0] >>> 4)&0x0f); i++)// shift to get the number of incoming bytes. If we need to recive more bytes we get to know it here.
-            data2 = serialPort.readBytes(((data1[0] >>> 4)&0x0f)); //Read the rest of the bytes.
+             data2 = serialPort.readBytes(((data1[0] >>> 4)&0x0f)); //Read the rest of the bytes.
         }
         catch (SerialPortException ex) {
             System.out.println(ex);
         }
 		
 		//merge first byte with the possible rest of data to get it all in one array
-		dataOut = new byte[16];//data1.length + data2.length];
+		dataOut = new byte[16];
         dataOut[0] = data1[0];
         for (int i = 0; i < data2.length; i++){
         	dataOut[i+1] = data2[i];
@@ -100,7 +100,7 @@ public class COMunication {
 	
 	//Lists all the active ports, Will be used in GUI to select the port we want. 
 	public String[] availablePorts() {return SerialPortList.getPortNames();}
-	
+
 	class SerialPortReader implements SerialPortEventListener {
 
 	//EventListener that waits for incoming data.

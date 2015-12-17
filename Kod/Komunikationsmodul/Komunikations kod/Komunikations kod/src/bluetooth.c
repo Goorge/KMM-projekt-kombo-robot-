@@ -18,11 +18,6 @@ short number_of_bytes_to_bt = 0;//How many bytes is there during current read
 short bytes_left_to_bt = -1;// how many bytes is left to read=
 		
 byte data_to_bt[16];// the byte we are currently reading
-	
-//PortD0 RXD (IN)
-//PortD1 TXD (OUT)
-//PortD2 CTS (IN)
-//PortD3 RTS (OUT)
 
 // sätt upp usart
 void usart_setup(unsigned int baudrate){
@@ -57,9 +52,6 @@ void bluetooth_clear_to_send(void){	PORTD &= ~(1 << RTS); }// Clear To Send;
 byte* bluetooth_fetch_new_data(void){
 	new_data_bt = false;
 	bluetooth_clear_to_send(); // Säg att du vill ha mer BT data
-	//byte data[number_of_bytes_from_bt];
-	//for(int i = 0; i < number_of_bytes_from_bt; i++)
-	//	data[i] = data_from_bt[i];
 	return data_from_bt;
 }
 
@@ -90,30 +82,10 @@ void bluetooth_handle_data( void ){
 	} 
 
 	// Om ny data, skicka vidare
-	if(new_data_bt){ //Här är lite fel data_from_bt funkar inte...
-		//int nr_of_bytes = ((data_from_bt[0] >> 4) & 0x0f) + 1;
-		//byte data[nr_of_bytes];
-		//for(int i = 0; i < nr_of_bytes; i++)
-		//	data[i] = data_from_bt[i];
-		if(data_from_bt[0] == 0x3f){
-			if(data_from_bt[1] == 0x01){
-				int a1 = data_from_bt[2];// + '0';
-				int a2 = data_from_bt[3];// + '0';
-				char s1[16];
-				s1[0] = (a1 / 100) % 10 +'0';
-				s1[1] = (a1 / 10) % 10 +'0';
-				s1[2] = (a1 / 1) % 10 +'0';
-				char s2[16];
-				s2[0] = (a2 / 100) % 10 +'0';
-				s2[1] = (a2 / 10) % 10 +'0';
-				s2[2] = (a2 / 1) % 10 +'0';
-				doLCD(s1, s2);	
-			}
-		}
-		i2c_requestToSend(0x04, data_from_bt);
-		bluetooth_add_to_send_queue(data_from_bt); // Ta bort när den skickar över i2c. 
-		new_data_bt = false;
-		bluetooth_clear_to_send();
+	if(new_data_bt){ 
+		i2c_requestToSend(0x04, data_from_bt); // Begör att få skicka data
+		new_data_bt = false; // Sätt new_data till false så vi inte hoppar in här igen nästa gång.
+		bluetooth_clear_to_send(); 
 	}
 
 	// Skicka data via BT
@@ -124,24 +96,18 @@ void bluetooth_handle_data( void ){
 }
 
 // Lägg in data i kö för att skicka över BT
-bool bluetooth_add_to_send_queue(byte* data){
-	//int nr_of_bytes = NELEMS(data);
+bool bluetooth_add_to_send_queue(byte* data){;
 	int nr_of_bytes = ((data[0] >> 4) & 0x0f);
-	//if(number_of_bytes_to_bt + nr_of_bytes > 15)
-	//	return false;
-	//for(int i = number_of_bytes_to_bt; i < number_of_bytes_to_bt + nr_of_bytes; i++)
-	//	data_to_bt[i] = data[i - number_of_bytes_to_bt];
 	number_of_bytes_to_bt = nr_of_bytes;
 	bytes_left_to_bt = nr_of_bytes;
 	for(int i = 0; i <= nr_of_bytes; i++)
-		data_to_bt[i] = data[i];
-	
+		data_to_bt[i] = data[i];	// Lägg in en byte i taget för att se till så att vi är redo att skicka
 	return true;
 }
 
 //Hämtar datan
-ISR ( USART0_RX_vect ){ //recieve complete // USART0_RX_vect
-	PORTD |= (1 << RTS);//Säg att du inte vill ha mer data atm
+ISR ( USART0_RX_vect ){		//recieve complete // USART0_RX_vect
+	PORTD |= (1 << RTS);	//Säg att du inte vill ha mer data atm
 	dataFromBT = UDR0;		// Hämta ut datan
-	newData = true; // Tala om för main att vi har fått data
+	newData = true;			// Tala om för main att vi har fått data
 }	

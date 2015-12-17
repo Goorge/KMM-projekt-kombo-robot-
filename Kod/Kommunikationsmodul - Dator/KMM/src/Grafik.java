@@ -2,7 +2,6 @@
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.ScrollPaneConstants;
-import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -23,8 +22,6 @@ import javax.swing.JLabel;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
 enum listEnum{leftDistance, rightDistance, frontDistance, gyro, leftWheel, rightWheel, line, rgb, garbage};
@@ -113,11 +110,12 @@ public class Grafik {
 	//bool for buttonspress
 	private boolean is_button_pressed = false;
 	
+	// Rullar programmet.
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
-			public void run() {
+			public void run() { // Starta en tråd
 				try {
-					Grafik window = new Grafik();
+					Grafik window = new Grafik();// initiera stuff
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -125,27 +123,26 @@ public class Grafik {
 			}
 		});
 		boolean test;
-		while(true){
+		while(true){// Här körs programmet.
 			test = com.GetIsSetup();
-			System.out.print("");
-			if(test){
-				//System.out.println("Klar med setup");
-				if(com.isDataAvailable()){
-					//System.out.println("Mottagen data");
-					handleData(com.deliverData());
+			System.out.print(""); // Gör inget men måste vara där, annars fungerar inget
+			if(test){ // kolla om vi är anslutna via BT
+				if(com.isDataAvailable()){ // Finns det data?
+					handleData(com.deliverData()); // isf behandla data
 				}
 			}
 		}
 	}
 	
+	// Byter färgen på RGB labeln. 
 	private static void changeRGBColor(Color color){ rgb_label.setBackground(color);}
 	
-	// Tar hand om data som kommer ifrån bt, Behöver göras mer. 
+	// Tar hand om data som kommer ifrån bt beroende på vilken data som kommer in 
 	private static void handleData(byte[] data){
-		if(save_data){
 			switch (data[0] & 0x0f){
 			case (byte)0x00: // Batteri
 				// Värdet / 51.2
+			// Lägg tillbaka om batteridata kommer tillbaka
 			/*
 			double b1 = (data[1] & 0xff) / 51.0;
 			double b2 = (data[2] & 0xff) / 51.0;
@@ -170,15 +167,16 @@ public class Grafik {
 			setButtonLabel(listEnum.frontDistance, Integer.toString((data[2] & 0xff)));
 			addToList(listEnum.rightDistance, getCurrentTime() + (data[3] & 0xff));
 			setButtonLabel(listEnum.rightDistance,Integer.toString((data[3] & 0xff)));
-			break;
+			break; 
 		case (byte)0x02: //Linjesensorer
+			// Skickar färkodning till alla labels för linjesensorerna
 			String text = getCurrentTime() + ": "; //
 			Color color_to_line[] = new Color[11];
 			for(int i = 3; i >= 1; i--)
 				for(int j = 3; j >= 0; j--){
 					byte current_data = (byte) ((data[i] >>> (j*2)) & 0x03);
 					if(!(i == 3 && j == 3)){
-						text += current_data + " ";
+						text += current_data + " "; 
 						Color color[] = { Color.black, Color.red, Color.orange, Color.yellow };
 						color_to_line[(3-j) + (3-i) * 4 -1] = color[current_data];
 					}
@@ -206,18 +204,15 @@ public class Grafik {
 			break;		
 		default: // If we dont get any real data, we still have a list where we write it so we know if it got wrong
 			String text2 = ""; 
-			for(int i = 0; i < data.length; i++){
-					text2 += data[i];
-				//System.out.println(" " + data[i]);
-				}
-				addToList(listEnum.garbage, getCurrentTime() + " " + text2);
-				break; 
-			}
+			for(int i = 0; i < data.length; i++)
+				text2 += data[i];
+			addToList(listEnum.garbage, getCurrentTime() + " " + text2);
+			break; 
 		}
 		com.clearDataAvailable();
 	}
 	
-	// label buttons
+	// label the button with the value
 	public static void setButtonLabel(listEnum button, String value){
 		switch (button){
 		case leftDistance:  
@@ -246,7 +241,8 @@ public class Grafik {
 		}
 	}
 
-	//Skicka data via bt, Behöver uppdateras med mer data. 
+	//Skickar data via bt. Skicka in vad du vill göra så skickar programmet rätt kod
+	//måste fyllas i om fler funktioner tillkommer 
 	private void sendDirection(directions dirr){
 		byte toSend[] = new byte[1];
 		switch (dirr){
@@ -340,7 +336,7 @@ public class Grafik {
 		init();
 	}
 	
-	//initialize some other stuff
+	//initialize the lists used to store data
 	private void init(){
 		lists = new DefaultListModel[listEnum.values().length];
 		for(int i = 0; i < listEnum.values().length; i++){
@@ -349,10 +345,11 @@ public class Grafik {
 		}
 	}
 	
+	// Creates a String of the current time on form hh:mm:ss.mmm
 	private static String getCurrentTime(){
 		long millis = System.currentTimeMillis();
 		return String.format("%02d:%02d:%02d,%03d: ", 
-					TimeUnit.MILLISECONDS.toHours(millis)%24 + 1, // +1 för ? men den låg en timme fel kanske kör gmt?
+					TimeUnit.MILLISECONDS.toHours(millis)%24 + 1,
 					TimeUnit.MILLISECONDS.toMinutes(millis)%60, 
 					TimeUnit.MILLISECONDS.toSeconds(millis)%60, 
 					millis%100);
@@ -461,26 +458,6 @@ public class Grafik {
 		frame.getContentPane().add(left_label);
 		right_label.setBounds(760, 500, 20, 22);
 		frame.getContentPane().add(right_label);
-		
-		/*
-		wheel_right_btn = new Button("");
-		wheel_right_btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setJListVisible(listEnum.rightWheel);
-			}
-		});
-		wheel_right_btn.setBounds(706, 239, 70, 22);
-		frame.getContentPane().add(wheel_right_btn);
-		
-		wheel_left_btn = new Button("");
-		wheel_left_btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setJListVisible(listEnum.leftWheel);
-			}
-		});
-		wheel_left_btn.setBounds(280, 239, 70, 22);
-		frame.getContentPane().add(wheel_left_btn);
-		*/
 		
 		sensor_right_btn = new Button("");
 		sensor_right_btn.addActionListener(new ActionListener() {
@@ -732,6 +709,7 @@ public class Grafik {
 			frame.getContentPane().add(line_labels[i]);	
 		}
 		
+		// Detta behöver läggas till igen om vi vill ha med batteridata
 		/*
 		battery1_label = new JLabel("");
 		battery1_label.setBounds(750, 15, 36, 25);
@@ -757,6 +735,7 @@ public class Grafik {
 		battery_text_label.setBounds(765, 0, 50, 15);
 		frame.getContentPane().add(battery_text_label);
 		*/
+		
 		rgb_label = new JLabel();
 		rgb_label.setBounds(350, 126, 70, 22);
 		rgb_label.setBackground(Color.darkGray);
@@ -769,7 +748,6 @@ public class Grafik {
 				String port = (String)graficList.getSelectedValue();
 				if((graficList.getModel() == comPorts) && port != null ){
 					com.setup(port, baudRate);
-					//System.out.println("Port setup färdig");
 				}
 			}
 		});
@@ -799,13 +777,13 @@ public class Grafik {
 		refresh_com_btn.setBounds(300, 575, 200, 22);
 		frame.getContentPane().add(refresh_com_btn);
 		
-		//image_label = new JLabel("");
-		//URL url = Grafik.class.getResource("/images/robot.png");
-		//ImageIcon img = new ImageIcon(url);
+		image_label = new JLabel("");
+		URL url = Grafik.class.getResource("/images/robot.png");
+		ImageIcon img = new ImageIcon(url);
 
-	//	image_label.setIcon(img);
-	//	image_label.setBounds(300, 10, 456, 567);
-	//	frame.getContentPane().add(image_label);	
+		image_label.setIcon(img);
+		image_label.setBounds(300, 10, 456, 567);
+		frame.getContentPane().add(image_label);	
 	}
 }
 
